@@ -218,9 +218,6 @@ module "essbase" {
 
   external_url = "${local.create_load_balancer ? module.load-balancer.external_url : ""}"
 
-  development_mode = "${var.runtime_mode == "development" ? 1 : 0}"
-  reset_system     = "${var.runtime_mode == "development" && var.reset_system ? 1 : 0}"
-
   demo_ca = "${module.demo-ca-cert.data}"
 }
 

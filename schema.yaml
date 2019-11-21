@@ -36,8 +36,6 @@ groupings:
   - ${essbase_admin_username}
   - ${essbase_admin_password}
   - ${essbase_admin_password_encrypted}
-  - ${runtime_mode}
-  - ${reset_system}
 
 - title: "Security Configuration"
   variables:
@@ -334,30 +332,6 @@ variables:
     maxLength: 12
     pattern: "^([a-zA-Z][a-zA-Z0-9]{0,11})?$"
 
-  runtime_mode:
-    title: Runtime Mode
-    description: Sets the system in either production or development mode.
-    type: enum
-    visible: false
-    enum:
-    - production
-    - development
-    default: production
-    required: true
-
-  reset_system:
-    title: Reset System
-    description: Deletes all of the existing data prior to recreating it. DEVELOPMENT ONLY. USE WITH CAUTION.
-    visible:
-      and:
-      - ${show_advanced_options}
-      - eq:
-        - ${runtime_mode}
-        - "development"
-    type: boolean
-    default: false
-
-
   # Load balancer options
   create_load_balancer:
     title: Provision Load Balancer
@@ -485,10 +459,7 @@ variables:
   db_connection_type:
     title: Database Connection Type
     type: enum
-    visible:
-      eq:
-      - ${runtime_mode}
-      - "development"
+    visible: false
     enum:
     - low
     - medium

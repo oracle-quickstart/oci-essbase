@@ -121,14 +121,6 @@ variable "rcu_schema_prefix" {
   default = ""
 }
 
-variable "runtime_mode" {
-  default = "production"
-}
-
-variable "reset_system" {
-  default = false
-}
-
 variable "assign_public_ip" {
   default = true
 }

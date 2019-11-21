@@ -65,7 +65,6 @@ resource "oci_core_instance" "essbase" {
 
   metadata = {
     ssh_authorized_keys = "${var.ssh_authorized_keys}"
-    system_mode         = "${var.development_mode ? "dev" : "prod"}"
     data_volume_ocid    = "${oci_core_volume.essbase_data.id}"
     config_volume_ocid  = "${oci_core_volume.essbase_config.id}"
     volume_group_ocid   = "${oci_core_volume_group.essbase_volume_group.id}"
@@ -200,8 +199,6 @@ locals {
   config_payload = <<JSON
 {
    "system": {
-      "mode": "${var.development_mode ? "dev" : "prod"}"
-      "reset": ${var.development_mode == "dev" && var.reset_system ? true : false}
       "adminUsername": "${var.admin_username}"
       "adminPassword": "%s"
    }

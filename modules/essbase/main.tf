@@ -201,6 +201,7 @@ locals {
    "system": {
       "adminUsername": "${var.admin_username}"
       "adminPassword": "%s"
+      "tempDir": "/u01/config/tmp"
    }
 
    "kms": {

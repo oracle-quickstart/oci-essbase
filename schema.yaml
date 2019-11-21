@@ -1,0 +1,641 @@
+title: Oracle Essbase
+description: Oracle Essbase on Oracle Cloud Infrastructure
+schemaVersion: 1.1.0
+version: "20190304"
+locale: "en"
+
+# URL of Logo Icon used on Application Information tab. Logo must be 130x130 pixels.
+# (Optional)
+logoUrl: https://cloudmarketplace.oracle.com/marketplace/content?contentId=63497741
+
+# Used in Application Information tab to Hyperlink Title and Logo to the Marketplace listing.
+# Also used to link to Listing Usage section for "View Instructions".
+# (Optional) If it is missing, Application Information uses the
+# "marketplace-listing-id" tag for the same purpose.
+source:
+  type: marketplace
+  reference: 63497640
+
+groupings:
+- title: "General Settings"
+  variables:
+  - ${service_name}
+  - ${compartment_ocid}
+  - ${use_kms_provisioning_key}
+  - ${kms_key_id}
+  - ${kms_crypto_endpoint}
+  - ${show_advanced_options}
+
+- title: "Essbase Instance"
+  variables:
+  - ${mp_listing_resource_id}
+  - ${instance_availability_domain}
+  - ${instance_shape}
+  - ${data_volume_size}
+  - ${ssh_public_key}
+  - ${essbase_admin_username}
+  - ${essbase_admin_password}
+  - ${essbase_admin_password_encrypted}
+  - ${runtime_mode}
+  - ${reset_system}
+
+- title: "Security Configuration"
+  variables:
+  - ${security_mode}
+  - ${idcs_client_tenant}
+  - ${idcs_client_id}
+  - ${idcs_client_secret}
+  - ${idcs_client_secret_encrypted}
+  - ${idcs_external_admin_username}
+
+- title: "Network Configuration"
+  variables:
+  - ${use_existing_vcn}
+  - ${existing_vcn_compartment_id}
+  - ${vcn_cidr}
+  - ${existing_vcn_id}
+  - ${application_subnet_cidr}
+  - ${existing_application_subnet_id}
+  - ${create_private_subnet}
+  - ${assign_public_ip}
+  - ${bastion_instance_shape}
+  - ${bastion_subnet_cidr}
+  - ${existing_bastion_subnet_id}
+  - ${create_load_balancer}
+  - ${load_balancer_shape}
+  - ${load_balancer_subnet_cidr}
+  - ${existing_load_balancer_subnet_id}
+  - ${existing_load_balancer_subnet_id_2}
+  - ${enable_load_balancer_ssl}
+
+- title: "Database Configuration"
+  variables:
+  - ${use_existing_db}
+  - ${existing_db_compartment_id}
+  - ${existing_db_id}
+  - ${db_admin_username}
+  - ${db_admin_password}
+  - ${db_admin_password_encrypted}
+  - ${db_license_model}
+  - ${db_connection_type}
+
+variables:
+  # General Configuration
+  tenancy_ocid:
+    title: Tenancy ID
+    description: The Oracle Cloud Identifier (OCID) for your tenancy
+    type: string
+    required: true
+    visible: false
+
+  region:
+    title: Region
+    description: The region in which to create all resources
+    type: oci:identity:region:name
+    required: true
+    visible: false
+
+  service_name:
+    title: Resource Display Name Prefix
+    description: Display name prefix for all generated compute and network resources.  If not specified, this will be automatically generated.
+    type: string
+    maxLength: 64
+    pattern: "^([a-zA-Z_][a-zA-Z0-9\\-_]*)?$"
+    required: false
+
+  compartment_ocid:
+    title: Target Compartment
+    description: The target compartment in which all provisioned resources will be created.
+    type: oci:identity:compartment:id
+    required: true
+
+  show_advanced_options:
+    title: Show Advanced Options
+    description: Enable advanced options on this page.
+    type: boolean
+    default: false
+
+  # Create Network options
+  use_existing_vcn:
+    title: Use Existing Network
+    description: Select this option to support deployment of Essbase components into an existing virtual cloud network (VCN). 
+    type: boolean
+    default: false
+
+  vcn_cidr:
+    title: Virtual Network CIDR
+    description: The CIDR to assign to the new virtual cloud network (VCN) to create for this service.
+    visible:
+      and:
+      - ${show_advanced_options}
+      - not:
+        - ${use_existing_vcn}
+    type: string
+    default: 10.0.0.0/16
+    pattern: "^(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\\/(3[0-2]|[1-2]?[0-9])$"
+    required: true
+
+  application_subnet_cidr:
+    title: Application Subnet CIDR
+    description: The CIDR to assign to the subnet for the target Essbase compute node. This will be created as a regional subnet.
+    visible:
+      and:
+      - ${show_advanced_options}
+      - not:
+        - ${use_existing_vcn}
+    type: string
+    default: 10.0.1.0/24
+    pattern: "^(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\\/(3[0-2]|[1-2]?[0-9])$"
+    required: true
+
+  create_private_subnet:
+    title: Create a private Essbase subnet
+    description: Create a private subnet for the Essbase node. A bastion host will be also created.
+    visible:
+      not:
+      - ${use_existing_vcn}
+    type: boolean
+    default: false
+
+  existing_vcn_compartment_id:
+    title: Target network compartment
+    description: Select the compartment containing the target VCN.
+    type: oci:identity:compartment:id
+    visible: ${use_existing_vcn}
+    required: true
+
+  existing_vcn_id:
+    title: Select Virtual Network
+    description: Select an existing VCN in which to create the compute resources.
+    type: oci:core:vcn:id
+    visible: ${use_existing_vcn}
+    dependsOn:
+      compartmentId: ${existing_vcn_compartment_id}
+    required: true
+
+  existing_application_subnet_id:
+    title: Select Application Subnet
+    description: Select an existing subnet for the target Essbase instance.
+    type: oci:core:subnet:id
+    visible: ${use_existing_vcn}
+    dependsOn:
+      compartmentId: ${existing_vcn_compartment_id}
+      vcnId: ${existing_vcn_id}
+    required: true
+
+  bastion_subnet_cidr:
+    title: Bastion Subnet CIDR
+    description: The CIDR to assign to the subnet for the bastion host. This will be created as a regional subnet.
+    visible:
+      and:
+      - ${show_advanced_options}
+      - not:
+        - ${use_existing_vcn}
+      - or:
+        - ${create_private_subnet}
+        - not:
+          - ${assign_public_ip}
+    type: string
+    default: 10.0.2.0/24
+    pattern: "^(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\\/(3[0-2]|[1-2]?[0-9])$"
+    required: true
+
+  existing_bastion_subnet_id:
+    title: Select Bastion Subnet
+    description: Select an existing subnet for creating the bastion host
+    type: oci:core:subnet:id
+    visible: 
+      and:
+      - ${use_existing_vcn}
+      - not:
+        - ${assign_public_ip}
+    dependsOn:
+      compartmentId: ${existing_vcn_compartment_id}
+      vcnId: ${existing_vcn_id} 
+    required: true
+
+  bastion_instance_shape:
+    title: Bastion Instance Shape
+    description: The shape for the bastion compute instance.
+    type: oci:core:instanceshape:name
+    visible:
+      or:
+      - ${create_private_subnet}
+      - not:
+        - ${assign_public_ip}
+    default: VM.Standard.E2.1
+    required: true
+    dependsOn:
+      compartmentId: ${compartment_ocid}
+
+  # Essbase instance configuration
+  use_marketplace_image:
+    title: Use Marketplace Image
+    type: boolean
+    visible: true
+
+  mp_listing_id:
+    type: string
+    visible: false
+
+  mp_listing_resource_version:
+    type: string
+    visible: false
+
+  mp_listing_resource_id:
+    title: Instance Image OCID
+    type: oci:core:image:id
+    visible:
+      not:
+      - ${use_marketplace_image}
+    required: true
+
+  instance_shape:
+    title: Essbase Instance Shape
+    description: The shape for the Essbase compute instance.
+    type: oci:core:instanceshape:name
+    default: VM.Standard2.4
+    required: true
+    dependsOn:
+      compartmentId: ${compartment_ocid}
+      imageId: ${mp_listing_resource_id}
+
+  instance_availability_domain:
+    title: Essbase Availability Domain
+    description: The name of the availability domain in which to create the Essbase compute instance.
+    type: oci:identity:availabilitydomain:name
+    required: true
+    dependsOn:
+      compartmentId: ${compartment_ocid}
+
+  assign_public_ip:
+    title: Assign Public IP Address
+    description: If the subnet allows for a public ip address, assign one to the Essbase instance.
+    type: boolean
+    visible:
+      or:
+      - ${use_existing_vcn}
+      - and:
+        - not:
+          - ${use_existing_vcn}
+        - not:
+          - ${create_private_subnet}
+    default: true
+
+  ssh_public_key:
+    title: SSH Public Key
+    description: Use the corresponding private key to access the Essbase compute instance.
+    type: string
+    required: true
+
+  data_volume_size:
+    title: Data Volume Size (in GB)
+    description: Define the target size of the data volume, which stores the Essbase application data.
+    type: integer
+    minimum: 1024
+    multipleOf: 1
+    required: true
+
+  config_volume_size:
+    title: Config Volume Size (in GB)
+    description: Define the target size of the configuration volume, which stored the Essbase system data, such as logs.
+    type: integer
+    visible: false
+    minimum: 256
+    multipleOf: 1
+
+  essbase_admin_username:
+    title: Essbase System Admin User Name
+    description: The name of the Essbase system administrator.
+    type: string
+    minLength: 5
+    maxLength: 128
+    pattern: "^[a-zA-Z][a-zA-Z0-9]{4,127}$"
+    default: admin
+    required: true
+
+  essbase_admin_password:
+    title: Essbase System Admin User Password
+    description: "The password for the Essbase system administrator. Use a password that starts with a letter, is between 8 and 30 characters long, contains at least one number, and, optionally, any number of the special characters ($ # _). For example, Ach1z0#d."
+    type: password
+    visible:
+      not:
+      - ${use_kms_provisioning_key}
+    minLength: 8
+    maxLength: 30
+    pattern: "^(?=.*[0-9])[a-zA-Z][a-zA-Z0-9$#_]{7,29}$" 
+    required: true
+
+  essbase_admin_password_encrypted:
+    title: Essbase System Admin User Password (Encrypted)
+    description: "The password for the Essbase system administrator, encrypted with the provided KMS key. Use a password that starts with a letter, is between 8 and 30 characters long, contains at least one number, and, optionally, any number of the special characters ($ # _). For example, Ach1z0#d."
+    type: string
+    visible: ${use_kms_provisioning_key}
+    pattern: "^(?:[a-zA-Z0-9+\/]{4})*(?:|(?:[a-zA-Z0-9+\/]{3}=)|(?:[a-zA-Z0-9+\/]{2}==)|(?:[a-zA-Z0-9+\/]{1}===))$"
+    required: true
+
+  rcu_schema_prefix:
+    title: RCU Schema Prefix
+    description: Schema prefix to use when running RCU. A value with be automatically generated if not specified.
+    type: string
+    visible: false
+    maxLength: 12
+    pattern: "^([a-zA-Z][a-zA-Z0-9]{0,11})?$"
+
+  runtime_mode:
+    title: Runtime Mode
+    description: Sets the system in either production or development mode.
+    type: enum
+    visible:
+      and:
+      - ${show_advanced_options}
+      - not:
+        - ${use_marketplace_image}
+    enum:
+    - production
+    - development
+    default: production
+    required: true
+
+  reset_system:
+    title: Reset System
+    description: Deletes all of the existing data prior to recreating it. DEVELOPMENT ONLY. USE WITH CAUTION.
+    visible:
+      and:
+      - ${show_advanced_options}
+      - eq:
+        - ${runtime_mode}
+        - "development"
+    type: boolean
+    default: false
+
+
+  # Load balancer options
+  create_load_balancer:
+    title: Provision Load Balancer
+    description: Provision a load balancer in Oracle Cloud Infrastructure. 
+    type: boolean
+    default: false
+
+  load_balancer_shape:
+    title: Load Balancer Shape
+    description: Select which load balancer shape.
+    type: enum
+    enum:
+    - 100Mbps
+    - 400Mbps
+    - 8000Mbps
+    default: 100Mbps
+    visible: ${create_load_balancer}
+
+  load_balancer_subnet_cidr:
+    title: Load Balancer Subnet
+    description: The CIDR to assign to the subnet for the load balancer.  This will be created as regional subnet.
+    visible:
+      and:
+      - ${show_advanced_options}
+      - ${create_load_balancer}
+      - not:
+        - ${use_existing_vcn}
+    type: string
+    default: 10.0.4.0/24
+    pattern: "^(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\\/(3[0-2]|[1-2]?[0-9])$"
+    required: true
+
+  existing_load_balancer_subnet_id:
+    title: Select Load Balancer Subnet
+    description: Select an existing subnet to use for the load balancer.
+    type: oci:core:subnet:id
+    visible: 
+      and:
+      - ${create_load_balancer}
+      - ${use_existing_vcn}
+    dependsOn:
+      compartmentId: ${existing_vcn_compartment_id}
+      vcnId: ${existing_vcn_id}
+    required: true
+
+  existing_load_balancer_subnet_id_2:
+    title: Select Secondary Load Balancer Subnet
+    description: Select an existing subnet to use for the second load balancer node. This field is required only if you are not using regional subnets.
+    type: oci:core:subnet:id
+    visible: 
+      and:
+      - ${create_load_balancer}
+      - ${use_existing_vcn}
+    dependsOn:
+      compartmentId: ${existing_vcn_compartment_id}
+      vcnId: ${existing_vcn_id}
+
+  enable_load_balancer_ssl:
+    title: Use HTTPS
+    description: Configures the load balancer to use HTTPS, provisioned with a demo certificate signed with the Essbase Demo CA. The use of demo certificate is not recommended for production workloads.
+    type: boolean
+    visible:
+      ${create_load_balancer}
+    default: true
+
+  # Database options
+  use_existing_db:
+    title: Use existing database
+    description: Select this option to enable support of an existing database for the internal Essbase repository.
+    type: boolean
+
+  existing_db_compartment_id:
+    title: Target database compartment
+    type: oci:identity:compartment:id
+    visible: ${use_existing_db}
+    required: true
+
+  existing_db_id:
+    title: Target database
+    description: Target database in which to create the Essbase schema.
+    visible: ${use_existing_db}
+    type: oci:database:autonomousdatabase:id
+    dependsOn:
+      compartmentId: ${existing_db_compartment_id} 
+    required: true
+
+  db_admin_username:
+    title: Database Admin User
+    description: The username for the database administrator.
+    type: string
+    visible: false
+
+  db_admin_password:
+    title: Database Admin User Password
+    description: "The password for the database administrator. Use a password that starts with a letter, is between 12 and 30 characters long, contains at least one number, and at least one of the special characters ($ # _). For example, BEstr0ng_#12."
+    type: password
+    visible:
+      not:
+      - ${use_kms_provisioning_key}
+    minLength: 12
+    maxLength: 30
+    pattern: "^(?=.*[0-9])(?=.*[$#_])[a-zA-Z][a-zA-Z0-9$#_]{11,29}$"
+    required: true
+
+  db_admin_password_encrypted:
+    title: Database Admin User Password (Encrypted)
+    description: "The password for the database administrator, encrypted with the provided KMS key. Use a password that starts with a letter, is between 12 and 30 characters long, contains at least one number, and at least one of the special characters ($ # _). For example, BEstr0ng_#12."
+    type: string
+    visible: ${use_kms_provisioning_key}
+    pattern: "^(?:[a-zA-Z0-9+\/]{4})*(?:|(?:[a-zA-Z0-9+\/]{3}=)|(?:[a-zA-Z0-9+\/]{2}==)|(?:[a-zA-Z0-9+\/]{1}===))$"
+    required: true
+
+  db_license_model:
+    title: Database License
+    visible:
+      not:
+      - ${use_existing_db}
+    type: enum
+    enum:
+    - LICENSE_INCLUDED
+    - BRING_YOUR_OWN_LICENSE
+    default: BRING_YOUR_OWN_LICENSE
+    required: true
+
+  db_connection_type:
+    title: Database Connection Type
+    type: enum
+    visible:
+      eq:
+      - ${runtime_mode}
+      - "development"
+    enum:
+    - low
+    - medium
+    default: low
+
+  # Security settings
+  security_mode:
+    title: Security Mode
+    description: Choose embedded LDAP or integration with Identity Cloud Service (IDCS). The use of embedded LDAP is not recommended for production workloads.
+    type: enum
+    enum:
+    - idcs
+    - embedded
+    default: idcs
+    required: true
+
+  idcs_client_tenant:
+    title: IDCS Instance GUID
+    description: The ID of your Identity Cloud Service instance, which typically has the format idcs-<guid>, and is part of the host name that you use to access Identity Cloud Service.
+    type: string
+    visible:
+      eq:
+      - ${security_mode}
+      - idcs
+    required: true
+ 
+  idcs_client_id:
+    title: IDCS Application Client ID
+    description: Provide the client ID for the IDCS application.
+    type: string
+    visible:
+      eq:
+      - ${security_mode}
+      - idcs
+    required: true
+
+  idcs_client_secret:
+    title: IDCS Application Client Secret
+    description: Provide the client secret for the IDCS application.
+    type: password
+    visible:
+      and:
+      - eq:
+        - ${security_mode}
+        - idcs
+      - not:
+        - ${use_kms_provisioning_key}
+    required: true
+
+  idcs_client_secret_encrypted:
+    title: IDCS Application Client Secret (Encrypted)
+    description: Provide the client secret for the IDCS application, encrypted with the provided KMS key.
+    type: string
+    visible:
+      and:
+      - eq:
+        - ${security_mode}
+        - idcs
+      - ${use_kms_provisioning_key}
+    pattern: "^(?:[a-zA-Z0-9+\/]{4})*(?:|(?:[a-zA-Z0-9+\/]{3}=)|(?:[a-zA-Z0-9+\/]{2}==)|(?:[a-zA-Z0-9+\/]{1}===))$"
+    required: true
+
+  idcs_external_admin_username:
+    title: IDCS Essbase Admin User
+    description: Provide a user id to be registered as an Essbase administrator. This user must exist in the provided Identity Cloud Service instance.
+    type: string
+    visible:
+      eq:
+      - ${security_mode}
+      - idcs
+    required: true
+
+  # KMS settings
+  use_kms_provisioning_key:
+    title: Use KMS Provisioning Key
+    description: Provide the KMS key used to encrypt the credentials during provisioning
+    type: boolean
+    default: true
+    required: true
+    
+  kms_key_id:
+    title: KMS Key OCID
+    description: OCID for the encryption key used for the provided credentials
+    type: string
+    visible: ${use_kms_provisioning_key}
+    required: true
+  
+  kms_crypto_endpoint:
+    title: KMS Service Crypto Endpoint
+    description: Provide the crypt endpoint for the KMS vault
+    type: string
+    visible: ${use_kms_provisioning_key}
+    required: true
+
+
+outputs:
+  essbase_url:
+    title: Essbase URL
+    type: link
+  essbase_node_id:
+    title: Essbase Node Instance OCID
+    type: ocid
+  essbase_node_domain_name:
+    title: Essbase Node Hostname
+    type: string
+  essbase_node_public_ip:
+    title: Essbase Node Public IP
+    type: string
+  essbase_node_private_ip:
+    title: Essbase Node Private IP
+    type: string
+  bastion_host_id:
+    title: Bastion Host Instance OCID
+    type: ocid
+  bastion_host_public_ip:
+    title: Bastion Host Public IP
+    type: string
+  rcu_schema_prefix:
+    title: RCU Schema Prefix
+    type: string
+
+outputGroups:
+- title: Essbase Instance
+  outputs:
+  - ${essbase_node_id}
+  - ${essbase_node_domain_name}
+  - ${essbase_node_public_ip}
+  - ${essbase_node_private_ip}
+  - ${essbase_url}
+  - ${rcu_schema_prefix}
+
+- title: Bastion Host Info
+  outputs:
+  - ${bastion_host_id}
+  - ${bastion_host_public_ip}
+
+primaryOutputButton: ${essbase_url}
+

@@ -232,7 +232,7 @@ variables:
   use_marketplace_image:
     title: Use Marketplace Image
     type: boolean
-    visible: true
+    visible: @@SHOW_USE_MARKETPLACE_IMAGE@@
 
   mp_listing_id:
     type: string

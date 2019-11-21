@@ -3,5 +3,5 @@
  */
 
 output "image_id" {
-  value = "${var.mp_listing_resource_id}"
+  value = "${join("", oci_core_app_catalog_subscription.mp_image_subscription.*.listing_resource_id)}"
 }

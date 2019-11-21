@@ -55,9 +55,9 @@ variable "ssh_private_key" {
   description = "Private key to be used to access this instance"
 }
 
-variable "enable_data_volume" {
-  description = "Enable the data volume for storing application data in an isolated volume"
-  default     = true
+variable "data_volume_device" {
+  description = "Device path for the data block volume"
+  default     = "/dev/oracleoci/oraclevdb"
 }
 
 variable "data_volume_size" {
@@ -65,9 +65,9 @@ variable "data_volume_size" {
   default     = "1024"
 }
 
-variable "enable_config_volume" {
-  description = "Enable the config volume to store configuraiton content in an isolated volume"
-  default     = true
+variable "config_volume_device" {
+  description = "Device path for the config block volume"
+  default     = "/dev/oracleoci/oraclevdc"
 }
 
 variable "config_volume_size" {

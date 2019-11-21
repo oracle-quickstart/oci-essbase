@@ -133,14 +133,6 @@ variable "rcu_schema_prefix" {
   default     = "ESS1"
 }
 
-variable "development_mode" {
-  default = false
-}
-
-variable "reset_system" {
-  default = false
-}
-
 // KMS Settings
 variable "use_kms_provisioning_key" {}
 

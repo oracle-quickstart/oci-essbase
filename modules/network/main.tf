@@ -45,14 +45,14 @@ resource "oci_core_service_gateway" "service_gateway" {
 }
 
 resource "oci_core_internet_gateway" "internet_gateway" {
-  count          = "${!var.use_existing_vcn && var.enable_internet_gateway ? 1 : 0}"
+  count          = "${! var.use_existing_vcn && var.enable_internet_gateway ? 1 : 0}"
   compartment_id = "${var.compartment_id}"
   display_name   = "${var.display_name_prefix}-internet-gateway"
   vcn_id         = "${local.vcn_id}"
 }
 
 resource "oci_core_route_table" "igw" {
-  count          = "${!var.use_existing_vcn && var.enable_internet_gateway ? 1 : 0}"
+  count          = "${! var.use_existing_vcn && var.enable_internet_gateway ? 1 : 0}"
   compartment_id = "${var.compartment_id}"
   vcn_id         = "${local.vcn_id}"
   display_name   = "${var.display_name_prefix}-internet-route-table"
@@ -65,14 +65,14 @@ resource "oci_core_route_table" "igw" {
 }
 
 resource "oci_core_nat_gateway" "nat_gateway" {
-  count          = "${!var.use_existing_vcn && var.enable_nat_gateway ? 1 : 0}"
+  count          = "${! var.use_existing_vcn && var.enable_nat_gateway ? 1 : 0}"
   compartment_id = "${var.compartment_id}"
   vcn_id         = "${local.vcn_id}"
   display_name   = "${var.display_name_prefix}-nat-gateway"
 }
 
 resource "oci_core_route_table" "nat" {
-  count          = "${!var.use_existing_vcn && var.enable_nat_gateway ? 1 : 0}"
+  count          = "${! var.use_existing_vcn && var.enable_nat_gateway ? 1 : 0}"
   compartment_id = "${var.compartment_id}"
   vcn_id         = "${local.vcn_id}"
   display_name   = "${var.display_name_prefix}-nat-route-table"

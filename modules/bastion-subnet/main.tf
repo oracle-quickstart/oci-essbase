@@ -14,7 +14,7 @@ resource "oci_core_security_list" "bastion" {
 
   ingress_security_rules {
     // Allow inbound traffic to WLS ports
-    protocol  = "6"                 // tcp
+    protocol  = "6" // tcp
     source    = "${local.all_cidr}"
     stateless = false
 
@@ -27,7 +27,7 @@ resource "oci_core_security_list" "bastion" {
 
   ingress_security_rules {
     // Allow inbound ssh traffic...
-    protocol  = "6"                 // tcp
+    protocol  = "6" // tcp
     source    = "${local.all_cidr}"
     stateless = false
 

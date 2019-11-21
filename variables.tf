@@ -74,22 +74,17 @@ variable "enable_load_balancer_ssl" {
 }
 
 // Essbase instance configuration
-variable "use_marketplace_image" {
-  // @@use_marketplace_image@@
-}
-
 variable "mp_listing_id" {
-  // @@mp_listing_id@@
+  default = "ocid1.appcataloglisting.oc1..aaaaaaaaqyxur5zacfln6epkbm46sdu5whf6zepbm43b63rm44d5hnm2ft5a"
 }
 
 variable "mp_listing_resource_version" {
-  // @@mp_listing_resource_version@@
+  default = "19.3.0.0.1-1910111603"
 }
 
 variable "mp_listing_resource_id" {
   description = "Target image id"
-
-  // @@mp_listing_resource_id@@
+  default     = "ocid1.image.oc1..aaaaaaaa743guvcbuzeawbltxcesal53hxm6sxtkbduokarlhuf3fah7yvgq"
 }
 
 variable "instance_shape" {
@@ -124,14 +119,6 @@ variable "essbase_admin_password_encrypted" {
 
 variable "rcu_schema_prefix" {
   default = ""
-}
-
-variable "runtime_mode" {
-  default = "production"
-}
-
-variable "reset_system" {
-  default = false
 }
 
 variable "assign_public_ip" {

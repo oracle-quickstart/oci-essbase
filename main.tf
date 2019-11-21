@@ -166,10 +166,9 @@ module "subscription" {
   source = "./modules/subscription"
 
   compartment_id              = "${data.oci_identity_compartment.compartment.id}"
-  use_marketplace_image       = "${var.use_marketplace_image}"
-  mp_listing_id               = "${var.use_marketplace_image ? var.mp_listing_id : ""}"
-  mp_listing_resource_version = "${var.use_marketplace_image ? var.mp_listing_resource_version : ""}"
-  mp_listing_resource_id      = "${var.use_marketplace_image ? var.mp_listing_resource_id : ""}"
+  mp_listing_id               = "${var.mp_listing_id}"
+  mp_listing_resource_version = "${var.mp_listing_resource_version}"
+  mp_listing_resource_id      = "${var.mp_listing_resource_id}"
 }
 
 module "essbase" {
@@ -197,7 +196,7 @@ module "essbase" {
   admin_username = "${var.essbase_admin_username}"
   admin_password = "${var.use_kms_provisioning_key ? var.essbase_admin_password_encrypted : var.essbase_admin_password}"
 
-  image_id = "${var.use_marketplace_image ? module.subscription.image_id : var.mp_listing_resource_id}"
+  image_id = "${module.subscription.image_id}"
 
   use_kms_provisioning_key = "${var.use_kms_provisioning_key}"
   kms_key_id               = "${var.use_kms_provisioning_key ? var.kms_key_id : ""}"
@@ -218,9 +217,6 @@ module "essbase" {
   idcs_external_admin_username = "${var.security_mode == "idcs" ? var.idcs_external_admin_username : ""}"
 
   external_url = "${local.create_load_balancer ? module.load-balancer.external_url : ""}"
-
-  development_mode = "${var.runtime_mode == "development" ? 1 : 0}"
-  reset_system     = "${var.runtime_mode == "development" && var.reset_system ? 1 : 0}"
 
   demo_ca = "${module.demo-ca-cert.data}"
 }

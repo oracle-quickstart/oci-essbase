@@ -3,8 +3,6 @@
 
 variable "compartment_id" {}
 
-variable "use_marketplace_image" {}
-
 variable "mp_listing_id" {}
 
 variable "mp_listing_resource_version" {}

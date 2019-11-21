@@ -229,11 +229,6 @@ variables:
       compartmentId: ${compartment_ocid}
 
   # Essbase instance configuration
-  use_marketplace_image:
-    title: Use Marketplace Image
-    type: boolean
-    visible: @@SHOW_USE_MARKETPLACE_IMAGE@@
-
   mp_listing_id:
     type: string
     visible: false
@@ -245,10 +240,7 @@ variables:
   mp_listing_resource_id:
     title: Instance Image OCID
     type: oci:core:image:id
-    visible:
-      not:
-      - ${use_marketplace_image}
-    required: true
+    visible: false
 
   instance_shape:
     title: Essbase Instance Shape
@@ -346,11 +338,7 @@ variables:
     title: Runtime Mode
     description: Sets the system in either production or development mode.
     type: enum
-    visible:
-      and:
-      - ${show_advanced_options}
-      - not:
-        - ${use_marketplace_image}
+    visible: false
     enum:
     - production
     - development

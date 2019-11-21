@@ -124,7 +124,7 @@ resource "oci_load_balancer_path_route_set" "essbase" {
 }
 
 resource "oci_load_balancer_listener" "essbase" {
-  count = "${local.enabled && !var.enable_https ? 1 : 0}"
+  count = "${local.enabled && ! var.enable_https ? 1 : 0}"
 
   load_balancer_id         = "${oci_load_balancer.loadbalancer.id}"
   name                     = "http"

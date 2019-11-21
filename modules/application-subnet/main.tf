@@ -13,7 +13,7 @@ resource "oci_core_security_list" "application" {
 
   ingress_security_rules {
     // Allow inbound traffic to WLS ports
-    protocol  = "6"                 // tcp
+    protocol  = "6" // tcp
     source    = "${local.all_cidr}"
     stateless = false
 
@@ -26,7 +26,7 @@ resource "oci_core_security_list" "application" {
 
   ingress_security_rules {
     // Allow inbound traffic to WLS ports
-    protocol  = "6"                 // tcp
+    protocol  = "6" // tcp
     source    = "${local.all_cidr}"
     stateless = false
 
@@ -39,7 +39,7 @@ resource "oci_core_security_list" "application" {
 
   ingress_security_rules {
     // Allow inbound ssh traffic for now...
-    protocol  = "6"                 // tcp
+    protocol  = "6" // tcp
     source    = "${local.all_cidr}"
     stateless = false
 

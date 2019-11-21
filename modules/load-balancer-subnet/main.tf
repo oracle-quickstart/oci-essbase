@@ -67,7 +67,7 @@ resource "oci_core_route_table_attachment" "load-balancer" {
 
 locals {
   lb_subnet_ids   = "${concat(oci_core_subnet.load-balancer.*.id, var.existing_subnet_ids)}"
-  lb_subnet_count = "${!var.use_existing_subnet ? 1 : length(var.existing_subnet_ids)}"
+  lb_subnet_count = "${! var.use_existing_subnet ? 1 : length(var.existing_subnet_ids)}"
 }
 
 data "oci_core_subnet" "load-balancer" {

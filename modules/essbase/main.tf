@@ -35,7 +35,7 @@ resource "oci_core_volume_group" "essbase_volume_group" {
 }
 
 locals {
-  assign_public_ip = "${!data.oci_core_subnet.application.prohibit_public_ip_on_vnic && var.assign_public_ip ? 1 : 0}"
+  assign_public_ip = "${! data.oci_core_subnet.application.prohibit_public_ip_on_vnic && var.assign_public_ip ? 1 : 0}"
   hostname_label   = "${data.oci_core_subnet.application.dns_label != "" ? format("%s-1", var.node_hostname_prefix) : ""}"
   node_domain_name = "${data.oci_core_subnet.application.subnet_domain_name != "" ? format("%s.%s", local.hostname_label, data.oci_core_subnet.application.subnet_domain_name) : ""}"
 }
@@ -64,12 +64,12 @@ resource "oci_core_instance" "essbase" {
   }
 
   metadata = {
-    ssh_authorized_keys  = "${var.ssh_authorized_keys}"
-    system_mode          = "${var.development_mode ? "dev" : "prod"}"
-    data_volume_ocid     = "${oci_core_volume.essbase_data.id}"
-    config_volume_ocid   = "${oci_core_volume.essbase_config.id}"
-    volume_group_ocid    = "${oci_core_volume_group.essbase_volume_group.id}"
-    kms_key_ocid         = "${var.kms_key_id}"
+    ssh_authorized_keys = "${var.ssh_authorized_keys}"
+    system_mode         = "${var.development_mode ? "dev" : "prod"}"
+    data_volume_ocid    = "${oci_core_volume.essbase_data.id}"
+    config_volume_ocid  = "${oci_core_volume.essbase_config.id}"
+    volume_group_ocid   = "${oci_core_volume_group.essbase_volume_group.id}"
+    kms_key_ocid        = "${var.kms_key_id}"
 
     #database_ocid                    = "${var.db_database_id}"
     #database_backup_bucket_namespace = "${var.db_backup_bucket_namespace}"
@@ -192,8 +192,8 @@ resource "tls_locally_signed_cert" "demo_node_cert" {
 }
 
 locals {
-  node_url     = "${local.assign_public_ip ? format("http://%s/essbase", oci_core_instance.essbase.public_ip) : format("http://%s/essbase", oci_core_instance.essbase.private_ip) }"
-  external_url = "${var.external_url != "" ? var.external_url : local.node_url }"
+  node_url     = "${local.assign_public_ip ? format("http://%s/essbase", oci_core_instance.essbase.public_ip) : format("http://%s/essbase", oci_core_instance.essbase.private_ip)}"
+  external_url = "${var.external_url != "" ? var.external_url : local.node_url}"
 }
 
 locals {
@@ -201,7 +201,7 @@ locals {
 {
    "system": {
       "mode": "${var.development_mode ? "dev" : "prod"}"
-      "reset": ${var.development_mode == "dev" && var.reset_system ? true : false }
+      "reset": ${var.development_mode == "dev" && var.reset_system ? true : false}
       "adminUsername": "${var.admin_username}"
       "adminPassword": "%s"
    }
@@ -239,8 +239,8 @@ JSON
   encoded_admin_password    = "${var.use_kms_provisioning_key ? format("{KMS}%s", var.admin_password) : base64encode(var.admin_password)}"
   encoded_db_admin_password = "${var.use_kms_provisioning_key ? format("{KMS}%s", var.db_admin_password) : base64encode(var.db_admin_password)}"
 
-  encoded_idcs_client_secret_1 = "${var.idcs_client_secret != "" ? format("{KMS}%s", var.idcs_client_secret) : "" }"
-  encoded_idcs_client_secret_2 = "${var.idcs_client_secret != "" ? base64encode(var.idcs_client_secret) : "" }"
+  encoded_idcs_client_secret_1 = "${var.idcs_client_secret != "" ? format("{KMS}%s", var.idcs_client_secret) : ""}"
+  encoded_idcs_client_secret_2 = "${var.idcs_client_secret != "" ? base64encode(var.idcs_client_secret) : ""}"
   encoded_idcs_client_secret   = "${var.use_kms_provisioning_key ? local.encoded_idcs_client_secret_1 : local.encoded_idcs_client_secret_2}"
 }
 
@@ -276,38 +276,38 @@ resource "null_resource" "initializer" {
   provisioner "remote-exec" {
     inline = <<EOT
 echo '${format(local.config_payload,
-               local.encoded_admin_password,
-               local.encoded_db_admin_password,
-               local.encoded_idcs_client_secret)}' > /etc/essbase/instance.conf
+    local.encoded_admin_password,
+    local.encoded_db_admin_password,
+local.encoded_idcs_client_secret)}' > /etc/essbase/instance.conf
 EOT
-  }
+}
 
-  # Copy the certs over
-  provisioner "file" {
-    content     = "${var.demo_ca["cert_pem"]}"
-    destination = "/etc/essbase/demo-ca.crt"
-  }
+# Copy the certs over
+provisioner "file" {
+  content     = "${var.demo_ca["cert_pem"]}"
+  destination = "/etc/essbase/demo-ca.crt"
+}
 
-  provisioner "file" {
-    content     = "${tls_locally_signed_cert.demo_node_cert.cert_pem}"
-    destination = "/etc/essbase/demo-cert.crt"
-  }
+provisioner "file" {
+  content     = "${tls_locally_signed_cert.demo_node_cert.cert_pem}"
+  destination = "/etc/essbase/demo-cert.crt"
+}
 
-  provisioner "file" {
-    content     = "${tls_private_key.demo_node_cert.private_key_pem}"
-    destination = "/etc/essbase/demo-cert.key"
-  }
+provisioner "file" {
+  content     = "${tls_private_key.demo_node_cert.private_key_pem}"
+  destination = "/etc/essbase/demo-cert.key"
+}
 
-  provisioner "remote-exec" {
-    script = "${path.module}/scripts/initialize.sh"
-  }
+provisioner "remote-exec" {
+  script = "${path.module}/scripts/initialize.sh"
+}
 
-  provisioner "remote-exec" {
-    when       = "destroy"
-    on_failure = "continue"
-    inline = [
-      "sudo -i -u oracle /u01/vmtools/shutdown.sh"
-    ]
-  }
+provisioner "remote-exec" {
+  when       = "destroy"
+  on_failure = "continue"
+  inline = [
+    "sudo -i -u oracle /u01/vmtools/shutdown.sh"
+  ]
+}
 
 }

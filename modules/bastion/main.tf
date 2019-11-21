@@ -1,6 +1,5 @@
-/*
- * Copyright (c) 2019 Oracle and/or its affiliates. All rights reserved.
- */
+## Copyright © 2019, Oracle and/or its affiliates. 
+## All rights reserved. The Universal Permissive License (UPL), Version 1.0 as shown at http://oss.oracle.com/licenses/upl
 
 data "template_cloudinit_config" "bastion-config" {
   count = "${var.enabled ? 1 : 0}"

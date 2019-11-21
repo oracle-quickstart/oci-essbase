@@ -1,7 +1,5 @@
-/*
- * Copyright (c) 2019 Oracle and/or its affiliates. All rights reserved.
- */
-# Output the private and public IPs of the instance
+## Copyright © 2019, Oracle and/or its affiliates. 
+## All rights reserved. The Universal Permissive License (UPL), Version 1.0 as shown at http://oss.oracle.com/licenses/upl
 
 output "display_name" {
   value = "${join(",", oci_core_instance.bastion-instance.*.display_name)}"

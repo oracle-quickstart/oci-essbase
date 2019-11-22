@@ -75,7 +75,6 @@ groupings:
   - ${db_admin_password}
   - ${db_admin_password_encrypted}
   - ${db_license_model}
-  - ${db_connection_type}
 
 variables:
   # General Configuration
@@ -455,15 +454,6 @@ variables:
     - BRING_YOUR_OWN_LICENSE
     default: BRING_YOUR_OWN_LICENSE
     required: true
-
-  db_connection_type:
-    title: Database Connection Type
-    type: enum
-    visible: false
-    enum:
-    - low
-    - medium
-    default: low
 
   # Security settings
   security_mode:

@@ -230,11 +230,6 @@ variable "db_license_model" {
   default = "LICENSE_INCLUDED"
 }
 
-variable "db_connection_type" {
-  type    = string
-  default = "low"
-}
-
 // Load Balancer configuration
 variable "create_load_balancer" {
   type    = bool

@@ -11,6 +11,8 @@ resource "oci_database_autonomous_database" "autonomous_database" {
   db_name                  = var.db_name
   is_auto_scaling_enabled  = true
 
+  whitelisted_ips          = [ var.vcn_id ]
+
   display_name  = "${var.display_name_prefix}-database"
   license_model = var.license_model
 

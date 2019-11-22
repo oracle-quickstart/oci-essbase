@@ -3,11 +3,11 @@
 
 locals {
   all_cidr = "0.0.0.0/0"
-  enabled  = var.enabled ? 1 : 0
+  enabled_count  = var.enabled ? 1 : 0
 }
 
 resource "oci_core_security_list" "bastion" {
-  count          = var.use_existing_subnet ? 0 : local.enabled
+  count          = var.use_existing_subnet ? 0 : local.enabled_count
   compartment_id = var.compartment_id
   vcn_id         = var.vcn_id
   display_name   = "${var.display_name_prefix}-bastion"
@@ -59,7 +59,7 @@ resource "oci_core_security_list" "bastion" {
 }
 
 resource "oci_core_subnet" "bastion" {
-  count          = var.use_existing_subnet ? 0 : local.enabled
+  count          = var.use_existing_subnet ? 0 : local.enabled_count
   compartment_id = var.compartment_id
   vcn_id         = var.vcn_id
   display_name   = "${var.display_name_prefix}-bastion"
@@ -73,7 +73,7 @@ resource "oci_core_subnet" "bastion" {
 }
 
 resource "oci_core_route_table_attachment" "bastion" {
-  count          = var.use_existing_subnet ? 0 : local.enabled
+  count          = var.use_existing_subnet ? 0 : local.enabled_count
   subnet_id      = join("", oci_core_subnet.bastion.*.id)
   route_table_id = var.route_table_id
 }
@@ -83,7 +83,7 @@ locals {
 }
 
 data "oci_core_subnet" "bastion" {
-  count     = local.enabled ? 1 : 0
+  count     = var.enabled ? 1 : 0
   subnet_id = local.bastion_subnet_id
 }
 

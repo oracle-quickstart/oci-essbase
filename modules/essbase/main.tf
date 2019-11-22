@@ -6,6 +6,7 @@ data "oci_core_subnet" "application" {
 }
 
 resource "oci_core_volume" "essbase_data" {
+  count               = var.enable_data_volume ? 1 : 0
   availability_domain = var.availability_domain
   compartment_id      = var.compartment_id
   display_name        = "${var.display_name_prefix}-data-volume-1"
@@ -13,6 +14,7 @@ resource "oci_core_volume" "essbase_data" {
 }
 
 resource "oci_core_volume" "essbase_config" {
+  count               = var.enable_config_volume ? 1 : 0
   availability_domain = var.availability_domain
   compartment_id      = var.compartment_id
   display_name        = "${var.display_name_prefix}-config-volume-1"
@@ -20,16 +22,17 @@ resource "oci_core_volume" "essbase_config" {
 }
 
 resource "oci_core_volume_group" "essbase_volume_group" {
+  count               = var.enable_data_volume || var.enable_config_volume ? 1 : 0
   availability_domain = var.availability_domain
   compartment_id      = var.compartment_id
 
   source_details {
     type = "volumeIds"
 
-    volume_ids = [
-      oci_core_volume.essbase_config.id,
-      oci_core_volume.essbase_data.id,
-    ]
+    volume_ids = concat(
+      oci_core_volume.essbase_config.*.id,
+      oci_core_volume.essbase_data.*.id,
+    )
   }
 
   display_name = "${var.display_name_prefix}-volume-group"
@@ -70,9 +73,9 @@ resource "oci_core_instance" "essbase" {
 
   metadata = {
     ssh_authorized_keys = var.ssh_authorized_keys
-    data_volume_ocid    = oci_core_volume.essbase_data.id
-    config_volume_ocid  = oci_core_volume.essbase_config.id
-    volume_group_ocid   = oci_core_volume_group.essbase_volume_group.id
+    data_volume_ocid    = join("", oci_core_volume.essbase_data.*.id)
+    config_volume_ocid  = join("", oci_core_volume.essbase_config.*.id)
+    volume_group_ocid   = join("", oci_core_volume_group.essbase_volume_group.*.id)
     kms_key_ocid        = var.kms_key_id
   }
 
@@ -86,13 +89,13 @@ resource "oci_core_instance" "essbase" {
 }
 
 resource "oci_core_volume_attachment" "essbase_data" {
+  count           = var.enable_data_volume ? 1 : 0
   attachment_type = "iscsi"
   instance_id     = oci_core_instance.essbase.id
-  volume_id       = oci_core_volume.essbase_data.id
+  volume_id       = join("", oci_core_volume.essbase_data.*.id)
 
   display_name = "${var.display_name_prefix}-data-volume-1-attachment"
 
-  # Mount details
   # Mount details
   connection {
     host        = local.assign_public_ip ? oci_core_instance.essbase.public_ip : oci_core_instance.essbase.private_ip
@@ -124,9 +127,10 @@ resource "oci_core_volume_attachment" "essbase_data" {
 }
 
 resource "oci_core_volume_attachment" "essbase_config" {
+  count           = var.enable_config_volume ? 1 : 0
   attachment_type = "iscsi"
   instance_id     = oci_core_instance.essbase.id
-  volume_id       = oci_core_volume.essbase_config.id
+  volume_id       = join("", oci_core_volume.essbase_config.*.id)
 
   display_name = "${var.display_name_prefix}-config-volume-1-attachment"
 
@@ -235,10 +239,12 @@ resource "null_resource" "initializer" {
     bastion_host = var.bastion_host
   }
 
-  # Adjust the system limits
+  # Adjust the system limits and create required directories
   provisioner "remote-exec" {
     inline = [
       "sudo /u01/vmtools/adjust-limits.sh",
+      "sudo mkdir -p /u01/data /u01/config",
+      "sudo chown -R oracle:oracle /u01/data /u01/config",
     ]
   }
 

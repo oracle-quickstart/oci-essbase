@@ -125,10 +125,20 @@ variable "ssh_public_key" {
   type = string
 }
 
+variable "enable_data_volume" {
+  type    = bool
+  default = true
+}
+
 variable "data_volume_size" {
   // (gigabytes)
   type    = number
   default = 1024
+}
+
+variable "enable_config_volume" {
+  type    = bool
+  default = true
 }
 
 variable "config_volume_size" {

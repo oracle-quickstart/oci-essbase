@@ -31,6 +31,7 @@ groupings:
   - ${mp_listing_resource_id}
   - ${instance_availability_domain}
   - ${instance_shape}
+  - ${enable_data_volume}
   - ${data_volume_size}
   - ${ssh_public_key}
   - ${essbase_admin_username}
@@ -277,6 +278,12 @@ variables:
     type: string
     required: true
 
+  enable_data_volume:
+    title: Enable Data Block Volume
+    description: Enable creation of a block volume to store the Essbase application data.
+    type: boolean
+    visible: false
+
   data_volume_size:
     title: Data Volume Size (in GB)
     description: Define the target size of the data volume, which stores the Essbase application data.
@@ -284,6 +291,13 @@ variables:
     minimum: 1024
     multipleOf: 1
     required: true
+    visible: ${enable_data_volume}
+
+  enable_config_volume:
+    title: Enable Config Block Volume
+    description: Enable creation of a block volume to store the Essbase application system data.
+    type: boolean
+    visible: false
 
   config_volume_size:
     title: Config Volume Size (in GB)

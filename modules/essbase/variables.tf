@@ -66,11 +66,11 @@ variable "ssh_private_key" {
   type        = string
 }
 
-variable "data_volume_device" {
-  description = "Device path for the data block volume"
-  type        = string
-  default     = "/dev/oracleoci/oraclevdb"
-}
+variable "enable_data_volume" {
+  description = "Enable the data volume for storing application data in an isolated volume"
+  type        = bool
+  default     = true
+} 
 
 variable "data_volume_size" {
   description = "The size of the data volume in gigabytes"
@@ -78,10 +78,10 @@ variable "data_volume_size" {
   default     = 1024
 }
 
-variable "config_volume_device" {
-  description = "Device path for the config block volume"
-  type        = string
-  default     = "/dev/oracleoci/oraclevdc"
+variable "enable_config_volume" {
+  description = "Enable the config volume to store configuration content in an isolated volume"
+  type        = bool
+  default     = true
 }
 
 variable "config_volume_size" {

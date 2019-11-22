@@ -200,9 +200,11 @@ module "essbase" {
   assign_public_ip     = local.assign_public_ip
   bastion_host         = module.bastion.public_ip
 
-  config_volume_size = var.config_volume_size
-  data_volume_size   = var.data_volume_size
-  rcu_schema_prefix  = local.rcu_schema_prefix
+  enable_config_volume = var.enable_config_volume
+  config_volume_size   = var.config_volume_size
+  enable_data_volume   = var.enable_data_volume
+  data_volume_size     = var.data_volume_size
+  rcu_schema_prefix    = local.rcu_schema_prefix
 
   admin_username = var.essbase_admin_username
   admin_password = var.use_kms_provisioning_key ? var.essbase_admin_password_encrypted : var.essbase_admin_password

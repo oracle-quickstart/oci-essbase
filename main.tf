@@ -216,7 +216,7 @@ module "essbase" {
   db_database_id    = module.database.database_id
   db_admin_username = var.db_admin_username
   db_admin_password = var.use_kms_provisioning_key ? var.db_admin_password_encrypted : var.db_admin_password
-  db_connect_alias  = "${module.database.db_name}_${var.db_connection_type}"
+  db_connect_alias  = "${module.database.db_name}_low"
 
   db_backup_bucket_namespace = module.database-backup-bucket.bucket_namespace
   db_backup_bucket_name      = module.database-backup-bucket.bucket_name

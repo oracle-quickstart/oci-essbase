@@ -205,44 +205,6 @@ locals {
 }
 
 locals {
-  config_payload = <<JSON
-{
-   "system": {
-      "adminUsername": "${var.admin_username}"
-      "adminPassword": "%s"
-      "tempDir": "/u01/config/tmp"
-   }
-
-   "kms": {
-      "key_id": "${var.kms_key_id}"
-      "crypto_endpoint": "${var.kms_crypto_endpoint}"
-   }
-
-   "database": {
-      "type": "ADP"
-      "alias": "${var.db_connect_alias}"
-      "autonomousDatabaseID": "${var.db_database_id}"
-      "adminUsername": "${var.db_admin_username}"
-      "adminPassword": "%s"
-      "schemaPrefix": "${var.rcu_schema_prefix}"
-      "backupBucketName": "${var.db_backup_bucket_name}"
-      "backupBucketNamespace": "${var.db_backup_bucket_namespace}"
-   }
-
-   "security": {
-      "type": "${var.security_mode}"
-      "idcs": {
-         "clientTenant": "${var.idcs_client_tenant}"
-         "clientId": "${var.idcs_client_id}"
-         "clientSecret": "%s"
-         "externalAdminUsername": "${var.idcs_external_admin_username}"
-      }
-   }
-
-   "externalUrl": "${local.external_url}"
-}
-JSON
-
 
   encoded_admin_password    = var.use_kms_provisioning_key ? format("{KMS}%s", var.admin_password) : base64encode(var.admin_password)
   encoded_db_admin_password = var.use_kms_provisioning_key ? format("{KMS}%s", var.db_admin_password) : base64encode(var.db_admin_password)

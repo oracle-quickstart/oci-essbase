@@ -97,7 +97,6 @@ resource "oci_core_volume_attachment" "essbase_data" {
   display_name = "${var.display_name_prefix}-data-volume-1-attachment"
 
   # Mount details
-  # Mount details
   connection {
     host        = local.assign_public_ip ? oci_core_instance.essbase.public_ip : oci_core_instance.essbase.private_ip
     private_key = var.ssh_private_key

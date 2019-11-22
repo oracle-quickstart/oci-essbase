@@ -9,3 +9,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Migrate scripts to terraform 0.12 syntax
 - Whitelist provisioned ADB instance with VCN
+- Support disabling config and data volume creation

@@ -2,24 +2,38 @@
 ## All rights reserved. The Universal Permissive License (UPL), Version 1.0 as shown at http://oss.oracle.com/licenses/upl
 
 variable "enabled" {
+  type    = bool
   default = false
 }
 
-variable "compartment_id" {}
-variable "region" {}
+variable "compartment_id" {
+  type = string
+}
 
-variable "display_name_prefix" {}
+variable "region" {
+  type = string
+}
 
-variable "availability_domain" {}
+variable "display_name_prefix" {
+  type = string
+}
+
+variable "availability_domain" {
+  type = string
+}
 
 variable "instance_shape" {
+  type    = string
   default = "VM.Standard2.1"
 }
 
-variable "ssh_authorized_keys" {}
+variable "ssh_authorized_keys" {
+  type = string
+}
 
 variable "subnet_id" {
   description = "The subnet id for the bastion node."
+  type        = string
 }
 
 /*
@@ -29,7 +43,7 @@ variable "subnet_id" {
 * Also see https://docs.us-phoenix-1.oraclecloud.com/images/ to pick another image in future.
 */
 variable "bastion_instance_image_ocid" {
-  type = "map"
+  type = map(string)
 
   default = {
     ap-mumbai-1    = "ocid1.image.oc1.ap-mumbai-1.aaaaaaaa74noijy4xbexah6elqtagiz2sr5rrmhp3iwph5c2esyauahgwk2q"
@@ -44,3 +58,4 @@ variable "bastion_instance_image_ocid" {
     us-phoenix-1   = "ocid1.image.oc1.phx.aaaaaaaajpign274mukkdwjqbzqanem4xqcmvu4mip3jbf5kzhrplqjwdkfq"
   }
 }
+

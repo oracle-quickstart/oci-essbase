@@ -4,28 +4,42 @@
 # OCI Service
 variable "compartment_id" {
   description = "Compartment OCID where the subnet is created."
+  type        = string
 }
 
 variable "enabled" {
+  type    = bool
   default = true
 }
 
 variable "use_existing_subnet" {
+  type    = bool
   default = false
 }
 
 variable "existing_subnet_id" {
+  type    = string
   default = ""
 }
 
-variable "vcn_id" {}
+variable "vcn_id" {
+  type = string
+}
 
 variable "display_name_prefix" {
   description = "Display name prefix for the resources created."
+  type        = string
 }
 
-variable "cidr_block" {}
+variable "cidr_block" {
+  type = string
+}
 
-variable "dhcp_options_id" {}
+variable "dhcp_options_id" {
+  type = string
+}
 
-variable "route_table_id" {}
+variable "route_table_id" {
+  type = string
+}
+

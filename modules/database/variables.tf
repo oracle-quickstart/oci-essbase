@@ -1,6 +1,11 @@
 ## Copyright © 2019, Oracle and/or its affiliates. 
 ## All rights reserved. The Universal Permissive License (UPL), Version 1.0 as shown at http://oss.oracle.com/licenses/upl
 
+variable "vcn_id" {
+  type = string
+  default = ""
+}
+
 variable "compartment_id" {
   type = string
 }

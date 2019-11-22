@@ -148,6 +148,7 @@ module "database" {
 
   use_existing_db   = local.use_existing_db
   existing_db_id    = var.existing_db_id
+  vcn_id            = module.network.vcn_id
   compartment_id    = local.target_db_compartment_id
   db_name           = local.generated_atp_db_name
   db_admin_username = var.db_admin_username

@@ -36,7 +36,7 @@ resource "oci_core_volume_group" "essbase_volume_group" {
 }
 
 locals {
-  assign_public_ip = false == data.oci_core_subnet.application.prohibit_public_ip_on_vnic && var.assign_public_ip ? 1 : 0
+  assign_public_ip = !data.oci_core_subnet.application.prohibit_public_ip_on_vnic && var.assign_public_ip
   hostname_label   = data.oci_core_subnet.application.dns_label != "" ? format("%s-1", var.node_hostname_prefix) : ""
   node_domain_name = data.oci_core_subnet.application.subnet_domain_name != "" ? format(
     "%s.%s",

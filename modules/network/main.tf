@@ -40,7 +40,7 @@ resource "oci_core_service_gateway" "service_gateway" {
   vcn_id         = local.vcn_id
 
   services {
-    service_id = data.oci_core_services.test_services.services[0]["id"]
+    service_id = data.oci_core_services.test_services.services[0].id
   }
 }
 
@@ -56,6 +56,12 @@ resource "oci_core_route_table" "igw" {
   compartment_id = var.compartment_id
   vcn_id         = local.vcn_id
   display_name   = "${var.display_name_prefix}-internet-route-table"
+
+  route_rules {
+    destination       = data.oci_core_services.test_services.services[0].cidr_block
+    destination_type  = "SERVICE_CIDR_BLOCK"
+    network_entity_id = join("", oci_core_service_gateway.service_gateway.*.id)
+  }
 
   route_rules {
     destination       = local.all_cidr
@@ -76,6 +82,12 @@ resource "oci_core_route_table" "nat" {
   compartment_id = var.compartment_id
   vcn_id         = local.vcn_id
   display_name   = "${var.display_name_prefix}-nat-route-table"
+
+  route_rules {
+    destination       = data.oci_core_services.test_services.services[0].cidr_block
+    destination_type  = "SERVICE_CIDR_BLOCK"
+    network_entity_id = join("", oci_core_service_gateway.service_gateway.*.id)
+  }
 
   route_rules {
     destination       = local.all_cidr

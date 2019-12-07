@@ -58,12 +58,6 @@ resource "oci_core_route_table" "igw" {
   display_name   = "${var.display_name_prefix}-internet-route-table"
 
   route_rules {
-    destination       = data.oci_core_services.test_services.services[0].cidr_block
-    destination_type  = "SERVICE_CIDR_BLOCK"
-    network_entity_id = join("", oci_core_service_gateway.service_gateway.*.id)
-  }
-
-  route_rules {
     destination       = local.all_cidr
     destination_type  = "CIDR_BLOCK"
     network_entity_id = join("", oci_core_internet_gateway.internet_gateway.*.id)

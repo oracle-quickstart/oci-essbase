@@ -1,0 +1,22 @@
+apply plugin: 'base'
+
+task essbaseStackBYOL(type: Zip) {
+   mustRunAfter clean
+   archiveName "essbase-stack-byol.zip"
+   from "terraform"
+   exclude ".terraform"
+   exclude "essbase.auto.tfvars.ucm"
+   rename '(essbase\\.auto\\.tfvars)\\.byol', '$1'
+}
+
+task essbaseStackUCM(type: Zip) {
+   mustRunAfter clean
+   archiveName "essbase-stack-ucm.zip"
+   from "terraform"
+   exclude ".terraform"
+   exclude "essbase.auto.tfvars.byol"
+   rename '(essbase\\.auto\\.tfvars)\\.ucm', '$1'
+}
+
+tasks.build.dependsOn essbaseStackBYOL
+tasks.build.dependsOn essbaseStackUCM

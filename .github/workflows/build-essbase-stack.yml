@@ -1,0 +1,35 @@
+name: 'essbase-stack'
+
+on: [push, pull_request]
+env:
+  PROJECT_WORKING_DIR: '/'
+
+jobs:
+  terraform_generate_packages:
+    name: 'Generate Stack Packages'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up JDK 1.8
+        uses: actions/setup-java@v1
+        with:
+          java-version: 1.8
+      - name: 'Terraform Init'
+        uses: hashicorp/terraform-github-actions@master
+        with:
+          tf_actions_version: 0.12.17
+          tf_actions_subcommand: 'init'
+          tf_actions_working_dir: ${{ env.PROJECT_WORKING_DIR }}/terraform
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: 'Terraform Validate'
+        uses: hashicorp/terraform-github-actions@master
+        with:
+          tf_actions_version: 0.12.17
+          tf_actions_subcommand: 'validate'
+          tf_actions_working_dir: ${{ env.PROJECT_WORKING_DIR }}/terraform
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: 'Build artifacts'
+        run: gradle build
+

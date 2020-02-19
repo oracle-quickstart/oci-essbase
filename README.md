@@ -12,6 +12,11 @@ This Quick Start automates the deployment of Oracle Essbase instance on OCI. It 
 
 The repository contains the application code as well as the [Terraform][tf] code to create a [Resource Manager][orm] stack, that creates all the required resources and configures the application on the created resources. To simplify getting started, the Resource Manager Stack is created as part of each [release](https://github.com/oracle-quickstart/oci-essbase/releases)
 
+### Default Topology
+
+![Default Topology Diagram](./images/image-default_topology.png)
+
+
 ### Full Topology
 
 ![Full Topology Diagram](./images/image-full_topology.png)

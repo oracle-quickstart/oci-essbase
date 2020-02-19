@@ -2,18 +2,6 @@
 ## All rights reserved. The Universal Permissive License (UPL), Version 1.0 as shown at http://oss.oracle.com/licenses/upl
 
 // General settings
-variable "tenancy_ocid" {
-  type = string
-}
-
-variable "compartment_ocid" {
-  type = string
-}
-
-variable "region" {
-  type = string
-}
-
 variable "service_name" {
   type    = string
   default = ""

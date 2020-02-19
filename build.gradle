@@ -2,14 +2,14 @@ apply plugin: 'base'
 
 task essbaseStackBYOL(type: Zip) {
    mustRunAfter clean
-   archiveName "essbase_stack_byol.zip"
+   archiveName "essbase-stack-byol.zip"
    from "terraform"
    exclude ".terraform"
 }
 
 task essbaseStackUCM(type: Zip) {
    mustRunAfter clean
-   archiveName "essbase_stack_ucm.zip"
+   archiveName "essbase-stack-ucm.zip"
    from "terraform"
    exclude ".terraform"
 }

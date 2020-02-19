@@ -6,7 +6,7 @@ env:
 
 jobs:
   terraform_generate_packages:
-    name: 'Generate Stack Packages'
+    name: Generate Stack Packages
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -14,12 +14,12 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 1.8
-      - name: 'Terraform Init'
+      - name: Terraform Init
         uses: hashicorp/terraform-github-actions@master
         with:
           tf_actions_version: 0.12.17
           tf_actions_subcommand: 'init'
-          tf_actions_working_dir: ${{ env.PROJECT_WORKING_DIR }}/terraform
+          tf_actions_working_dir: ${{ github.workspace }}${{ env.PROJECT_WORKING_DIR }}terraform
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: 'Terraform Validate'
@@ -27,9 +27,30 @@ jobs:
         with:
           tf_actions_version: 0.12.17
           tf_actions_subcommand: 'validate'
-          tf_actions_working_dir: ${{ env.PROJECT_WORKING_DIR }}/terraform
+          tf_actions_working_dir: ${{ github.workspace }}${{ env.PROJECT_WORKING_DIR }}terraform
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: 'Build artifacts'
+      - name: Build artifacts
         run: gradle build
-
+      - name: Create release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          body: |
+            Changes in this Release
+            - New ORM Stack templates ${{ github.ref }}
+          draft: true
+          prerelease: true
+      - name: Upload Release Asset
+        uses: actions/upload-release-asset@v1.0.1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ${{ github.workspace }}${{ env.PROJECT_WORKING_DIR }}build/distributions/essbase-stack-byol.zip
+          asset_name: essbase-stack-byol.zip
+          asset_content_type: application/zip

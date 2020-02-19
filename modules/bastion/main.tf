@@ -1,4 +1,4 @@
-## Copyright © 2019, Oracle and/or its affiliates. 
+## Copyright (c) 2020, Oracle and/or its affiliates.
 ## All rights reserved. The Universal Permissive License (UPL), Version 1.0 as shown at http://oss.oracle.com/licenses/upl
 
 data "template_cloudinit_config" "bastion-config" {
@@ -25,6 +25,8 @@ resource "oci_core_instance" "bastion-instance" {
 
   compartment_id = var.compartment_id
   display_name   = "${var.display_name_prefix}-bastion"
+  freeform_tags  = var.freeform_tags
+  defined_tags   = var.defined_tags
   shape          = var.instance_shape
 
   create_vnic_details {

@@ -1,4 +1,4 @@
-## Copyright © 2019, Oracle and/or its affiliates. 
+## Copyright (c) 2020, Oracle and/or its affiliates.
 ## All rights reserved. The Universal Permissive License (UPL), Version 1.0 as shown at http://oss.oracle.com/licenses/upl
 
 variable "image_id" {
@@ -33,6 +33,11 @@ variable "node_count" {
   default     = 1
 }
 
+variable "instance_uuid" {
+  description = "The unique identifier for the stack"
+  type        = string
+}
+
 variable "node_hostname_prefix" {
   description = "The hostname for the essbase node"
   type        = string
@@ -52,7 +57,7 @@ variable "shape" {
 
 variable "assign_public_ip" {
   description = "Whether the VNIC should be assigned a public IP address. Default 'true' assigns a public IP address."
-  type        = bool
+  type        = string
   default     = true
 }
 
@@ -70,7 +75,7 @@ variable "enable_data_volume" {
   description = "Enable the data volume for storing application data in an isolated volume"
   type        = bool
   default     = true
-} 
+}
 
 variable "data_volume_size" {
   description = "The size of the data volume in gigabytes"
@@ -79,7 +84,7 @@ variable "data_volume_size" {
 }
 
 variable "enable_config_volume" {
-  description = "Enable the config volume to store configuration content in an isolated volume"
+  description = "Enable the config volume to store configuraiton content in an isolated volume"
   type        = bool
   default     = true
 }
@@ -126,12 +131,11 @@ variable "idcs_external_admin_username" {
   default = ""
 }
 
-variable "external_url" {
-  type    = string
-  default = ""
+// Database configuration
+variable "db_type" {
+  type = string
 }
 
-// Database configuration
 variable "db_admin_username" {
   description = "Database admin username"
   type        = string
@@ -146,8 +150,13 @@ variable "db_database_id" {
   type = string
 }
 
-variable "db_connect_alias" {
+variable "db_alias_name" {
   type = string
+}
+
+variable "db_connect_string" {
+  type = string
+  default = ""
 }
 
 variable "db_backup_bucket_namespace" {
@@ -166,18 +175,18 @@ variable "rcu_schema_prefix" {
   default     = "ESS1"
 }
 
-// KMS Settings
-variable "use_kms_provisioning_key" {
-  type = bool
+variable "reset_system" {
+  type    = bool
+  default = false
 }
 
+// KMS Settings
 variable "kms_key_id" {
   type = string
 }
 
 variable "kms_crypto_endpoint" {
-  type    = string
-  default = ""
+  type = string
 }
 
 // Bastion host settings
@@ -186,11 +195,13 @@ variable "bastion_host" {
   default = ""
 }
 
-variable "demo_ca" {
-  type = object({   
-    algorithm       = string
-    private_key_pem = string
-    cert_pem        = string
-  })
+// Tags
+variable "freeform_tags" {
+  type = map(string)
+  default = null
 }
 
+variable "defined_tags" {
+  type = map(string)
+  default = null
+}

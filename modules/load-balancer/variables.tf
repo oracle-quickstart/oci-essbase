@@ -1,4 +1,4 @@
-## Copyright © 2019, Oracle and/or its affiliates. 
+## Copyright (c) 2020, Oracle and/or its affiliates.
 ## All rights reserved. The Universal Permissive License (UPL), Version 1.0 as shown at http://oss.oracle.com/licenses/upl
 
 variable "enabled" {
@@ -13,13 +13,12 @@ variable "compartment_id" {
 }
 
 variable "subnet_count" {
-  type    = number
-  default = 1
+  type = number
 }
 
 variable "subnet_ids" {
+  description = "The subnet id for the Essbase node."
   type        = list(string)
-  description = "The subnet ids for the Essbase node."
 }
 
 variable "node_count" {
@@ -48,16 +47,13 @@ variable "idle_timeout" {
   default = 300
 }
 
-variable "enable_https" {
-  type    = bool
-  default = true
+// Tags
+variable "freeform_tags" {
+  type = map(string)
+  default = null
 }
 
-variable "demo_ca" {
-  type = object({
-    algorithm       = string
-    private_key_pem = string
-    cert_pem        = string
-  })
+variable "defined_tags" {
+  type = map(string)
+  default = null
 }
-

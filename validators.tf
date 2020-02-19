@@ -1,4 +1,4 @@
-## Copyright © 2019, Oracle and/or its affiliates. 
+## Copyright (c) 2020, Oracle and/or its affiliates.
 ## All rights reserved. The Universal Permissive License (UPL), Version 1.0 as shown at http://oss.oracle.com/licenses/upl
 
 #
@@ -13,14 +13,6 @@ locals {
     "0",
   )
 
-  # Essbase admin password
-  check_pattern_essbase_admin_password = replace(
-    var.essbase_admin_password,
-    "/^[a-zA-Z][a-zA-Z0-9$#_]{7,29}$/",
-    "0",
-  )
-  check_number_essbase_admin_password = replace(var.essbase_admin_password, "/^.*[0-9].*/", "0")
-  check_essbase_admin_password        = "${local.check_pattern_essbase_admin_password}${local.check_number_essbase_admin_password}"
 }
 
 resource "null_resource" "invalid_essbase_admin_username" {
@@ -31,39 +23,12 @@ resource "null_resource" "invalid_essbase_admin_username" {
   }
 }
 
-resource "null_resource" "invalid_essbase_admin_password" {
-  count = false == var.use_kms_provisioning_key && local.check_essbase_admin_password != "00" ? 1 : 0
-
-  provisioner "local-exec" {
-    command = "echo 'ESSPROV-00002 - Essbase System Admin password should start with a letter and length should be between 8 and 30 characters, and should contain at least one number, and optionally, any number of the special characters ($ # _). For example, Ach1z0#d.' && exit 1"
-  }
-}
-
 #
 # Database validation
 #
-locals {
-  # Database admin password
-  check_pattern_db_admin_password = replace(
-    var.db_admin_password,
-    "/^[a-zA-Z][a-zA-Z0-9$#_]{11,29}$/",
-    "0",
-  )
-  check_number_db_admin_password  = replace(var.db_admin_password, "/^.*[0-9].*/", "0")
-  check_special_db_admin_password = replace(var.db_admin_password, "/^.*[$#_].*/", "0")
-  check_db_admin_password         = "${local.check_pattern_db_admin_password}${local.check_number_db_admin_password}${local.check_special_db_admin_password}"
-}
-
-resource "null_resource" "invalid_db_admin_password" {
-  count = false == var.use_kms_provisioning_key && local.check_db_admin_password != "000" ? 1 : 0
-
-  provisioner "local-exec" {
-    command = "echo 'ESSPROV-00003 - Database Admin password should start with a letter and length should be between 12 and 30 characters, and should contain at least one number, and at least one of the special characters ($ # _). For example, BEstr0ng_#12.' && exit 1"
-  }
-}
-
 resource "null_resource" "missing_existing_db_id" {
-  count = var.use_existing_db && var.existing_db_id == "" ? 1 : 0
+  count = 0
+#var.use_existing_db && var.existing_db_id == "" ? 1 : 0
 
   provisioner "local-exec" {
     command = "echo 'ESSPROV-00004 - Missing Existing Database ID.' && exit 1"
@@ -82,7 +47,7 @@ resource "null_resource" "missing_idcs_client_id" {
 }
 
 resource "null_resource" "missing_idcs_client_secret" {
-  count = var.security_mode == "idcs" && false == var.use_kms_provisioning_key && var.idcs_client_secret == "" ? 1 : 0
+  count = var.security_mode == "idcs" && var.idcs_client_secret_encrypted == "" ? 1 : 0
 
   provisioner "local-exec" {
     command = "echo 'ESSPROV-00006 - Missing IDCS Application Client Secret. The value has to set if using IDCS.' && exit 1"
@@ -106,11 +71,8 @@ resource "null_resource" "missing_idcs_external_admin_username" {
 resource "null_resource" "input_validation" {
   depends_on = [
     null_resource.invalid_essbase_admin_username,
-    null_resource.invalid_essbase_admin_password,
-    null_resource.invalid_db_admin_password,
     null_resource.missing_existing_db_id,
     null_resource.missing_idcs_client_id,
-    null_resource.missing_idcs_client_secret,
     null_resource.missing_idcs_client_tenant,
     null_resource.missing_idcs_external_admin_username,
   ]

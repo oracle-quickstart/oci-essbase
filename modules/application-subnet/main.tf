@@ -1,28 +1,18 @@
-## Copyright © 2019, Oracle and/or its affiliates. 
+## Copyright (c) 2020, Oracle and/or its affiliates.
 ## All rights reserved. The Universal Permissive License (UPL), Version 1.0 as shown at http://oss.oracle.com/licenses/upl
 
 locals {
   all_cidr = "0.0.0.0/0"
+  use_existing_subnet = var.existing_subnet_id != ""
 }
 
 resource "oci_core_security_list" "application" {
-  count          = var.use_existing_subnet ? 0 : 1
+  count          = local.use_existing_subnet ? 0 : 1
   compartment_id = var.compartment_id
   vcn_id         = var.vcn_id
   display_name   = "${var.display_name_prefix}-application"
-
-  ingress_security_rules {
-    // Allow inbound traffic to WLS ports
-    protocol  = "6" // tcp
-    source    = local.all_cidr
-    stateless = false
-
-    tcp_options {
-      // These values correspond to the destination port range.
-      min = "80"
-      max = "80"
-    }
-  }
+  freeform_tags  = var.freeform_tags
+  defined_tags   = var.defined_tags
 
   ingress_security_rules {
     // Allow inbound traffic to WLS ports
@@ -71,10 +61,12 @@ resource "oci_core_security_list" "application" {
 }
 
 resource "oci_core_subnet" "application" {
-  count          = var.use_existing_subnet ? 0 : 1
+  count          = local.use_existing_subnet ? 0 : 1
   compartment_id = var.compartment_id
   vcn_id         = var.vcn_id
   display_name   = "${var.display_name_prefix}-application"
+  freeform_tags  = var.freeform_tags
+  defined_tags   = var.defined_tags
 
   cidr_block = var.cidr_block
 
@@ -83,20 +75,17 @@ resource "oci_core_subnet" "application" {
   dhcp_options_id = var.dhcp_options_id
   dns_label       = "app"
 
-  prohibit_public_ip_on_vnic = var.create_private_subnet 
+  prohibit_public_ip_on_vnic = var.create_private_subnet
 }
 
 resource "oci_core_route_table_attachment" "application" {
-  count          = var.use_existing_subnet ? 0 : 1
+  count          = local.use_existing_subnet ? 0 : 1
   subnet_id      = join("", oci_core_subnet.application.*.id)
   route_table_id = var.route_table_id
 }
 
-locals {
-  application_subnet_id = var.use_existing_subnet ? var.existing_subnet_id : join(",", oci_core_subnet.application.*.id)
-}
-
 data "oci_core_subnet" "application" {
-  subnet_id = local.application_subnet_id
+  count     = local.use_existing_subnet ? 1 : 0
+  subnet_id = var.existing_subnet_id
 }
 

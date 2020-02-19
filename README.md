@@ -1,5 +1,4 @@
-| ![Essbase Logo](./images/oracle-Essbase.png) | # Oracle Essbase on Oracle Cloud Infrastructure |
-|---|---|
+#![Essbase Logo](./images/oracle-Essbase.png) Oracle Essbase on Oracle Cloud Infrastructure 
 
 These are Terraform modules that deploy Oracle Essbase on [Oracle Cloud Infrastructure (OCI)](https://cloud.oracle.com/en_US/cloud-infrastructure).
 

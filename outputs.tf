@@ -1,4 +1,4 @@
-## Copyright © 2019, Oracle and/or its affiliates. 
+## Copyright (c) 2020, Oracle and/or its affiliates.
 ## All rights reserved. The Universal Permissive License (UPL), Version 1.0 as shown at http://oss.oracle.com/licenses/upl
 
 output "essbase_node_id" {
@@ -18,7 +18,27 @@ output "essbase_node_domain_name" {
 }
 
 output "essbase_url" {
-  value = module.essbase.external_url
+  value = var.create_load_balancer ? module.load-balancer.external_url : module.essbase.external_url
+}
+
+output "essbase_external_url" {
+  value = var.create_load_balancer ? module.load-balancer.external_url : module.essbase.external_url
+}
+
+output "essbase_redirect_url" {
+  value = var.security_mode == "idcs" ? (var.create_load_balancer ? format("%s/redirect_uri", module.load-balancer.redirect_url_prefix) : format("%s/redirect_uri", module.essbase.external_url)) : ""
+}
+
+output "essbase_post_logout_redirect_url" {
+  value = var.security_mode == "idcs" ? (var.create_load_balancer ? format("%s/jet/logout.html", module.load-balancer.redirect_url_prefix) : format("%s/jet/logout.html", module.essbase.external_url)) : ""
+}
+
+output "idcs_client_tenant" {
+  value = var.security_mode == "idcs" ? var.idcs_client_tenant : ""
+}
+
+output "idcs_client_id" {
+  value = var.security_mode == "idcs" ? var.idcs_client_id : ""
 }
 
 output "rcu_schema_prefix" {

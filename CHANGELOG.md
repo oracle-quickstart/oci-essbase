@@ -6,8 +6,31 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [19.3.0.0.2]
+### Added
+- Support OCI Database System as a target database.
+- Support compartment selection for existing subnets.
+- Output Essbase Redirect URL for the IDCS confidential app.
+- Add freeform tag to created resources containing the display name prefix provided by user or generated.
+- Updated default service connection string for Autonomous Database to tp.
+
 ### Changed
-- Migrate scripts to terraform 0.12 syntax
-- Whitelist provisioned ADB instance with VCN
-- Support disabling config and data volume creation
-- Add service gateway to the network route tables
+- Migrate scripts to terraform 0.12 syntax.
+- Enable access control for provisioned Autonomous Database instance and whitelist VCN.
+- Add service gateway to the route table for the private application subnet.
+- Make KMS encryption for sensitive input values mandatory.
+- Remove "Use HTTPS" option. Load balancer will always be configured with HTTPS and a demo certificate.
+
+## [19.3.0.0.1]
+### Added
+- Support for using existing ATP-D instance for Essbase RCU schema
+- Support for bastion host shape selection
+
+### Changed
+- Updated terminology for IDCS attributes.
+-- IDCS Tenant -> IDCS Instance GUID
+-- IDCS Client ID -> IDCS Application Client ID
+-- IDCS Client Secret -> IDCS Application Client Secret
+- Fix Use HTTPS selection to show up when Provision Load Balancer is selected.
+- Support Use Existing Database without requiring using an existing network.
+

@@ -1,4 +1,4 @@
-## Copyright © 2019, Oracle and/or its affiliates. 
+## Copyright (c) 2020, Oracle and/or its affiliates.
 ## All rights reserved. The Universal Permissive License (UPL), Version 1.0 as shown at http://oss.oracle.com/licenses/upl
 
 # OCI Service
@@ -10,11 +10,6 @@ variable "compartment_id" {
 variable "enabled" {
   type    = bool
   default = true
-}
-
-variable "use_existing_subnet" {
-  type    = bool
-  default = false
 }
 
 variable "existing_subnet_ids" {
@@ -35,6 +30,11 @@ variable "cidr_block" {
   type = string
 }
 
+variable "target_cidr_block" {
+  type    = string
+  default = "0.0.0.0/0"
+}
+
 variable "dhcp_options_id" {
   type = string
 }
@@ -43,8 +43,13 @@ variable "route_table_id" {
   type = string
 }
 
-variable "enable_https" {
-  type    = bool
-  default = true
+// Tags
+variable "freeform_tags" {
+  type = map(string)
+  default = null
 }
 
+variable "defined_tags" {
+  type = map(string)
+  default = null
+}

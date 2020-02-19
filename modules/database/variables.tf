@@ -1,9 +1,9 @@
-## Copyright © 2019, Oracle and/or its affiliates. 
+## Copyright (c) 2020, Oracle and/or its affiliates.
 ## All rights reserved. The Universal Permissive License (UPL), Version 1.0 as shown at http://oss.oracle.com/licenses/upl
 
-variable "vcn_id" {
-  type = string
-  default = ""
+variable "enabled" {
+  type = bool
+  default = true
 }
 
 variable "compartment_id" {
@@ -14,12 +14,7 @@ variable "display_name_prefix" {
   type = string
 }
 
-variable "use_existing_db" {
-  type    = bool
-  default = false
-}
-
-variable "existing_db_id" {
+variable "database_id" {
   type    = string
   default = ""
 }
@@ -33,11 +28,35 @@ variable "db_admin_username" {
   default = "ADMIN"
 }
 
-variable "db_admin_password" {
+variable "db_admin_password_encrypted" {
+  type = string
+}
+
+variable "kms_crypto_endpoint" {
+  type = string
+}
+
+variable "kms_key_id" {
   type = string
 }
 
 variable "license_model" {
-  type = string
+  type    = string
+  default = "LICENSE_INCLUDED"
 }
 
+variable "whitelisted_ips" {
+  type    = list(string)
+  default = null
+}
+
+// Tags
+variable "freeform_tags" {
+  type = map(string)
+  default = null
+}
+
+variable "defined_tags" {
+  type = map(string)
+  default = null
+}

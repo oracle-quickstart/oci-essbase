@@ -1,4 +1,4 @@
-## Copyright © 2019, Oracle and/or its affiliates. 
+## Copyright (c) 2020, Oracle and/or its affiliates.
 ## All rights reserved. The Universal Permissive License (UPL), Version 1.0 as shown at http://oss.oracle.com/licenses/upl
 
 // General settings
@@ -55,6 +55,11 @@ variable "existing_vcn_id" {
   default = ""
 }
 
+variable "existing_application_subnet_compartment_id" {
+  type    = string
+  default = ""
+}
+
 variable "existing_application_subnet_id" {
   type    = string
   default = ""
@@ -63,6 +68,11 @@ variable "existing_application_subnet_id" {
 variable "bastion_subnet_cidr" {
   type    = string
   default = "10.0.2.0/24"
+}
+
+variable "existing_bastion_subnet_compartment_id" {
+  type    = string
+  default = ""
 }
 
 variable "existing_bastion_subnet_id" {
@@ -80,6 +90,11 @@ variable "load_balancer_subnet_cidr" {
   default = "10.0.4.0/24"
 }
 
+variable "existing_load_balancer_subnet_compartment_id" {
+  type    = string
+  default = ""
+}
+
 variable "existing_load_balancer_subnet_id" {
   type    = string
   default = ""
@@ -90,26 +105,20 @@ variable "existing_load_balancer_subnet_id_2" {
   default = ""
 }
 
-variable "enable_load_balancer_ssl" {
-  type    = string
-  default = true
-}
-
 // Essbase instance configuration
 variable "mp_listing_id" {
-  type    = string
-  default = "ocid1.appcataloglisting.oc1..aaaaaaaaqyxur5zacfln6epkbm46sdu5whf6zepbm43b63rm44d5hnm2ft5a"
+  type = string
+  default = ""
 }
 
 variable "mp_listing_resource_version" {
-  type    = string
-  default = "19.3.0.0.1-1910111603"
+  type = string
+  default = "" 
 }
 
 variable "mp_listing_resource_id" {
   description = "Target image id"
   type        = string
-  default     = "ocid1.image.oc1..aaaaaaaa743guvcbuzeawbltxcesal53hxm6sxtkbduokarlhuf3fah7yvgq"
 }
 
 variable "instance_shape" {
@@ -125,20 +134,10 @@ variable "ssh_public_key" {
   type = string
 }
 
-variable "enable_data_volume" {
-  type    = bool
-  default = true
-}
-
 variable "data_volume_size" {
   // (gigabytes)
   type    = number
   default = 1024
-}
-
-variable "enable_config_volume" {
-  type    = bool
-  default = true
 }
 
 variable "config_volume_size" {
@@ -152,14 +151,8 @@ variable "essbase_admin_username" {
   default = "admin"
 }
 
-variable "essbase_admin_password" {
-  type    = string
-  default = ""
-}
-
 variable "essbase_admin_password_encrypted" {
   type    = string
-  default = ""
 }
 
 variable "rcu_schema_prefix" {
@@ -168,7 +161,7 @@ variable "rcu_schema_prefix" {
 }
 
 variable "assign_public_ip" {
-  type    = string
+  type    = bool
   default = true
 }
 
@@ -189,11 +182,6 @@ variable "idcs_client_id" {
   default = ""
 }
 
-variable "idcs_client_secret" {
-  type    = string
-  default = ""
-}
-
 variable "idcs_client_secret_encrypted" {
   type    = string
   default = ""
@@ -210,22 +198,17 @@ variable "use_existing_db" {
   default = false
 }
 
+variable "existing_db_type" {
+  type    = string
+  default = "Autonomous Database"
+}
+
 variable "existing_db_compartment_id" {
   type    = string
   default = ""
 }
 
 variable "existing_db_id" {
-  type    = string
-  default = ""
-}
-
-variable "db_admin_username" {
-  type    = string
-  default = "ADMIN"
-}
-
-variable "db_admin_password" {
   type    = string
   default = ""
 }
@@ -240,6 +223,42 @@ variable "db_license_model" {
   default = "LICENSE_INCLUDED"
 }
 
+variable "existing_db_connect_string" {
+  type    = string
+  default = ""
+}
+
+variable "existing_oci_db_system_id" {
+  type    = string
+  default = ""
+}
+
+variable "existing_oci_db_system_dbhome_id" {
+  type    = string
+  default = ""
+}
+
+variable "existing_oci_db_system_database_id" {
+  type    = string
+  default = ""
+}
+
+variable "existing_oci_db_system_database_pdb_name" {
+  type    = string
+  default = ""
+}
+
+variable "oci_db_admin_username" {
+  type    = string
+  default = "SYS"
+}
+
+variable "oci_db_admin_password_encrypted" {
+  type    = string
+  default = ""
+}
+
+
 // Load Balancer configuration
 variable "create_load_balancer" {
   type    = bool
@@ -252,18 +271,11 @@ variable "load_balancer_shape" {
 }
 
 // KMS Settings
-variable "use_kms_provisioning_key" {
-  type    = bool
-  default = true
-}
-
 variable "kms_key_id" {
   type    = string
-  default = ""
 }
 
 variable "kms_crypto_endpoint" {
   type    = string
-  default = ""
 }
 

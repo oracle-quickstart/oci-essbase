@@ -98,6 +98,28 @@ variables:
     required: true
     visible: false
 
+  compartment_ocid:
+    title: Target Compartment
+    description: The target compartment in which all provisioned resources will be created.
+    type: oci:identity:compartment:id
+    required: true
+
+  user_ocid:
+    title: User ID
+    description: The Oracle Cloud Identifier (OCID) for the user
+    type: string
+    visible: false
+
+  fingerprint:
+    title: Private Key Fingerprint
+    type: string
+    visible: false
+
+  private_key_path:
+    title: Private Key Path
+    type: string
+    visible: false
+
   service_name:
     title: Resource Display Name Prefix
     description: Display name prefix for all generated compute and network resources.  If not specified, this will be automatically generated.
@@ -105,12 +127,6 @@ variables:
     maxLength: 64
     pattern: "^([a-zA-Z_][a-zA-Z0-9\\-_]*)?$"
     required: false
-
-  compartment_ocid:
-    title: Target Compartment
-    description: The target compartment in which all provisioned resources will be created.
-    type: oci:identity:compartment:id
-    required: true
 
   show_advanced_options:
     title: Show Advanced Options

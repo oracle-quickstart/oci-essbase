@@ -6,10 +6,13 @@ output "database_id" {
 }
 
 output "db_name" {
-  value = local.use_existing_db ? join("", data.oci_database_autonomous_database.autonomous_database.*.db_name) : join("", oci_database_autonomous_database.autonomous_database.*.db_name)
+  value = local.db_name
 }
 
 output "compartment_id" {
   value = local.use_existing_db ? join("", data.oci_database_autonomous_database.autonomous_database.*.compartment_id) : join("", oci_database_autonomous_database.autonomous_database.*.compartment_id)
 }
 
+output "tns_alias" {
+  value = local.tns_alias
+}

@@ -197,7 +197,7 @@ locals {
   }
 
   db_type_alias_name = {
-     "adb" = "${module.database.db_name}_tp"
+     "adb" = module.database.tns_alias
   }
 
   db_type_connect_string = {

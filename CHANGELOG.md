@@ -12,7 +12,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Support compartment selection for existing subnets.
 - Output Essbase Redirect URL for the IDCS confidential app.
 - Add freeform tag to created resources containing the display name prefix provided by user or generated.
-- Updated default service connection string for Autonomous Database to tp.
 
 ### Changed
 - Migrate scripts to terraform 0.12 syntax.
@@ -20,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add service gateway to the route table for the private application subnet.
 - Make KMS encryption for sensitive input values mandatory.
 - Remove "Use HTTPS" option. Load balancer will always be configured with HTTPS and a demo certificate.
+- Enable SSL connections for ATP-D.
 
 ## [19.3.0.0.1]
 ### Added

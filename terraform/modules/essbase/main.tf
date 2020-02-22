@@ -116,18 +116,16 @@ locals {
    }
 }
 JSON
-}
 
 
-data "template_cloudinit_config" "config" {
-  gzip          = true
-  base64_encode = true
+  cloud_init = <<TMPL
+Content-Type: multipart/mixed; boundary="boundary-0123456789"
+MIME-Version: 1.0
 
-  # Main cloud-config configuration file.
-  part {
-    filename     = "system_config"
-    content_type = "text/cloud-config"
-    content      = <<EOT
+--boundary-0123456789
+MIME-Version: 1.0
+Content-Type: text/cloud-config; charset="us-ascii"
+
 #cloud-config
 # vim: syntax=yaml
 write_files:
@@ -135,23 +133,21 @@ write_files:
   permissions: '0644'
   content: |
       ${indent(6, local.essbase_config)}
-EOT
-  }
 
-  # Machine setup
-  part {
-    content_type = "text/x-shellscript"
-    content      = file("${path.module}/scripts/configure_machine.sh")
-  }
+--boundary-0123456789
+MIME-Version: 1.0
+Content-Type: text/x-shellscript
 
-  # Volume setup
-  part {
-    content_type = "text/x-shellscript"
-    content      = file("${path.module}/scripts/configure_volumes.sh")
-  }
+${file("${path.module}/scripts/configure_machine.sh")}
+--boundary-0123456789
+MIME-Version: 1.0
+Content-Type: text/x-shellscript
+
+${file("${path.module}/scripts/configure_volumes.sh")}
+--boundary-0123456789--
+TMPL
 
 }
-
 
 #
 # Essbase instance definition
@@ -177,7 +173,7 @@ resource "oci_core_instance" "essbase" {
 
   metadata = {
     ssh_authorized_keys  = var.ssh_authorized_keys
-    user_data            = data.template_cloudinit_config.config.rendered
+    user_data            = base64gzip(local.cloud_init)
     volume_group_ocid    = join("", oci_core_volume_group.essbase_volume_group.*.id)
     kms_key_ocid         = var.kms_key_id
   }

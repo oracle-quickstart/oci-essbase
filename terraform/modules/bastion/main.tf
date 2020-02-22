@@ -1,20 +1,21 @@
 ## Copyright (c) 2020, Oracle and/or its affiliates.
 ## All rights reserved. The Universal Permissive License (UPL), Version 1.0 as shown at http://oss.oracle.com/licenses/upl
 
-data "template_cloudinit_config" "bastion-config" {
-  count = var.enabled ? 1 : 0
 
-  gzip          = true
-  base64_encode = true
+locals {
 
-  # cloud-config configuration file.
-  # /var/lib/cloud/instance/scripts/*
+  cloud_init = <<TMPL
+Content-Type: multipart/mixed; boundary="BASTION-BOUNDARY-0123456789"
+MIME-Version: 1.0
 
-  part {
-    filename     = "init.cfg"
-    content_type = "text/cloud-config"
-    content      = file("${path.module}/userdata/bastion-bootstrap")
-  }
+--boundary-0123456789
+MIME-Version: 1.0
+Content-Type: text/cloud-config; charset="us-ascii"
+
+${file("${path.module}/userdata/bastion-bootstrap")}
+--boundary-0123456789--
+TMPL
+
 }
 
 resource "oci_core_instance" "bastion-instance" {
@@ -36,7 +37,7 @@ resource "oci_core_instance" "bastion-instance" {
 
   metadata = {
     ssh_authorized_keys = var.ssh_authorized_keys
-    user_data           = data.template_cloudinit_config.bastion-config[0].rendered
+    user_data           = base64gzip(local.cloud_init)
   }
 
   source_details {

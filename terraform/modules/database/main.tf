@@ -44,7 +44,8 @@ data "oci_database_autonomous_database" "autonomous_database" {
 }
 
 locals {
-  db_name = local.use_existing_db ? join("", data.oci_database_autonomous_database.autonomous_database.*.db_name) : join("", oci_database_autonomous_database.autonomous_database.*.db_name)
-  is_dedicated = var.enabled && tobool(local.use_existing_db ? join("", data.oci_database_autonomous_database.autonomous_database.*.is_dedicated) : join("", oci_database_autonomous_database.autonomous_database.*.is_dedicated))
+  db_name = join("", concat(data.oci_database_autonomous_database.autonomous_database.*.db_name, oci_database_autonomous_database.autonomous_database.*.db_name))
+  is_dedicated_values = compact(concat(data.oci_database_autonomous_database.autonomous_database.*.is_dedicated, oci_database_autonomous_database.autonomous_database.*.is_dedicated))
+  is_dedicated = var.enabled && length(local.is_dedicated_values) > 0 ? tobool(join("", local.is_dedicated_values)) : false
   tns_alias = var.enabled ? lower(local.is_dedicated ? "${local.db_name}_low_tls" : "${local.db_name}_low") : ""
 }

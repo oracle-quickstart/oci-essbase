@@ -5,8 +5,8 @@ task essbaseStackBYOL(type: Zip) {
    archiveName "essbase-stack-byol.zip"
    from "terraform"
    exclude ".terraform"
-   exclude "essbase.auto.tfvars.ucm"
-   rename '(essbase\\.auto\\.tfvars)\\.byol', '$1'
+   exclude "essbase-ucm.*"
+   rename '(.+).disabled', '$1'
 }
 
 task essbaseStackUCM(type: Zip) {
@@ -14,8 +14,8 @@ task essbaseStackUCM(type: Zip) {
    archiveName "essbase-stack-ucm.zip"
    from "terraform"
    exclude ".terraform"
-   exclude "essbase.auto.tfvars.byol"
-   rename '(essbase\\.auto\\.tfvars)\\.ucm', '$1'
+   exclude "essbase-byol.*"
+   rename '(.+).disabled', '$1'
 }
 
 tasks.build.dependsOn essbaseStackBYOL

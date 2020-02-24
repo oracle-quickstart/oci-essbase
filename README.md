@@ -1,16 +1,26 @@
 # ![Essbase Logo](./images/oracle-Essbase.png) Oracle Essbase on Oracle Cloud Infrastructure
 
+## About
+
 Oracle Essbase is a business analytics solution that uses a proven, flexible, best-in-class architecture for analysis, reporting, and collaboration. It delivers instant value and greater productivity for your business users, analysts, modelers, and decision-makers, across all lines of business within your organization. You can interact with Essbase, through a web or Microsoft Office interface, to analyze, model, collaborate, and report.
 
-This Quick Start automates the deployment of Oracle Essbase instance on [Oracle Cloud Infrastructure (OCI)][oci]. It deploys additional stack components required – Autonomous Database, Load Balancer, Storage, Virtual Cloud Network (VCN) as part of the deployment.
+This Quick Start automates the deployment of Oracle Essbase stack on [Oracle Cloud Infrastructure (OCI)][oci]. It can also deploy additional stack components required – Autonomous Database, Load Balancer, Storage, Virtual Cloud Network (VCN) as part of the deployment.
 
-## Getting Started
+### Default Topology
 
-The repository contains the application code as well as the [Terraform][tf] code to create a [Resource Manager][orm] stack, that creates all the required resources and configures the application on the created resources. To simplify getting started, the Resource Manager Stack is created as part of each [release](https://github.com/oracle-quickstart/oci-essbase/releases)
+![Default Topology Diagram](./images/image-default_topology.png)
+
+### Full Topology
+
+![Full Topology Diagram](./images/image-full_topology.png)
+
+
+## Before you get started
+
 
 ### Encrypt Values using KMS
 
-Oracle Cloud Infrastructure Key Management (KMS) enables you to manage sensitive information when creating a stack. You are required to use KMS to encrypt credentials during provisioning by creating a key. Passwords chosen for Essbase administrator and Database must meet the Resource Manager password requirements.
+Oracle Cloud Infrastructure Key Management (KMS) enables you to manage sensitive information when creating a stack. You are required to use KMS to encrypt credentials during provisioning by creating a key. Passwords chosen for Essbase administrator and Database must meet their respective password requirements.
 
 ### Create Dynamic Group
 
@@ -21,8 +31,6 @@ You create dynamic groups of Oracle Cloud Infrastructure compute instances, and 
 Set up policies that are appropriate for your organization's security setup. The following is an example of a policy template, with each row being a policy statement.
 
 ```
-Allow group group_name to manage orm-stacks in compartment compartment_name
-Allow group group_name to manage orm-jobs in compartment compartment_name
 Allow group group_name to manage virtual-network-family in compartment compartment_name
 Allow group group_name to manage instances in compartment compartment_name
 Allow group group_name to manage volume-family in compartment compartment_name
@@ -54,31 +62,89 @@ Allow dynamic-group group_name to manage autonomous-backups in compartment compa
 ```
 
 
-### Default Topology
+## Getting started using the Terraform command line tool
 
-![Default Topology Diagram](./images/image-default_topology.png)
+### Prerequisites
 
+First off you'll need to do some pre deploy setup. That's all detailed here.
 
-### Full Topology
+### Clone the Module
 
-![Full Topology Diagram](./images/image-full_topology.png)
+Now, you'll want a local copy of this repo. You can make that with the commands:
+
+```
+git clone https://github.com/oracle-quickstart/oci-essbase.git
+cd oci-essbase/terraform
+ls
+```
+
+That should give you this:
+
+<INSERT PICTURE HERE>
+
+We now need to initialize the directory with the module in it. This makes the module aware of the OCI provider. You can do this by running:
+
+```
+terraform init
+```
+
+This gives the following output:
+
+<INSERT PICTURE HERE>
+
+### Deploy
+
+Now for the main attraction. Let's make sure the plan looks good:
+
+```
+terraform plan
+```
+
+That gives:
+
+<INSERT PICTURE HERE>
+
+The next command will deploy Oracle Essbase using the values in the variables.tf file:
+
+<INSERT TABLE OF VARIABLES HERE>
+
+If that's good, we can go ahead and apply the deploy:
+
+```
+terraform apply
+```
+
+You'll need to enter yes when prompted. The apply should take about twenty minutes to run.  Once complete, you'll see something like this:
+
+<INSERT PICTURE HERE>
+
+When the apply is complete, the infrastructure will be deployed.
+
+### Destroy the Deployment
+
+When you no longer need the deployment, you can run this command to destroy it:
+
+```
+terraform destroy
+```
+
+You'll need to enter yes when prompted. Once complete, you'll see something like this:
+
+<INSERT PICTURE HERE>
+
+## Getting Started Using Resource Manager
+
+Resource Manager is an Oracle Cloud Infrastructure service that allows you to manage your terraform configuration and state. 
+To simplify getting started, the terraform BYOL and UCM stacks for use with the Resource Manager service are created as part of each [release](https://github.com/oracle-quickstart/oci-essbase/releases).
+
+```
+Allow group group_name to manage orm-stacks in compartment compartment_name
+Allow group group_name to manage orm-jobs in compartment compartment_name
+```
 
 ## License
 
-### Bring Your Own License
-
-Conversion Ratios: 
-* For each supported Processor license You may activate up to 2 OCPUs of this BYOL offering.
-* For Named User Plus licenses You may activate any supported compute shape provided the number of users is within licensed limits.
-
-for more details refer: http://www.oracle.com/us/corporate/contracts/processor-core-factor-table-070634.pdf
-
-Any of the following supported program licenses may be aggregated to meet the conversion ratio above.
-* Business Intelligence Suite Foundation Edition; OR
-* Oracle Business Intelligence Foundation Suite; OR
-* Oracle Essbase Plus
-
-### Universal Credits
+This template assumes you already have purchased a license for Oracle Essbase. For more information, see XXX.
 
 
 ## Questions

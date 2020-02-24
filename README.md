@@ -21,7 +21,6 @@ This Quick Start automates the deployment of Oracle Essbase stack on [Oracle Clo
 
 ## Before you get started
 
-
 ### Encrypt Values using KMS
 
 Oracle Cloud Infrastructure Key Management (KMS) enables you to manage sensitive information when creating a stack. You are required to use KMS to encrypt credentials during provisioning by creating a key. Passwords chosen for Essbase administrator and Database must meet their respective password requirements.
@@ -68,12 +67,6 @@ Allow dynamic-group group_name to manage autonomous-backups in compartment compa
 
 ## Getting started using the Terraform command line tool
 
-### Prerequisites
-
-First off you'll need to do some pre deploy setup. That's all detailed here.
-
-### Clone the Module
-
 Now, you'll want a local copy of this repo. You can make that with the commands:
 
 ```
@@ -82,38 +75,23 @@ cd oci-essbase/terraform
 ls
 ```
 
-That should give you this:
-
-<INSERT PICTURE HERE>
-
-
-
-
 We now need to initialize the directory with the module in it. This makes the module aware of the OCI provider. You can do this by running:
 
 ```
 terraform init
 ```
 
-This gives the following output:
-
-<INSERT PICTURE HERE>
-
 ### Deploy
 
-Now for the main attraction. Let's make sure the plan looks good:
+Choose the Essbase image that corresponds to the license that you are using.  This can be done by removing the .disabled extension on either the [essbase-byol.auto.tfvars.disabled](./terraform/essbase-byol.auto.tfvars.disabled) or [essbase-ucm.auto.tfvars.disabled](./terraform/essbase-ucm.auto.tfvars.disabled) file.
+
+Set the renaming variables needed to drive the stack creation.  
+
+Let's make sure the plan looks good:
 
 ```
 terraform plan
 ```
-
-That gives:
-
-<INSERT PICTURE HERE>
-
-The next command will deploy Oracle Essbase using the values in the variables.tf file:
-
-
 
 If that's good, we can go ahead and apply the deploy:
 
@@ -121,9 +99,7 @@ If that's good, we can go ahead and apply the deploy:
 terraform apply
 ```
 
-You'll need to enter yes when prompted. The apply should take about twenty minutes to run.  Once complete, you'll see something like this:
-
-<INSERT PICTURE HERE>
+You'll need to enter yes when prompted. The apply should take about twenty minutes to run.
 
 When the apply is complete, the infrastructure will be deployed.
 
@@ -135,9 +111,7 @@ When you no longer need the deployment, you can run this command to destroy it:
 terraform destroy
 ```
 
-You'll need to enter yes when prompted. Once complete, you'll see something like this:
-
-<INSERT PICTURE HERE>
+You'll need to enter yes when prompted.
 
 ## Getting Started Using Resource Manager
 

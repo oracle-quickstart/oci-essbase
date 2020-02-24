@@ -86,6 +86,9 @@ That should give you this:
 
 <INSERT PICTURE HERE>
 
+
+
+
 We now need to initialize the directory with the module in it. This makes the module aware of the OCI provider. You can do this by running:
 
 ```
@@ -110,7 +113,7 @@ That gives:
 
 The next command will deploy Oracle Essbase using the values in the variables.tf file:
 
-<INSERT TABLE OF VARIABLES HERE>
+
 
 If that's good, we can go ahead and apply the deploy:
 

@@ -1,6 +1,10 @@
-# ![Essbase Logo](./images/oracle-Essbase.png) Oracle Essbase on Oracle Cloud Infrastructure
 
-## About
+<p float="left">
+  <img align="left" width="130" src="./images/oracle-Essbase.png"> 
+  <br/>
+  <h1>Oracle Essbase on Oracle Cloud Infrastructure</h1>
+  <br/>
+</p>
 
 Oracle Essbase is a business analytics solution that uses a proven, flexible, best-in-class architecture for analysis, reporting, and collaboration. It delivers instant value and greater productivity for your business users, analysts, modelers, and decision-makers, across all lines of business within your organization. You can interact with Essbase, through a web or Microsoft Office interface, to analyze, model, collaborate, and report.
 

@@ -5,7 +5,7 @@
 locals {
 
   cloud_init = <<TMPL
-Content-Type: multipart/mixed; boundary="BASTION-BOUNDARY-0123456789"
+Content-Type: multipart/mixed; boundary="boundary-0123456789"
 MIME-Version: 1.0
 
 --boundary-0123456789

@@ -1,10 +1,7 @@
 
-<p float="left">
-  <img align="left" width="130" src="./images/oracle-Essbase.png"> 
-  <br/>
-  <h1>Oracle Essbase on Oracle Cloud Infrastructure</h1>
-  <br/>
-</p>
+<img align="left" width="130" src="./images/oracle-Essbase.png"> 
+<br/>
+<h1>Oracle Essbase on Oracle Cloud Infrastructure</h1>
 
 ![essbase-stack](https://github.com/oracle-quickstart/oci-essbase/workflows/essbase-stack/badge.svg)
 

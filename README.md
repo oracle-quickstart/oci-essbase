@@ -1,10 +1,11 @@
-![essbase-stack](https://github.com/oracle-quickstart/oci-essbase/workflows/essbase-stack/badge.svg)
 <p float="left">
   <img align="left" width="130" src="./images/oracle-Essbase.png"> 
   <br/>
   <h1>Oracle Essbase on Oracle Cloud Infrastructure</h1>
   <br/>
 </p>
+
+![essbase-stack](https://github.com/oracle-quickstart/oci-essbase/workflows/essbase-stack/badge.svg)
 
 Oracle Essbase is a business analytics solution that uses a proven, flexible, best-in-class architecture for analysis, reporting, and collaboration. It delivers instant value and greater productivity for your business users, analysts, modelers, and decision-makers, across all lines of business within your organization. You can interact with Essbase, through a web or Microsoft Office interface, to analyze, model, collaborate, and report.
 
@@ -14,10 +15,13 @@ This Quick Start automates the deployment of Oracle Essbase stack on [Oracle Clo
 
 ![Default Topology Diagram](./images/image-default_topology.png)
 
+The above digram shows the default topology supported by the terraform scripts.  In the basic topology, the Essbase compute instance is exposed on a public subnet, and configured using the target autonomous database for the RCU schema.
+
 ### Full Topology
 
 ![Full Topology Diagram](./images/image-full_topology.png)
 
+The above digram shows the full topology supported by the terraform scripts.  In this scenario, the application subnet is private. To access the Essbase user interface, an OCI load balancer is provisioned in another public regional subnet.  A bastion host is also provisioned to support connectivity from the Resource Manager.
 
 ## Before you get started
 

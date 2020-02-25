@@ -34,3 +34,6 @@ ls -la
 zip -r $SCRIPT_DIR/build/essbase-stack-ucm.zip *
 cd $SCRIPT_DIR
 rm -rf $folder
+
+ls -la $SCRIPT_DIR/build
+

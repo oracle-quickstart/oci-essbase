@@ -70,10 +70,7 @@ You'll need to enter yes when prompted. The apply can take up to twenty minutes 
 
 ![terraform apply](./images/03_terraform_apply.png)
 
-When the apply is complete, the infrastructure will be deployed and the Essbase product will be running.
-
-
-### Access the Essbase environment
+When the apply is complete, the infrastructure will be deployed and the Essbase product will be running, and can be accessed at the given `essbase_url` output variable.
 
 ![access essbase](./images/04_access_essbase.png)
 

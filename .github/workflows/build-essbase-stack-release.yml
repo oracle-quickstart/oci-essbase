@@ -1,6 +1,8 @@
 name: 'essbase-stack-release'
 
-on: [release]
+on:
+  release:
+    types: [published]
 env:
   PROJECT_WORKING_DIR: '/'
 

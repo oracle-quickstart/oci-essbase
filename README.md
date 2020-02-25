@@ -82,7 +82,10 @@ You'll want a local copy of this repo. You can make that with the commands:
 ```
 git clone https://github.com/oracle-quickstart/oci-essbase.git
 cd oci-essbase/terraform
+ls
 ```
+
+![clone repo](./images/00_clone_repo.png)
 
 We now need to initialize the directory with the module in it. This makes the module aware of the OCI provider. You can do this by running:
 

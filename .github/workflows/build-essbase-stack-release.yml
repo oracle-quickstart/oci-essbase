@@ -1,0 +1,44 @@
+name: 'essbase-stack-release'
+
+on: [release]
+env:
+  PROJECT_WORKING_DIR: '/'
+
+jobs:
+  terraform_generate_packages:
+    name: Generate Stack Packages
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Terraform Init
+        uses: hashicorp/terraform-github-actions@master
+        with:
+          tf_actions_version: 0.12.17
+          tf_actions_subcommand: 'init'
+          tf_actions_working_dir: ${{ env.PROJECT_WORKING_DIR }}terraform
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: 'Terraform Validate'
+        uses: hashicorp/terraform-github-actions@master
+        with:
+          tf_actions_version: 0.12.17
+          tf_actions_subcommand: 'validate'
+          tf_actions_working_dir: ${{ env.PROJECT_WORKING_DIR }}terraform
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Build artifacts
+        run: |
+          /bin/bash build.sh
+      - name: Upload BYOL to release
+        uses: JsonEtco/upload-to-release@master
+        with:
+          args: ${{ env.PROJECT_WORKING_DIR}}build/essbase-stack-byol.zip application/zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Upload UCM to release
+        uses: JsonEtco/upload-to-release@master
+        with:
+          args: ${{ env.PROJECT_WORKING_DIR}}build/essbase-stack-ucm.zip application/zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+

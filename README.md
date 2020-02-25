@@ -27,7 +27,7 @@ The above digram shows the full topology supported by the terraform scripts.  In
 
 ### Encrypt Values using KMS
 
-Oracle Cloud Infrastructure Key Management (KMS) enables you to manage sensitive information when creating a stack. You are required to use KMS to encrypt credentials during provisioning by creating a key. Passwords chosen for Essbase administrator and Database must meet their respective password requirements.
+Oracle Cloud Infrastructure [Key Management (KMS)][kms] enables you to manage sensitive information when creating a stack. You are required to use KMS to encrypt credentials during provisioning by creating a key. Passwords chosen for Essbase administrator and Database must meet their respective password requirements.
 
 ### Create Dynamic Group
 
@@ -68,7 +68,6 @@ allow dynamic-group group_name to manage objects in compartment compartment_name
 ```
 
 ## Getting started using the Terraform command line tool
-
 
 You'll want a local copy of this repo. You can make that with the commands:
 
@@ -117,24 +116,31 @@ You'll need to enter yes when prompted.
 
 ## Getting Started Using Resource Manager
 
-[Resource Manager][orm] is an Oracle Cloud Infrastructure service that allows you to manage your terraform configuration and state. 
-To simplify getting started, the terraform BYOL and UCM stacks for use with the Resource Manager service are created as part of each [release](https://github.com/oracle-quickstart/oci-essbase/releases).
+Oracle Cloud Infrastructure [Resource Manager (ORM)][orm] allows you to manage your terraform configurations and state.
+To simplify getting started, the terraform stacks for use with ORM are created as part of each [release](https://github.com/oracle-quickstart/oci-essbase/releases).
+
+Note, you may need to update your policies for accessing the ORM service.
 
 ```
-Allow group group_name to manage orm-stacks in compartment compartment_name
-Allow group group_name to manage orm-jobs in compartment compartment_name
+allow group group_name to manage orm-stacks in compartment compartment_name
+allow group group_name to manage orm-jobs in compartment compartment_name
 ```
 
 ## License
 
-This template assumes you already have purchased a license for Oracle Essbase. For more information, see XXX.
+These terraform scripts are licensed under the Universal Permissive License 1.0.  See [LICENSE](./LICENSE) for more details.
 
+The Oracle Essbase product requires a purchased license.  
+
+* Bring Your Own License (BYOL)
+* Universal Credits (UCM).
 
 ## Questions
 
 If you have an issue or a question, please take a look at our [FAQs](./FAQs.md) or [open an issue](https://github.com/oracle-quickstart/oci-essbase/issues/new).
 
 [essbase]: https://docs.oracle.com/en/database/other-databases/essbase/19.3/index.html
-[oci]: https://cloud.oracle.com/en_US/cloud-infrastructure
+[oci]: https://cloud.oracle.com/cloud-infrastructure
 [orm]: https://docs.cloud.oracle.com/iaas/Content/ResourceManager/Concepts/resourcemanager.htm
+[kms]: https://docs.cloud.oracle.com/iaas/Content/KeyManagement/Concepts/keyoverview.htm
 [tf]: https://www.terraform.io

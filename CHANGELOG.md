@@ -20,6 +20,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Make KMS encryption for sensitive input values mandatory.
 - Remove "Use HTTPS" option. Load balancer will always be configured with HTTPS and a demo certificate.
 - Enable SSL connections for ATP-D.
+- Rename variable `create_private_subnet` to `create_private_application_subnet`
+- Rename variable `assign_public_ip` to `assign_instance_public_ip`
 
 ## [19.3.0.0.1]
 ### Added

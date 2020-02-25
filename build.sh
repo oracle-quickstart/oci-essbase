@@ -17,7 +17,7 @@ rm -rf .terraform
 rm -rf essbase-ucm*
 for file in *.disabled; do mv $file ${file//.disabled/}; done
 ls -la
-zip $SCRIPT_DIR/build/essbase-stack-byol.zip *
+zip -r $SCRIPT_DIR/build/essbase-stack-byol.zip *
 cd $SCRIPT_DIR
 rm -rf $folder
 
@@ -31,6 +31,9 @@ rm -rf .terraform
 rm -rf essbase-byol*
 for file in *.disabled; do mv $file ${file//.disabled/}; done
 ls -la
-zip $SCRIPT_DIR/build/essbase-stack-byol.zip *
+zip -r $SCRIPT_DIR/build/essbase-stack-ucm.zip *
 cd $SCRIPT_DIR
 rm -rf $folder
+
+ls -la $SCRIPT_DIR/build
+

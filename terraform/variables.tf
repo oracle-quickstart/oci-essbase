@@ -28,7 +28,7 @@ variable "application_subnet_cidr" {
   default = "10.0.1.0/24"
 }
 
-variable "create_private_subnet" {
+variable "create_private_application_subnet" {
   type    = bool
   default = false
 }

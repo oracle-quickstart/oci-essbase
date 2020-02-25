@@ -20,7 +20,7 @@ locals {
   resource_name_prefix = var.service_name != "" ? var.service_name : local.generated_name_prefix
   rcu_schema_prefix    = var.rcu_schema_prefix != "" ? var.rcu_schema_prefix : local.generated_rcu_schema_prefix
 
-  assign_public_ip = var.assign_public_ip && var.use_existing_vcn || (! var.use_existing_vcn) && (! var.create_private_subnet)
+  assign_public_ip = var.assign_public_ip && var.use_existing_vcn || (! var.use_existing_vcn) && (! var.create_private_application_subnet)
 
   enable_bastion = (! local.assign_public_ip)
 
@@ -72,7 +72,7 @@ module "application-subnet" {
   cidr_block            = var.application_subnet_cidr
   dhcp_options_id       = module.network.default_dhcp_options_id
   route_table_id        = local.enable_bastion ? module.network.nat_route_table_id : module.network.internet_route_table_id
-  create_private_subnet = var.create_private_subnet
+  create_private_subnet = var.create_private_application_subnet
   display_name_prefix   = local.resource_name_prefix
   freeform_tags         = local.freeform_tags
   defined_tags          = local.defined_tags

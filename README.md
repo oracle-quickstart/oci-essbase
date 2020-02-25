@@ -32,48 +32,46 @@ The above digram shows the full topology supported by the terraform scripts.  In
 Refer to the [documentation](https://docs.oracle.com/en/database/other-databases/essbase/19.3/essad/you-begin-oracle-essbase.html) for the pre-requisite steps to using Essbase on OCI.
 
 ### Encrypt Values using KMS
- Refer to the [documentation](https://docs.oracle.com/en/database/other-databases/essbase/19.3/essad/you-begin-oracle-essbase.html) for the pre-requisite steps to using Essbase on OCI.
 
- Oracle Cloud Infrastructure [Key Management (KMS)][kms] enables you to manage sensitive information when creating a stack. You are required to use KMS to encrypt credentials during provisioning by creating a key. Passwords chosen for Essbase administrator and Database must meet their respective password requirements.
+Oracle Cloud Infrastructure [Key Management (KMS)][kms] enables you to manage sensitive information when creating a stack. You are required to use KMS to encrypt credentials during provisioning by creating a key. Passwords chosen for Essbase administrator and Database must meet their respective password requirements.
 
- ### Create Dynamic Group
+### Create Dynamic Group
 
- You create dynamic groups of Oracle Cloud Infrastructure compute instances, and associate them with policies. For more information on dynamic groups, see [Managing Dynamic Groups](https://docs.cloud.oracle.com/iaas/Content/Identity/Tasks/managingdynamicgroups.htm).
+You create dynamic groups of Oracle Cloud Infrastructure compute instances, and associate them with policies. For more information on dynamic groups, see [Managing Dynamic Groups](https://docs.cloud.oracle.com/iaas/Content/Identity/Tasks/managingdynamicgroups.htm).
 
- ### Setup Policies
+### Setup Policies
 
- Set up policies that are appropriate for your organization's security setup. The following is an example of a policy template, with each row being a policy statement.
+Set up policies that are appropriate for your organization's security setup. The following is an example of a policy template, with each row being a policy statement.
 
- ```
- allow group group_name to manage virtual-network-family in compartment compartment_name
- allow group group_name to manage load-balancers in compartment compartment_name
- allow group group_name to manage app-catalog-listing in compartment compartment_name
- allow group group_name to manage instances in compartment compartment_name
- allow group group_name to manage volume-family in compartment compartment_name
- allow group group_name to use instance-family in compartment compartment_name
- allow group group_name to manage autonomous-database-family in compartment compartment_name
- allow group group_name to manage autonomous-backups in compartment compartment_name
- allow group group_name to manage buckets in compartment compartment_name
- allow group group_name to manage objects in compartment compartment_name
- allow group group_name to use vaults in compartment compartment_name
- allow group group_name to use keys in compartment compartment_name
- ```
+```
+allow group group_name to manage virtual-network-family in compartment compartment_name
+allow group group_name to manage load-balancers in compartment compartment_name
+allow group group_name to manage app-catalog-listing in compartment compartment_name
+allow group group_name to manage instances in compartment compartment_name
+allow group group_name to manage volume-family in compartment compartment_name
+allow group group_name to use instance-family in compartment compartment_name
+allow group group_name to manage autonomous-database-family in compartment compartment_name
+allow group group_name to manage autonomous-backups in compartment compartment_name
+allow group group_name to manage buckets in compartment compartment_name
+allow group group_name to manage objects in compartment compartment_name
+allow group group_name to use vaults in compartment compartment_name
+allow group group_name to use keys in compartment compartment_name
+```
 
- Some policies may be optional, depending on expected use. For example, if you're not using a load balancer, you don't need a policy that allows management of load balancers.
+Some policies may be optional, depending on expected use. For example, if you're not using a load balancer, you don't need a policy that allows management of load balancers.
 
- To allow instances within the compartment to invoke functionality without requiring further authentication, you must have group policies for the instances in the compartment. To do this, create a dynamic group, and set the policies for that dynamic group, such as shown in the following example:
+To allow instances within the compartment to invoke functionality without requiring further authentication, you must have group policies for the instances in the compartment. To do this, create a dynamic group, and set the policies for that dynamic group, such as shown in the following example:
 
- ```
- allow dynamic-group group_name to inspect volume-groups in compartment compartment_name
- allow dynamic-group group_name to manage volumes in compartment compartment_name
- allow dynamic-group group_name to manage volume-group-backups in compartment compartment_name
- allow dynamic-group group_name to manage volume-backups in compartment compartment_name
- allow dynamic-group group_name to use autonomous-database in compartment compartment_name
- allow dynamic-group group_name to manage autonomous-backups in compartment compartment_name
- allow dynamic-group group_name to read buckets in compartment compartment_name
- allow dynamic-group group_name to manage objects in compartment compartment_name
- ```
-
+```
+allow dynamic-group group_name to inspect volume-groups in compartment compartment_name
+allow dynamic-group group_name to manage volumes in compartment compartment_name
+allow dynamic-group group_name to manage volume-group-backups in compartment compartment_name
+allow dynamic-group group_name to manage volume-backups in compartment compartment_name
+allow dynamic-group group_name to use autonomous-database in compartment compartment_name
+allow dynamic-group group_name to manage autonomous-backups in compartment compartment_name
+allow dynamic-group group_name to read buckets in compartment compartment_name
+allow dynamic-group group_name to manage objects in compartment compartment_name
+```
 
 ## Using the Terraform command line tool
 

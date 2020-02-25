@@ -34,13 +34,13 @@ jobs:
       - name: Upload BYOL to release
         uses: JasonEtco/upload-to-release@master
         with:
-          args: ${{ env.PROJECT_WORKING_DIR }}build/essbase-stack-byol.zip application/zip
+          args: build/essbase-stack-byol.zip application/zip
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Upload UCM to release
         uses: JasonEtco/upload-to-release@master
         with:
-          args: ${{ env.PROJECT_WORKING_DIR }}build/essbase-stack-ucm.zip application/zip
+          args: build/essbase-stack-ucm.zip application/zip
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 

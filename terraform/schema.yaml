@@ -54,7 +54,7 @@ groupings:
   - ${application_subnet_cidr}
   - ${existing_application_subnet_compartment_id}
   - ${existing_application_subnet_id}
-  - ${create_private_subnet}
+  - ${create_private_application_subnet}
   - ${assign_public_ip}
   - ${bastion_instance_shape}
   - ${bastion_subnet_cidr}
@@ -167,7 +167,7 @@ variables:
     pattern: "^(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\\/(3[0-2]|[1-2]?[0-9])$"
     required: true
 
-  create_private_subnet:
+  create_private_application_subnet:
     title: Create a private Essbase subnet
     description: Create a private subnet for the Essbase node. A bastion host will be also created.
     visible:
@@ -220,7 +220,7 @@ variables:
       - not:
         - ${use_existing_vcn}
       - or:
-        - ${create_private_subnet}
+        - ${create_private_application_subnet}
         - not:
           - ${assign_public_ip}
     type: string
@@ -260,7 +260,7 @@ variables:
     type: oci:core:instanceshape:name
     visible:
       or:
-      - ${create_private_subnet}
+      - ${create_private_application_subnet}
       - not:
         - ${assign_public_ip}
     default: VM.Standard.E2.1
@@ -313,7 +313,7 @@ variables:
         - not:
           - ${use_existing_vcn}
         - not:
-          - ${create_private_subnet}
+          - ${create_private_application_subnet}
     default: true
 
   ssh_public_key:

@@ -84,6 +84,8 @@ We now need to initialize the directory with the module in it. This makes the mo
 terraform init
 ```
 
+![terraform init](./images/01_terraform_init.png)
+
 ### Configure
 
 Choose the Essbase image that corresponds to the desired [license](#License), by removing the `.disabled` extension on either the [essbase-byol.auto.tfvars.disabled](./terraform/essbase-byol.auto.tfvars.disabled) or [essbase-ucm.auto.tfvars.disabled](./terraform/essbase-ucm.auto.tfvars.disabled) file.  Set the remaining variables needed to drive the stack creation.  This can be done by creating the terraform.tfvars from the [template file](./terraform/terraform.tfvars.template), or using environment variables as described here.
@@ -93,6 +95,8 @@ Let's make sure the plan looks good:
 ```
 terraform plan
 ```
+
+![terraform plan](./images/02_terraform_plan.png)
 
 ### Deploy
 

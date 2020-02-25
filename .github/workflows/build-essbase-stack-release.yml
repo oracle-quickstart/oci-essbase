@@ -29,13 +29,13 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     - name: Build artifacts
       run: |
-        /bin/bash build.sh
+        /bin/bash -e build.sh
     - name: Upload BYOL stack
       uses: actions/upload-release-asset@v1.0.1
       with:
         upload_url: ${{ github.event.release.upload_url }}
         asset_path: ./build/essbase-stack-byol.zip
-        asset_name: Essbase Stack - BYOL
+        asset_name: essbase-stack-byol.zip
         asset_content_type: application/zip
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -44,7 +44,7 @@ jobs:
       with:
         upload_url: ${{ github.event.release.upload_url }}
         asset_path: ./build/essbase-stack-ucm.zip
-        asset_name: Essbase Stack - UCM
+        asset_name: essbase-stack-ucm.zip
         asset_content_type: application/zip
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

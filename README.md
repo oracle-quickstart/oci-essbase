@@ -11,6 +11,8 @@
 
 This Quick Start automates the deployment of Oracle Essbase on [Oracle Cloud Infrastructure (OCI)][oci]. It can also deploy additional stack components required – Autonomous Database, Load Balancer, Storage, Virtual Cloud Network (VCN) as part of the deployment.
 
+For more details on deploying the Essbase stack on Oracle Cloud Infrastructure, please visit the [Administering Oracle Essbase](https://docs.oracle.com/en/database/other-databases/essbase/19.3/essad/index.html) guide.
+
 ### Default Topology
 
 ![Default Topology Diagram](./images/image-default_topology.png)

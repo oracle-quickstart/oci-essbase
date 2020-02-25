@@ -31,16 +31,22 @@ jobs:
       - name: Build artifacts
         run: |
           /bin/bash build.sh
-      - name: Upload BYOL to release
-        uses: JasonEtco/upload-to-release@master
+      - name: Upload BYOL stack
+        uses: actions/upload-release-asset@v1.0.1
         with:
-          args: build/essbase-stack-byol.zip application/zip
+          upload_url: ${{ github.event.release.upload_url }}
+          asset_path: ${{ env.PROJECT_WORKING_DIR }}build/essbase-stack-byol.zip
+          asset_name: Essbase Stack - BYOL
+          asset_content_type: application/zip
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: Upload UCM to release
-        uses: JasonEtco/upload-to-release@master
+      - name: Upload UCM stack
+        uses: actions/upload-release-asset@v1.0.1
         with:
-          args: build/essbase-stack-ucm.zip application/zip
+          upload_url: ${{ github.event.release.upload_url }}
+          asset_path: ${{ env.PROJECT_WORKING_DIR }}build/essbase-stack-ucm.zip
+          asset_name: Essbase Stack - UCM
+          asset_content_type: application/zip
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 

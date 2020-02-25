@@ -108,6 +108,8 @@ terraform apply
 
 You'll need to enter yes when prompted. The apply should take about twenty minutes to run.
 
+![terraform apply](./images/03_terraform_apply.png)
+
 When the apply is complete, the infrastructure will be deployed and the Essbase product will be running.
 
 ### Destroy the Deployment
@@ -119,6 +121,8 @@ terraform destroy
 ```
 
 You'll need to enter yes when prompted.
+
+![terraform destroy](./images/04_terraform_destroy.png)
 
 ## Getting Started Using Resource Manager
 

@@ -1,7 +1,6 @@
-
-#![Essbase Logo](./images/oracle-Essbase.png) Oracle Essbase on Oracle Cloud Infrastructure
-
----
-
-## Frequently asked questions
-
+<p float="left">
+  <img align="left" width="130" src="./images/oracle-Essbase.png">
+  <br/>
+  <h1>Frequently Asked Questions</h1>
+  <br/>
+</p>

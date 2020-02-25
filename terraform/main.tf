@@ -20,9 +20,9 @@ locals {
   resource_name_prefix = var.service_name != "" ? var.service_name : local.generated_name_prefix
   rcu_schema_prefix    = var.rcu_schema_prefix != "" ? var.rcu_schema_prefix : local.generated_rcu_schema_prefix
 
-  assign_public_ip = var.assign_public_ip && var.use_existing_vcn || (! var.use_existing_vcn) && (! var.create_private_application_subnet)
+  assign_instance_public_ip = var.assign_instance_public_ip && var.use_existing_vcn || (! var.use_existing_vcn) && (! var.create_private_application_subnet)
 
-  enable_bastion = (! local.assign_public_ip)
+  enable_bastion = (! local.assign_instance_public_ip)
 
   db_type_map = {
      "Autonomous Database" = "adb"
@@ -227,7 +227,7 @@ module "essbase" {
   node_hostname_prefix = local.generated_node_hostname_prefix
   shape                = var.instance_shape
   subnet_id            = module.application-subnet.id
-  assign_public_ip     = local.assign_public_ip
+  assign_public_ip     = local.assign_instance_public_ip
   bastion_host         = module.bastion.public_ip
 
   config_volume_size = var.config_volume_size

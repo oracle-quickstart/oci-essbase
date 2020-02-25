@@ -55,7 +55,7 @@ groupings:
   - ${existing_application_subnet_compartment_id}
   - ${existing_application_subnet_id}
   - ${create_private_application_subnet}
-  - ${assign_public_ip}
+  - ${assign_instance_public_ip}
   - ${bastion_instance_shape}
   - ${bastion_subnet_cidr}
   - ${existing_bastion_subnet_compartment_id}
@@ -222,7 +222,7 @@ variables:
       - or:
         - ${create_private_application_subnet}
         - not:
-          - ${assign_public_ip}
+          - ${assign_instance_public_ip}
     type: string
     default: 10.0.2.0/24
     pattern: "^(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\\/(3[0-2]|[1-2]?[0-9])$"
@@ -237,7 +237,7 @@ variables:
       and:
       - ${use_existing_vcn}
       - not:
-        - ${assign_public_ip}
+        - ${assign_instance_public_ip}
     required: true
 
   existing_bastion_subnet_id:
@@ -248,7 +248,7 @@ variables:
       and:
       - ${use_existing_vcn}
       - not:
-        - ${assign_public_ip}
+        - ${assign_instance_public_ip}
     dependsOn:
       compartmentId: ${existing_bastion_subnet_compartment_id}
       vcnId: ${existing_vcn_id} 
@@ -262,7 +262,7 @@ variables:
       or:
       - ${create_private_application_subnet}
       - not:
-        - ${assign_public_ip}
+        - ${assign_instance_public_ip}
     default: VM.Standard.E2.1
     required: true
     dependsOn:
@@ -302,7 +302,7 @@ variables:
     dependsOn:
       compartmentId: ${compartment_ocid}
 
-  assign_public_ip:
+  assign_instance_public_ip:
     title: Assign Public IP Address
     description: If the subnet allows for a public ip address, assign one to the Essbase instance.
     type: boolean

@@ -50,7 +50,7 @@ ssh_public_key = "<Public key used on the instance>"
 # essbase_admin_username = "admin"
 essbase_admin_password_encrypted = "<Password encrypted with provided KMS key>"
 # rcu_schema_prefix = ""
-# assign_public_ip = "true"
+# assign_instance_public_ip = "true"
 
 ### Security Details
 # security_mode = "idcs"

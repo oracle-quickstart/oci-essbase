@@ -148,7 +148,7 @@ variable "rcu_schema_prefix" {
   default = ""
 }
 
-variable "assign_public_ip" {
+variable "assign_instance_public_ip" {
   type    = bool
   default = true
 }

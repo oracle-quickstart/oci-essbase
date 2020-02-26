@@ -7,7 +7,7 @@ echo "Cleaning build folder"
 rm -rf $SCRIPT_DIR/build
 mkdir -p $SCRIPT_DIR/build
 
-echo "Creating BYOL stack"
+echo "Creating stack"
 folder=$(mktemp -d "essbase-XXXXX")
 
 mkdir -p $folder
@@ -15,7 +15,7 @@ cd $folder
 cp -R $SCRIPT_DIR/terraform/* .
 rm -rf .terraform
 ls -la
-zip -r $SCRIPT_DIR/build/essbase-stack-byol.zip *
+zip -r $SCRIPT_DIR/build/essbase-stack.zip *
 cd $SCRIPT_DIR
 rm -rf $folder
 

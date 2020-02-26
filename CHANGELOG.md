@@ -6,7 +6,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [19.3.0.0.2]
 ### Added
 - Support OCI Database System as a target database.
 - Support compartment selection for existing subnets.

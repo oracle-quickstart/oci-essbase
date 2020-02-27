@@ -18,9 +18,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add service gateway to the route table for the private application subnet.
 - Make KMS encryption for sensitive input values mandatory.
 - Remove "Use HTTPS" option. Load balancer will always be configured with HTTPS and a demo certificate.
-- Enable SSL connections for ATP-D.
+- Enable SSL at Essbase compute instance. Endpoint will be configured with a demo certificate.
+- Enable SSL for mid-tier connection to the ATP-D instance.
 - Rename variable `create_private_subnet` to `create_private_application_subnet`
 - Rename variable `assign_public_ip` to `assign_instance_public_ip`
+
+### Noteworthy Image Changes
+- Update base image to [Oracle-Linux-7.7-2020.01.28-0](https://docs.cloud.oracle.com/en-us/iaas/images/image/0a72692a-bdbb-46fc-b17b-6e0a3fedeb23/).
+- Update JDK to Oracle Java 8u241 - Server JRE.
+- Apply WebLogic Patch Set Update January 2020 (30675853).
+- Apply OPSS Patch Bundle October 2019 (30146350).
 
 ## [19.3.0.0.1]
 ### Added

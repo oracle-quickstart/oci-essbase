@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add service gateway to the route table for the private application subnet.
 - Make KMS encryption for sensitive input values mandatory.
 - Remove "Use HTTPS" option. Load balancer will always be configured with HTTPS and a demo certificate.
+- Enable SSL at Essbase compute instance. Endpoint will be configured with a demo certificate.
 - Enable SSL for mid-tier connection to the ATP-D instance.
 - Rename variable `create_private_subnet` to `create_private_application_subnet`
 - Rename variable `assign_public_ip` to `assign_instance_public_ip`

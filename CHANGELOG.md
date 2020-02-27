@@ -23,7 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Rename variable `create_private_subnet` to `create_private_application_subnet`
 - Rename variable `assign_public_ip` to `assign_instance_public_ip`
 
-## Noteworthy Image Changes
+### Noteworthy Image Changes
 - Update base image to [Oracle-Linux-7.7-2020.01.28-0](https://docs.cloud.oracle.com/en-us/iaas/images/image/0a72692a-bdbb-46fc-b17b-6e0a3fedeb23/).
 - Update JDK to Oracle Java 8u241 - Server JRE.
 - Apply WebLogic Patch Set Update January 2020 (30675853).

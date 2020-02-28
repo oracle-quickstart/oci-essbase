@@ -95,7 +95,7 @@ terraform init
 
 ### Configure
 
-Choose the Essbase image that corresponds to the desired [license](#License), by removing the `.disabled` extension on either the [essbase-byol.auto.tfvars.disabled](./terraform/essbase-byol.auto.tfvars.disabled) or [essbase-ucm.auto.tfvars.disabled](./terraform/essbase-ucm.auto.tfvars.disabled) file.  Set the remaining [variables](./VARIABLES.md) needed to drive the stack creation.  This can be done by creating the terraform.tfvars from the [template file](./terraform/terraform.tfvars.template), or using environment variables as described here.
+Choose the Essbase image that corresponds to the desired [license](#License), by removing the `.disabled` extension on appropriate `essbase-<license>.auto.tfvars.disabled` file.  Set the remaining [variables](./VARIABLES.md) needed to drive the stack creation.  This can be done by creating the terraform.tfvars from the [template file](./terraform/terraform.tfvars.template), or using environment variables as described here.
 
 Let's make sure the plan looks good:
 

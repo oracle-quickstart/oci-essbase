@@ -152,9 +152,18 @@ Refer to the [documentation](https://docs.oracle.com/en/database/other-databases
 
 These terraform scripts are licensed under the Universal Permissive License 1.0.  See [LICENSE](./LICENSE) for more details.
 
-The Oracle Essbase product requires a purchased license.  
+The Oracle Essbase product requires an on-premises purchased license and active support contract. This allows customers to leverage BYOL option for deploying Essbase on OCI.
 
-* Bring Your Own License (BYOL)
+Conversion Ratios that apply for BYOL: 
+* For each supported Processor license You may activate up to 2 OCPUs of this BYOL offering.
+* For Named User Plus licenses You may activate any supported compute shape provided the number of users is within licensed limits.
+
+For more details refer: http://www.oracle.com/us/corporate/contracts/processor-core-factor-table-070634.pdf
+
+Any of the following supported program licenses may be aggregated to meet the conversion ratio above.
+* Business Intelligence Suite Foundation Edition; OR
+* Oracle Business Intelligence Foundation Suite; OR
+* Oracle Essbase Plus
 
 ## Questions
 

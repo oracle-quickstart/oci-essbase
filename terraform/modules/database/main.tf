@@ -1,28 +1,51 @@
 ## Copyright (c) 2020, Oracle and/or its affiliates.
 ## All rights reserved. The Universal Permissive License (UPL), Version 1.0 as shown at http://oss.oracle.com/licenses/upl
 
-resource "oci_database_autonomous_database" "autonomous_database" {
-  count = "${var.use_existing_db ? 0 : 1}"
+locals {
+  use_existing_db = var.database_id != ""
+}
 
-  admin_password           = "${chomp(var.db_admin_password)}"
-  compartment_id           = "${var.compartment_id}"
+data "oci_identity_compartment" "db_compartment" {
+  count      = var.enabled && !local.use_existing_db ? 1 : 0
+  id         = var.compartment_id
+}
+
+data "oci_kms_decrypted_data" "decrypted_db_admin_password" {
+  count           = var.enabled && !local.use_existing_db ? 1 : 0
+  ciphertext      = var.db_admin_password_encrypted
+  crypto_endpoint = var.kms_crypto_endpoint
+  key_id          = var.kms_key_id
+}
+
+resource "oci_database_autonomous_database" "autonomous_database" {
+  count                    = var.enabled && !local.use_existing_db ? 1 : 0
+  admin_password           = chomp(base64decode(join("", data.oci_kms_decrypted_data.decrypted_db_admin_password.*.plaintext)))
+  compartment_id           = join("", data.oci_identity_compartment.db_compartment.*.id)
   cpu_core_count           = "1"
   data_storage_size_in_tbs = "1"
-  db_name                  = "${var.db_name}"
+  db_name                  = var.db_name
   is_auto_scaling_enabled  = true
 
+  whitelisted_ips = var.whitelisted_ips
+
   display_name  = "${var.display_name_prefix}-database"
-  license_model = "${var.license_model}"
+  freeform_tags = var.freeform_tags
+  defined_tags  = var.defined_tags
+  license_model = var.license_model
 
   timeouts {
     create = "30m"
   }
 }
 
-locals {
-  database_id = "${var.use_existing_db ? var.existing_db_id : join(",", oci_database_autonomous_database.autonomous_database.*.id)}"
+data "oci_database_autonomous_database" "autonomous_database" {
+  count                  = var.enabled && local.use_existing_db ? 1 : 0
+  autonomous_database_id = var.database_id
 }
 
-data "oci_database_autonomous_database" "autonomous_database" {
-  autonomous_database_id = "${local.database_id}"
+locals {
+  db_name = join("", concat(data.oci_database_autonomous_database.autonomous_database.*.db_name, oci_database_autonomous_database.autonomous_database.*.db_name))
+  is_dedicated_values = compact(concat(data.oci_database_autonomous_database.autonomous_database.*.is_dedicated, oci_database_autonomous_database.autonomous_database.*.is_dedicated))
+  is_dedicated = var.enabled && length(local.is_dedicated_values) > 0 ? tobool(join("", local.is_dedicated_values)) : false
+  tns_alias = var.enabled ? lower(local.is_dedicated ? "${local.db_name}_low_tls" : "${local.db_name}_low") : ""
 }

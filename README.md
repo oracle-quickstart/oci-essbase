@@ -31,7 +31,7 @@ Refer to the [documentation](https://docs.oracle.com/en/database/other-databases
 
 ### Encrypt Values using KMS
 
-Oracle Cloud Infrastructure [Key Management (KMS)][kms] enables you to manage sensitive information when creating a stack. It is recommended to use KMS to encrypt credentials during provisioning by creating a key. Passwords chosen for Essbase administrator and Database must meet their respective password requirements.
+Oracle Cloud Infrastructure [Key Management (KMS)][kms] enables you to manage sensitive information when creating a stack. You are required to use KMS to encrypt credentials during provisioning by creating a key. Passwords chosen for Essbase administrator and Database must meet their respective password requirements.
 
 ### Create Dynamic Group
 
@@ -78,7 +78,6 @@ You'll want a local copy of this repo. You can make that with the commands:
 ```
 git clone https://github.com/oracle-quickstart/oci-essbase.git
 cd oci-essbase/terraform
-git checkout release-19.3.0.0.1
 ls
 ```
 
@@ -94,7 +93,7 @@ terraform init
 
 ### Configure
 
-Set the [variables](./VARIABLES.md) needed to drive the stack creation.  This can be done by creating the terraform.tfvars from the [template file](./terraform/terraform.tfvars.template), or using environment variables as described here.
+Choose the Essbase image that corresponds to the desired [license](#License), by removing the `.disabled` extension on appropriate `essbase-<license>.auto.tfvars.disabled` file.  Set the remaining [variables](./VARIABLES.md) needed to drive the stack creation.  This can be done by creating the terraform.tfvars from the [template file](./terraform/terraform.tfvars.template), or using environment variables as described here.
 
 Let's make sure the plan looks good:
 
@@ -155,6 +154,7 @@ These terraform scripts are licensed under the Universal Permissive License 1.0.
 The Oracle Essbase product requires an on-premises purchased license and active support contract. This allows customers to leverage BYOL option for deploying Essbase on OCI.
 
 Conversion Ratios that apply for BYOL: 
+
 * For each supported Processor license You may activate up to 2 OCPUs of this BYOL offering.
 * For Named User Plus licenses You may activate any supported compute shape provided the number of users is within licensed limits.
 

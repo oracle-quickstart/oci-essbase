@@ -21,7 +21,6 @@ groupings:
   variables:
   - ${service_name}
   - ${compartment_ocid}
-  - ${use_kms_provisioning_key}
   - ${kms_key_id}
   - ${kms_crypto_endpoint}
   - ${show_advanced_options}
@@ -36,8 +35,6 @@ groupings:
   - ${essbase_admin_username}
   - ${essbase_admin_password}
   - ${essbase_admin_password_encrypted}
-  - ${runtime_mode}
-  - ${reset_system}
 
 - title: "Security Configuration"
   variables:
@@ -55,29 +52,35 @@ groupings:
   - ${vcn_cidr}
   - ${existing_vcn_id}
   - ${application_subnet_cidr}
+  - ${existing_application_subnet_compartment_id}
   - ${existing_application_subnet_id}
-  - ${create_private_subnet}
-  - ${assign_public_ip}
+  - ${create_private_application_subnet}
+  - ${assign_instance_public_ip}
   - ${bastion_instance_shape}
   - ${bastion_subnet_cidr}
+  - ${existing_bastion_subnet_compartment_id}
   - ${existing_bastion_subnet_id}
   - ${create_load_balancer}
   - ${load_balancer_shape}
   - ${load_balancer_subnet_cidr}
+  - ${existing_load_balancer_subnet_compartment_id}
   - ${existing_load_balancer_subnet_id}
   - ${existing_load_balancer_subnet_id_2}
-  - ${enable_load_balancer_ssl}
 
 - title: "Database Configuration"
   variables:
   - ${use_existing_db}
+  - ${existing_db_type}
   - ${existing_db_compartment_id}
   - ${existing_db_id}
-  - ${db_admin_username}
-  - ${db_admin_password}
   - ${db_admin_password_encrypted}
   - ${db_license_model}
-  - ${db_connection_type}
+  - ${existing_oci_db_system_id}
+  - ${existing_oci_db_system_dbhome_id}
+  - ${existing_oci_db_system_database_id}
+  - ${existing_oci_db_system_database_pdb_name}
+  - ${oci_db_admin_username}
+  - ${oci_db_admin_password_encrypted}
 
 variables:
   # General Configuration
@@ -95,6 +98,28 @@ variables:
     required: true
     visible: false
 
+  compartment_ocid:
+    title: Target Compartment
+    description: The target compartment in which all provisioned resources will be created.
+    type: oci:identity:compartment:id
+    required: true
+
+  user_ocid:
+    title: User ID
+    description: The Oracle Cloud Identifier (OCID) for the user
+    type: string
+    visible: false
+
+  fingerprint:
+    title: Private Key Fingerprint
+    type: string
+    visible: false
+
+  private_key_path:
+    title: Private Key Path
+    type: string
+    visible: false
+
   service_name:
     title: Resource Display Name Prefix
     description: Display name prefix for all generated compute and network resources.  If not specified, this will be automatically generated.
@@ -102,12 +127,6 @@ variables:
     maxLength: 64
     pattern: "^([a-zA-Z_][a-zA-Z0-9\\-_]*)?$"
     required: false
-
-  compartment_ocid:
-    title: Target Compartment
-    description: The target compartment in which all provisioned resources will be created.
-    type: oci:identity:compartment:id
-    required: true
 
   show_advanced_options:
     title: Show Advanced Options
@@ -148,7 +167,7 @@ variables:
     pattern: "^(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\\/(3[0-2]|[1-2]?[0-9])$"
     required: true
 
-  create_private_subnet:
+  create_private_application_subnet:
     title: Create a private Essbase subnet
     description: Create a private subnet for the Essbase node. A bastion host will be also created.
     visible:
@@ -161,6 +180,7 @@ variables:
     title: Target network compartment
     description: Select the compartment containing the target VCN.
     type: oci:identity:compartment:id
+    default: ${compartment_ocid}
     visible: ${use_existing_vcn}
     required: true
 
@@ -173,13 +193,21 @@ variables:
       compartmentId: ${existing_vcn_compartment_id}
     required: true
 
+  existing_application_subnet_compartment_id:
+    title: Target application subnet compartment
+    description: Select the compartment containing the target application subnet.
+    type: oci:identity:compartment:id
+    default: ${compartment_ocid}
+    visible: ${use_existing_vcn}
+    required: true
+
   existing_application_subnet_id:
     title: Select Application Subnet
     description: Select an existing subnet for the target Essbase instance.
     type: oci:core:subnet:id
     visible: ${use_existing_vcn}
     dependsOn:
-      compartmentId: ${existing_vcn_compartment_id}
+      compartmentId: ${existing_application_subnet_compartment_id}
       vcnId: ${existing_vcn_id}
     required: true
 
@@ -192,12 +220,24 @@ variables:
       - not:
         - ${use_existing_vcn}
       - or:
-        - ${create_private_subnet}
+        - ${create_private_application_subnet}
         - not:
-          - ${assign_public_ip}
+          - ${assign_instance_public_ip}
     type: string
     default: 10.0.2.0/24
     pattern: "^(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\\/(3[0-2]|[1-2]?[0-9])$"
+    required: true
+
+  existing_bastion_subnet_compartment_id:
+    title: Target bastion subnet compartment
+    description: Select the compartment containing the target bastion subnet.
+    type: oci:identity:compartment:id
+    default: ${compartment_ocid}
+    visible:
+      and:
+      - ${use_existing_vcn}
+      - not:
+        - ${assign_instance_public_ip}
     required: true
 
   existing_bastion_subnet_id:
@@ -208,9 +248,9 @@ variables:
       and:
       - ${use_existing_vcn}
       - not:
-        - ${assign_public_ip}
+        - ${assign_instance_public_ip}
     dependsOn:
-      compartmentId: ${existing_vcn_compartment_id}
+      compartmentId: ${existing_bastion_subnet_compartment_id}
       vcnId: ${existing_vcn_id} 
     required: true
 
@@ -220,20 +260,15 @@ variables:
     type: oci:core:instanceshape:name
     visible:
       or:
-      - ${create_private_subnet}
+      - ${create_private_application_subnet}
       - not:
-        - ${assign_public_ip}
+        - ${assign_instance_public_ip}
     default: VM.Standard.E2.1
     required: true
     dependsOn:
       compartmentId: ${compartment_ocid}
 
   # Essbase instance configuration
-  use_marketplace_image:
-    title: Use Marketplace Image
-    type: boolean
-    visible: false
-
   mp_listing_id:
     type: string
     visible: false
@@ -243,11 +278,10 @@ variables:
     visible: false
 
   mp_listing_resource_id:
-    title: Instance Image OCID
+    title: Essbase Compute Image OCID
+    description: The published image that will be used for the Essbase compute instance.
     type: oci:core:image:id
-    visible:
-      not:
-      - ${use_marketplace_image}
+    pattern: "^ocid1\\.image\\.[a-zA-Z0-9\\.\\-\\_]+$"
     required: true
 
   instance_shape:
@@ -268,7 +302,7 @@ variables:
     dependsOn:
       compartmentId: ${compartment_ocid}
 
-  assign_public_ip:
+  assign_instance_public_ip:
     title: Assign Public IP Address
     description: If the subnet allows for a public ip address, assign one to the Essbase instance.
     type: boolean
@@ -279,7 +313,7 @@ variables:
         - not:
           - ${use_existing_vcn}
         - not:
-          - ${create_private_subnet}
+          - ${create_private_application_subnet}
     default: true
 
   ssh_public_key:
@@ -314,23 +348,10 @@ variables:
     default: admin
     required: true
 
-  essbase_admin_password:
-    title: Essbase System Admin User Password
-    description: "The password for the Essbase system administrator. Use a password that starts with a letter, is between 8 and 30 characters long, contains at least one number, and, optionally, any number of the special characters ($ # _). For example, Ach1z0#d."
-    type: password
-    visible:
-      not:
-      - ${use_kms_provisioning_key}
-    minLength: 8
-    maxLength: 30
-    pattern: "^(?=.*[0-9])[a-zA-Z][a-zA-Z0-9$#_]{7,29}$" 
-    required: true
-
   essbase_admin_password_encrypted:
     title: Essbase System Admin User Password (Encrypted)
     description: "The password for the Essbase system administrator, encrypted with the provided KMS key. Use a password that starts with a letter, is between 8 and 30 characters long, contains at least one number, and, optionally, any number of the special characters ($ # _). For example, Ach1z0#d."
     type: string
-    visible: ${use_kms_provisioning_key}
     pattern: "^(?:[a-zA-Z0-9+\/]{4})*(?:|(?:[a-zA-Z0-9+\/]{3}=)|(?:[a-zA-Z0-9+\/]{2}==)|(?:[a-zA-Z0-9+\/]{1}===))$"
     required: true
 
@@ -342,38 +363,10 @@ variables:
     maxLength: 12
     pattern: "^([a-zA-Z][a-zA-Z0-9]{0,11})?$"
 
-  runtime_mode:
-    title: Runtime Mode
-    description: Sets the system in either production or development mode.
-    type: enum
-    visible:
-      and:
-      - ${show_advanced_options}
-      - not:
-        - ${use_marketplace_image}
-    enum:
-    - production
-    - development
-    default: production
-    required: true
-
-  reset_system:
-    title: Reset System
-    description: Deletes all of the existing data prior to recreating it. DEVELOPMENT ONLY. USE WITH CAUTION.
-    visible:
-      and:
-      - ${show_advanced_options}
-      - eq:
-        - ${runtime_mode}
-        - "development"
-    type: boolean
-    default: false
-
-
   # Load balancer options
   create_load_balancer:
     title: Provision Load Balancer
-    description: Provision a load balancer in Oracle Cloud Infrastructure. 
+    description: Provision a load balancer in Oracle Cloud Infrastructure. The load balancer will be provisioned with a demo certificate. The use of demo certificate is not recommended for production workloads.
     type: boolean
     default: false
 
@@ -402,6 +395,17 @@ variables:
     pattern: "^(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\\/(3[0-2]|[1-2]?[0-9])$"
     required: true
 
+  existing_load_balancer_subnet_compartment_id:
+    title: Target load balancer subnet compartment
+    description: Select the compartment containing the target load balancer subnets.
+    type: oci:identity:compartment:id
+    default: ${compartment_ocid}
+    visible:
+      and:
+      - ${create_load_balancer}
+      - ${use_existing_vcn}
+    required: true
+
   existing_load_balancer_subnet_id:
     title: Select Load Balancer Subnet
     description: Select an existing subnet to use for the load balancer.
@@ -411,7 +415,7 @@ variables:
       - ${create_load_balancer}
       - ${use_existing_vcn}
     dependsOn:
-      compartmentId: ${existing_vcn_compartment_id}
+      compartmentId: ${existing_load_balancer_subnet_compartment_id}
       vcnId: ${existing_vcn_id}
     required: true
 
@@ -424,16 +428,9 @@ variables:
       - ${create_load_balancer}
       - ${use_existing_vcn}
     dependsOn:
-      compartmentId: ${existing_vcn_compartment_id}
+      compartmentId: ${existing_load_balancer_subnet_compartment_id}
       vcnId: ${existing_vcn_id}
-
-  enable_load_balancer_ssl:
-    title: Use HTTPS
-    description: Configures the load balancer to use HTTPS, provisioned with a demo certificate signed with the Essbase Demo CA. The use of demo certificate is not recommended for production workloads.
-    type: boolean
-    visible:
-      ${create_load_balancer}
-    default: true
+      hideRegionalSubnet: true
 
   # Database options
   use_existing_db:
@@ -441,45 +438,49 @@ variables:
     description: Select this option to enable support of an existing database for the internal Essbase repository.
     type: boolean
 
+  existing_db_type:
+    title: Database Type
+    description: Select which database you will use
+    type: enum
+    enum:
+    - "Autonomous Database"
+    - "Database System"
+    default: "Autonomous Database"
+    visible: ${use_existing_db}
+
   existing_db_compartment_id:
     title: Target database compartment
     type: oci:identity:compartment:id
+    default: ${compartment_ocid}
     visible: ${use_existing_db}
     required: true
 
   existing_db_id:
-    title: Target database
-    description: Target database in which to create the Essbase schema.
-    visible: ${use_existing_db}
+    title: Target ATP database
+    description: Target ATP database in which to create the Essbase schema.
+    visible:
+      and:
+      - eq:
+        - ${existing_db_type}
+        - "Autonomous Database"
+      - ${use_existing_db}
     type: oci:database:autonomousdatabase:id
     dependsOn:
       compartmentId: ${existing_db_compartment_id} 
-    required: true
-
-  db_admin_username:
-    title: Database Admin User
-    description: The username for the database administrator.
-    type: string
-    visible: false
-
-  db_admin_password:
-    title: Database Admin User Password
-    description: "The password for the database administrator. Use a password that starts with a letter, is between 12 and 30 characters long, contains at least one number, and at least one of the special characters ($ # _). For example, BEstr0ng_#12."
-    type: password
-    visible:
-      not:
-      - ${use_kms_provisioning_key}
-    minLength: 12
-    maxLength: 30
-    pattern: "^(?=.*[0-9])(?=.*[$#_])[a-zA-Z][a-zA-Z0-9$#_]{11,29}$"
     required: true
 
   db_admin_password_encrypted:
     title: Database Admin User Password (Encrypted)
     description: "The password for the database administrator, encrypted with the provided KMS key. Use a password that starts with a letter, is between 12 and 30 characters long, contains at least one number, and at least one of the special characters ($ # _). For example, BEstr0ng_#12."
     type: string
-    visible: ${use_kms_provisioning_key}
     pattern: "^(?:[a-zA-Z0-9+\/]{4})*(?:|(?:[a-zA-Z0-9+\/]{3}=)|(?:[a-zA-Z0-9+\/]{2}==)|(?:[a-zA-Z0-9+\/]{1}===))$"
+    visible:
+      or:
+      - eq:
+        - ${existing_db_type}
+        - "Autonomous Database"
+      - not:
+        - ${use_existing_db}
     required: true
 
   db_license_model:
@@ -494,18 +495,104 @@ variables:
     default: BRING_YOUR_OWN_LICENSE
     required: true
 
-  db_connection_type:
-    title: Database Connection Type
-    type: enum
-    visible:
-      eq:
-      - ${runtime_mode}
-      - "development"
-    enum:
-    - low
-    - medium
-    default: low
 
+  existing_db_connect_string:
+    title: Database Connection String
+    description: Target database connect string
+    type: string
+    visible:
+      and:
+      - eq:
+        - ${existing_db_type}
+        - "Manual"
+      - ${use_existing_db}
+    required: true
+
+  existing_oci_db_system_id:
+    title: Target database system
+    description: Target database system in which to create the Essbase schema.
+    type: oci:database:dbsystem:id
+    visible: 
+      and: 
+      - eq:
+        - ${existing_db_type}
+        - "Database System"
+      - ${use_existing_db}
+    dependsOn:
+      compartmentId: ${existing_db_compartment_id}
+    required: true
+
+  existing_oci_db_system_dbhome_id:
+    title: Database home in the DB System
+    description: The database home within the DB System
+    type: oci:database:dbhome:id
+    visible:
+      and:
+      - eq:
+        - ${existing_db_type}
+        - "Database System"
+      - ${use_existing_db}
+    required: true
+    dependsOn:
+      compartmentId: ${existing_db_compartment_id}
+      dbSystemId: ${existing_oci_db_system_id}
+
+  existing_oci_db_system_database_id:
+    title: Database in the DB System
+    description: The database within the DB System in which to create the Essbase schema.
+    type: oci:database:database:id
+    visible:
+      and:
+      - eq:
+        - ${existing_db_type}
+        - "Database System"
+      - ${use_existing_db}
+    dependsOn:
+      compartmentId: ${existing_db_compartment_id}
+      dbHomeId: ${existing_oci_db_system_dbhome_id}
+    required: true
+
+  existing_oci_db_system_database_pdb_name:
+    title: Database PDB Name
+    description: The name of the pdb in the target database. Required if not using the default pdb created during database provision.
+    type: string
+    pattern: "^([a-zA-Z0-9][a-zA-Z0-9_]*)?$"
+    visible:
+      and:
+      - eq:
+        - ${existing_db_type}
+        - "Database System"
+      - ${use_existing_db}
+    required: false
+
+  oci_db_admin_username:
+    title: Database Admin User
+    description: The username for the database administrator.
+    type: string
+    pattern: "^[a-zA-Z][a-zA-Z0-9$#_]{0,29}$"
+    default: SYS
+    visible:
+      and: 
+      - eq:
+        - ${existing_db_type}
+        - "Database System"
+      - ${use_existing_db}
+    required: true
+
+  oci_db_admin_password_encrypted:
+    title: Database Admin User Password (Encrypted)
+    description: "The password for the database administrator, encrypted with the provided KMS key. Use a password that starts with a letter, is between 12 and 30 characters long, contains at least one number, and at least one of the special characters ($ # _). For example, BEstr0ng_#12."
+    type: string
+    pattern: "^(?:[a-zA-Z0-9+\/]{4})*(?:|(?:[a-zA-Z0-9+\/]{3}=)|(?:[a-zA-Z0-9+\/]{2}==)|(?:[a-zA-Z0-9+\/]{1}===))$"
+    visible:
+      and:
+      - eq:
+        - ${existing_db_type}
+        - "Database System"
+      - ${use_existing_db}
+    required: true
+
+ 
   # Security settings
   security_mode:
     title: Security Mode
@@ -537,29 +624,14 @@ variables:
       - idcs
     required: true
 
-  idcs_client_secret:
-    title: IDCS Application Client Secret
-    description: Provide the client secret for the IDCS application.
-    type: password
-    visible:
-      and:
-      - eq:
-        - ${security_mode}
-        - idcs
-      - not:
-        - ${use_kms_provisioning_key}
-    required: true
-
   idcs_client_secret_encrypted:
     title: IDCS Application Client Secret (Encrypted)
     description: Provide the client secret for the IDCS application, encrypted with the provided KMS key.
     type: string
     visible:
-      and:
-      - eq:
-        - ${security_mode}
-        - idcs
-      - ${use_kms_provisioning_key}
+      eq:
+      - ${security_mode}
+      - idcs
     pattern: "^(?:[a-zA-Z0-9+\/]{4})*(?:|(?:[a-zA-Z0-9+\/]{3}=)|(?:[a-zA-Z0-9+\/]{2}==)|(?:[a-zA-Z0-9+\/]{1}===))$"
     required: true
 
@@ -574,32 +646,31 @@ variables:
     required: true
 
   # KMS settings
-  use_kms_provisioning_key:
-    title: Use KMS Provisioning Key
-    description: Provide the KMS key used to encrypt the credentials during provisioning
-    type: boolean
-    default: true
-    required: true
-    
   kms_key_id:
     title: KMS Key OCID
     description: OCID for the encryption key used for the provided credentials
     type: string
-    visible: ${use_kms_provisioning_key}
+    pattern: "^ocid1\\.key\\.[a-zA-Z0-9\\.\\-\\_]+$"
     required: true
   
   kms_crypto_endpoint:
     title: KMS Service Crypto Endpoint
-    description: Provide the crypt endpoint for the KMS vault
+    description: Provide the crypto endpoint for the KMS vault
     type: string
-    visible: ${use_kms_provisioning_key}
     required: true
-
 
 outputs:
   essbase_url:
     title: Essbase URL
     type: link
+  essbase_external_url:
+    title: Essbase External URL
+    type: link
+  essbase_redirect_url:
+    title: Essbase Redirect URL
+    type: string
+  essbase_post_logout_redirect_url:
+    title: Essbase Post Logout Redirect URL
   essbase_node_id:
     title: Essbase Node Instance OCID
     type: ocid
@@ -621,6 +692,12 @@ outputs:
   rcu_schema_prefix:
     title: RCU Schema Prefix
     type: string
+  idcs_client_tenant:
+    title: IDCS Instance GUID
+    type: string
+  idcs_client_id:
+    title: IDCS Application Client ID
+    type: string
 
 outputGroups:
 - title: Essbase Instance
@@ -630,6 +707,7 @@ outputGroups:
   - ${essbase_node_public_ip}
   - ${essbase_node_private_ip}
   - ${essbase_url}
+  - ${essbase_external_url}
   - ${rcu_schema_prefix}
 
 - title: Bastion Host Info
@@ -637,5 +715,12 @@ outputGroups:
   - ${bastion_host_id}
   - ${bastion_host_public_ip}
 
-primaryOutputButton: ${essbase_url}
+- title: Identity Cloud Service Info
+  outputs:
+  - ${idcs_client_tenant}
+  - ${idcs_client_id}
+  - ${essbase_redirect_url}
+  - ${essbase_post_logout_redirect_url}
+
+primaryOutputButton: ${essbase_external_url}
 

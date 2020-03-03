@@ -2,7 +2,7 @@
 ## All rights reserved. The Universal Permissive License (UPL), Version 1.0 as shown at http://oss.oracle.com/licenses/upl
 
 terraform {
-  required_version = "< 0.12"
+  required_version = ">= 0.12"
 }
 
 provider "local" {
@@ -24,3 +24,4 @@ provider "random" {
 provider "template" {
   version = "~> 2.1"
 }
+

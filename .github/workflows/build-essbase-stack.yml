@@ -7,28 +7,23 @@ jobs:
     name: Generate Stack Packages
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
-    - name: Terraform Init
-      uses: hashicorp/terraform-github-actions@master
-      with:
-        tf_actions_version: 0.11.14
-        tf_actions_subcommand: 'init'
-        tf_actions_working_dir: terraform
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    - name: 'Terraform Validate'
-      uses: hashicorp/terraform-github-actions@master
-      with:
-        tf_actions_version: 0.11.14
-        tf_actions_subcommand: 'validate'
-        tf_actions_working_dir: terraform
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        TF_VAR_tenancy_ocid: "ocid1.tenancy.oc1..a"
-        TF_VAR_compartment_ocid: "ocid1.compartment.oc1..a"
-        TF_VAR_ssh_public_key: "ssh-rsa AAAA"
-        TF_VAR_region: "us-ashburn-1"
-        TF_VAR_instance_availability_domain: "X:KmGu:US-ASHBURN-AD-1"
-    - name: Build artifacts
-      run: |
-        /bin/bash -e build.sh
+      - uses: actions/checkout@v2
+      - name: Terraform Init
+        uses: hashicorp/terraform-github-actions@master
+        with:
+          tf_actions_version: 0.12.17
+          tf_actions_subcommand: 'init'
+          tf_actions_working_dir: terraform
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: 'Terraform Validate'
+        uses: hashicorp/terraform-github-actions@master
+        with:
+          tf_actions_version: 0.12.17
+          tf_actions_subcommand: 'validate'
+          tf_actions_working_dir: terraform
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Build artifacts
+        run: |
+          /bin/bash -e build.sh

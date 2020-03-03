@@ -1,10 +1,19 @@
 ## Copyright (c) 2020, Oracle and/or its affiliates.
 ## All rights reserved. The Universal Permissive License (UPL), Version 1.0 as shown at http://oss.oracle.com/licenses/upl
 
-output "subnet_id" {
-  value = "${data.oci_core_subnet.application.id}"
+output "id" {
+  value = local.use_existing_subnet ? join("", data.oci_core_subnet.application.*.id) : join("", oci_core_subnet.application.*.id)
+}
+
+locals {
+  af = [ false ]
+  actual = compact(concat(data.oci_core_subnet.application.*.prohibit_public_ip_on_vnic, oci_core_subnet.application.*.prohibit_public_ip_on_vnic, local.af ))
 }
 
 output "is_private_subnet" {
-  value = "${data.oci_core_subnet.application.prohibit_public_ip_on_vnic ? 1 : 0}"
+  value = element(local.actual, 0)
+}
+
+output "cidr_block" {
+  value = local.use_existing_subnet ? join("", data.oci_core_subnet.application.*.cidr_block) : join("", oci_core_subnet.application.*.cidr_block)
 }

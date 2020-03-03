@@ -366,7 +366,7 @@ variables:
   # Load balancer options
   create_load_balancer:
     title: Provision Load Balancer
-    description: Provision a load balancer in Oracle Cloud Infrastructure. The load balancer will be provisioned with a demo certificate signed with the Essbase Demo CA. The use of demo certificate is not recommended for production workloads.
+    description: Provision a load balancer in Oracle Cloud Infrastructure. The load balancer will be provisioned with a demo certificate. The use of demo certificate is not recommended for production workloads.
     type: boolean
     default: false
 

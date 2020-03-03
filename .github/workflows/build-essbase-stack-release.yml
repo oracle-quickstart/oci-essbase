@@ -35,7 +35,7 @@ jobs:
       with:
         upload_url: ${{ github.event.release.upload_url }}
         asset_path: ./build/essbase-stack-byol.zip
-        asset_name: essbase-stack-byol-${{ github.event.release.tag_name }}.zip
+        asset_name: essbase-stack-${{ github.event.release.tag_name }}-byol.zip
         asset_content_type: application/zip
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

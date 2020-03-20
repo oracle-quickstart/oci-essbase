@@ -6,11 +6,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [19.3.0.0.2]
+
 ### Added
 - Support OCI Database System as a target database.
 - Support compartment selection for existing subnets.
 - Output Essbase Redirect URL for the IDCS confidential app.
 - Add freeform tag to created resources containing the display name prefix provided by user or generated.
+- Essbase Universal Credits Model (UCM) edition information.
 
 ### Changed
 - Migrate scripts to terraform 0.12 syntax.

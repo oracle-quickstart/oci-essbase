@@ -1,4 +1,10 @@
-#  Local .terraform directories
+.DS_Store
+
+# Gradle directories
+.gradle
+build
+
+# Local .terraform directories
 **/.terraform/*
 
 # .tfstate files
@@ -7,3 +13,4 @@
 
 # .tfvars files
 *.tfvars
+!essbase-byol.auto.tfvars

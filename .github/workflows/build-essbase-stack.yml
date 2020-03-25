@@ -29,6 +29,7 @@ jobs:
         TF_VAR_ssh_public_key: "ssh-rsa AAAA"
         TF_VAR_region: "us-ashburn-1"
         TF_VAR_instance_availability_domain: "X:KmGu:US-ASHBURN-AD-1"
+        TF_VAR_security_mode: "embedded"
     - name: Build artifacts
       run: |
         /bin/bash -e build.sh

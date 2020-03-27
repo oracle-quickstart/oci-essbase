@@ -69,6 +69,7 @@ allow dynamic-group group_name to use autonomous-database in compartment compart
 allow dynamic-group group_name to manage autonomous-backups in compartment compartment_name
 allow dynamic-group group_name to read buckets in compartment compartment_name
 allow dynamic-group group_name to manage objects in compartment compartment_name
+allow dynamic-group group_name to use keys in compartment compartment_name
 ```
 
 ## Using the Terraform command line tool

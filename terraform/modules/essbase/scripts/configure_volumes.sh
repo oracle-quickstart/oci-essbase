@@ -1,6 +1,7 @@
 #!/bin/bash -e
 #
-# Copyright (c) 2020, Oracle and/or its affiliates. All rights reserved.
+# Copyright (c) 2019, 2020, Oracle and/or its affiliates.
+# Licensed under the Universal Permissive License v1.0 as shown at http://oss.oracle.com/licenses/upl.
 #
 
 mkdir -p /var/log/essbase /var/run/essbase
@@ -28,6 +29,8 @@ export OCI_CLI_AUTH=instance_principal
 # Metadata information
 instance_metadata=$(oci-metadata -j)
 compute_ocid=$(echo $instance_metadata | jq -r '.instance.id')
+metadata_bucket_ns=$(echo $instance_metadata | jq -r ".instance.metadata.metadata_bucket_ns")
+metadata_bucket_name=$(echo $instance_metadata | jq -r ".instance.metadata.metadata_bucket_name")
 
 echo "Preparing volumes for running Essbase to ${compute_ocid}"
 
@@ -36,8 +39,9 @@ attach_volume() {
 
   # Wait until the metadata artifact is available where we expect it
   echo "Attaching volume ${volume_ocid}"
+  local object_name="${compute_ocid}/${volume_ocid}.dat"
   local data_file="/etc/essbase/${volume_ocid}.dat"
-  while [[ ! -e ${data_file} ]]; do
+  until $(oci os object get -ns ${metadata_bucket_ns} -bn ${metadata_bucket_name} --name ${object_name} --file ${data_file}); do
     echo "Waiting for ${volume_ocid} attachment metadata contents"
     sleep 5
   done

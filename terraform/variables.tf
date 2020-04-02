@@ -1,5 +1,5 @@
-## Copyright (c) 2020, Oracle and/or its affiliates.
-## All rights reserved. The Universal Permissive License (UPL), Version 1.0 as shown at http://oss.oracle.com/licenses/upl
+## Copyright (c) 2019, 2020, Oracle and/or its affiliates.
+## Licensed under the Universal Permissive License v1.0 as shown at http://oss.oracle.com/licenses/upl.
 
 // General settings
 variable "service_name" {
@@ -49,6 +49,11 @@ variable "existing_application_subnet_compartment_id" {
 }
 
 variable "existing_application_subnet_id" {
+  type    = string
+  default = ""
+}
+
+variable "bastion_listing_resource_id" {
   type    = string
   default = ""
 }

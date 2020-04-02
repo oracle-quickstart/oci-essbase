@@ -1,5 +1,5 @@
 ## Copyright (c) 2020, Oracle and/or its affiliates.
-## All rights reserved. The Universal Permissive License (UPL), Version 1.0 as shown at http://oss.oracle.com/licenses/upl
+## Licensed under the Universal Permissive License v1.0 as shown at http://oss.oracle.com/licenses/upl.
 
 data "oci_database_database" "database" {
   count       = var.enabled ? 1 : 0

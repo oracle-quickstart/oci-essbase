@@ -1,5 +1,5 @@
-## Copyright (c) 2020, Oracle and/or its affiliates.
-## All rights reserved. The Universal Permissive License (UPL), Version 1.0 as shown at http://oss.oracle.com/licenses/upl
+## Copyright (c) 2019, 2020, Oracle and/or its affiliates.
+## Licensed under the Universal Permissive License v1.0 as shown at http://oss.oracle.com/licenses/upl.
 
 locals {
   config_volume_mount = "/u01/config"
@@ -8,6 +8,24 @@ locals {
 
 data "oci_core_subnet" "application" {
   subnet_id = var.subnet_id
+}
+
+#
+# Metadata bucket
+# Stores metadata required for the compute instances that cannot be
+# provided at instance creation time
+#
+data "oci_objectstorage_namespace" "user" {
+  compartment_id = var.compartment_id
+}
+
+resource "oci_objectstorage_bucket" "essbase_metadata" {
+  compartment_id = var.compartment_id
+  namespace      = data.oci_objectstorage_namespace.user.namespace
+  name           = "essbase_${var.instance_uuid}_metadata"
+  access_type    = "NoPublicAccess"
+  freeform_tags  = var.freeform_tags
+  defined_tags   = var.defined_tags
 }
 
 #
@@ -176,6 +194,9 @@ resource "oci_core_instance" "essbase" {
     user_data            = base64gzip(local.cloud_init)
     volume_group_ocid    = join("", oci_core_volume_group.essbase_volume_group.*.id)
     kms_key_ocid         = var.kms_key_id
+    metadata_bucket_id   = oci_objectstorage_bucket.essbase_metadata.id
+    metadata_bucket_ns   = oci_objectstorage_bucket.essbase_metadata.namespace
+    metadata_bucket_name = oci_objectstorage_bucket.essbase_metadata.name
   }
 
   extended_metadata = {
@@ -202,29 +223,21 @@ resource "oci_core_volume_attachment" "essbase_data" {
   volume_id       = join("", oci_core_volume.essbase_data.*.id)
 
   display_name = "${var.display_name_prefix}-data-volume-1-attachment"
-
-  connection {
-    host        = local.assign_public_ip ? oci_core_instance.essbase.public_ip : oci_core_instance.essbase.private_ip
-    private_key = var.ssh_private_key
-    type        = "ssh"
-    user        = "opc"
-    timeout     = "5m"
-
-    bastion_host = var.bastion_host
-  }
-
-  provisioner "file" {
-    destination = format("/etc/essbase/%s.dat", self.volume_id)
-    content = jsonencode({
-      "path" = local.data_volume_mount,
-      "iqn"  = self.iqn,
-      "ipv4" = self.ipv4,
-      "port" = self.port
-    })
-  }
 }
 
+resource "oci_objectstorage_object" "essbase_data_volume_metadata" {
+  count     = var.enable_data_volume ? 1 : 0
+  bucket    = oci_objectstorage_bucket.essbase_metadata.name
+  namespace = oci_objectstorage_bucket.essbase_metadata.namespace
+  object    = format("%s/%s.dat", oci_core_instance.essbase.id, join("", oci_core_volume.essbase_data.*.id))
+  content = jsonencode({
+    "path" = local.data_volume_mount,
+    "iqn" = join("", oci_core_volume_attachment.essbase_data.*.iqn),
+    "ipv4" = join("", oci_core_volume_attachment.essbase_data.*.ipv4),
+    "port" = join("", oci_core_volume_attachment.essbase_data.*.port)
+  })
 
+}
 
 #
 # Config volume attachment
@@ -236,28 +249,20 @@ resource "oci_core_volume_attachment" "essbase_config" {
   volume_id       = join("", oci_core_volume.essbase_config.*.id)
 
   display_name = "${var.display_name_prefix}-config-volume-1-attachment"
-
-  connection {
-    host        = local.assign_public_ip ? oci_core_instance.essbase.public_ip : oci_core_instance.essbase.private_ip
-    private_key = var.ssh_private_key
-    type        = "ssh"
-    user        = "opc"
-    timeout     = "5m"
-    bastion_host = var.bastion_host
-  }
-
-  provisioner "file" {
-    destination = format("/etc/essbase/%s.dat", self.volume_id)
-    content = jsonencode({
-      "path" = local.config_volume_mount,
-      "iqn"  = self.iqn,
-      "ipv4" = self.ipv4,
-      "port" = self.port
-    })
-  }
-
 }
 
+resource "oci_objectstorage_object" "essbase_config_volume_metadata" {
+  count     = var.enable_config_volume ? 1 : 0
+  bucket    = oci_objectstorage_bucket.essbase_metadata.name
+  namespace = oci_objectstorage_bucket.essbase_metadata.namespace
+  object    = format("%s/%s.dat", oci_core_instance.essbase.id, join("", oci_core_volume.essbase_config.*.id))
+  content = jsonencode({
+    "path" = local.config_volume_mount,
+    "iqn" = join("", oci_core_volume_attachment.essbase_config.*.iqn),
+    "ipv4" = join("", oci_core_volume_attachment.essbase_config.*.ipv4),
+    "port" = join("", oci_core_volume_attachment.essbase_config.*.port)
+  })
+}
 
 locals {
   external_url = local.assign_public_ip ? format("https://%s/essbase", oci_core_instance.essbase.public_ip) : format("https://%s/essbase", oci_core_instance.essbase.private_ip)
@@ -273,8 +278,8 @@ resource "null_resource" "initializer" {
 
   depends_on = [
     oci_core_instance.essbase,
-    oci_core_volume_attachment.essbase_config,
-    oci_core_volume_attachment.essbase_data,
+    oci_objectstorage_object.essbase_data_volume_metadata,
+    oci_objectstorage_object.essbase_config_volume_metadata,
   ]
 
   connection {

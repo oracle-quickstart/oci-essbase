@@ -33,7 +33,6 @@ groupings:
   - ${data_volume_size}
   - ${ssh_public_key}
   - ${essbase_admin_username}
-  - ${essbase_admin_password}
   - ${essbase_admin_password_encrypted}
 
 - title: "Security Configuration"
@@ -41,7 +40,6 @@ groupings:
   - ${security_mode}
   - ${idcs_client_tenant}
   - ${idcs_client_id}
-  - ${idcs_client_secret}
   - ${idcs_client_secret_encrypted}
   - ${idcs_external_admin_username}
 
@@ -56,6 +54,7 @@ groupings:
   - ${existing_application_subnet_id}
   - ${create_private_application_subnet}
   - ${assign_instance_public_ip}
+  - ${bastion_listing_resource_id}
   - ${bastion_instance_shape}
   - ${bastion_subnet_cidr}
   - ${existing_bastion_subnet_compartment_id}
@@ -211,6 +210,10 @@ variables:
       vcnId: ${existing_vcn_id}
     required: true
 
+  bastion_listing_resource_id:
+    title: Bastion Image OCID
+    visible: false
+
   bastion_subnet_cidr:
     title: Bastion Subnet CIDR
     description: The CIDR to assign to the subnet for the bastion host. This will be created as a regional subnet.
@@ -267,6 +270,7 @@ variables:
     required: true
     dependsOn:
       compartmentId: ${compartment_ocid}
+      imageId: ${bastion_listing_resource_id}
 
   # Essbase instance configuration
   mp_listing_id:

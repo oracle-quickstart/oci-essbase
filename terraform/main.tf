@@ -1,5 +1,5 @@
-## Copyright (c) 2020, Oracle and/or its affiliates.
-## All rights reserved. The Universal Permissive License (UPL), Version 1.0 as shown at http://oss.oracle.com/licenses/upl
+## Copyright (c) 2019, 2020, Oracle and/or its affiliates.
+## Licensed under the Universal Permissive License v1.0 as shown at http://oss.oracle.com/licenses/upl.
 
 // Random suffix to make things unique
 resource "random_string" "instance_uuid" {
@@ -120,7 +120,6 @@ module "bastion" {
 
   enabled             = local.enable_bastion
   compartment_id      = data.oci_identity_compartment.compartment.id
-  region              = var.region
   availability_domain = var.instance_availability_domain
   subnet_id           = module.bastion-subnet.id
   ssh_authorized_keys = "${var.ssh_public_key}\n${tls_private_key.stack_management_key.public_key_openssh}"
@@ -128,6 +127,7 @@ module "bastion" {
   freeform_tags       = local.freeform_tags
   defined_tags        = local.defined_tags
   instance_shape      = var.bastion_instance_shape
+  image_id            = var.bastion_listing_resource_id
 }
 
 module "database" {
@@ -140,7 +140,6 @@ module "database" {
   db_admin_password_encrypted = var.db_admin_password_encrypted
   kms_crypto_endpoint         = var.kms_crypto_endpoint
   kms_key_id                  = var.kms_key_id
-  whitelisted_ips             = [ module.network.vcn_id ]
   license_model               = var.db_license_model
   display_name_prefix         = local.resource_name_prefix
   freeform_tags               = local.freeform_tags

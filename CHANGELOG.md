@@ -6,6 +6,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [19.3.0.0.3]
+
+### Added
+- Add security-util.sh script to register users with Essbase roles.
+
+### Changed
+- Use objectstore bucket for runtime metadata that cannot be provided at compute instance creation time. This removes some of the usages of remote-exec.
+- Use custom harden image for bastion hosts.
+- Revert change for whitelisting VCN for provisioned Autonomous Database.
+
+### Noteworthy Image Changes
+- Update base image to [Oracle-Linux-7.7-2020.02.21-0](https://docs.cloud.oracle.com/en-us/iaas/images/image/957e74db-0375-4918-b897-a8ce93753ad9/).
+- Apply Essbase Cumulative Bundle Patch (30464311).
+
 ## [19.3.0.0.2]
 
 ### Added

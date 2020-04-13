@@ -1,5 +1,5 @@
-## Copyright (c) 2020, Oracle and/or its affiliates.
-## All rights reserved. The Universal Permissive License (UPL), Version 1.0 as shown at http://oss.oracle.com/licenses/upl
+## Copyright (c) 2019, 2020, Oracle and/or its affiliates.
+## Licensed under the Universal Permissive License v1.0 as shown at http://oss.oracle.com/licenses/upl.
 
 locals {
   all_cidr            = "0.0.0.0/0"
@@ -42,7 +42,7 @@ resource "oci_core_security_list" "bastion" {
 
   egress_security_rules {
     // Allow all outbound traffic
-    destination      = var.target_cidr_block
+    destination      = local.all_cidr
     destination_type = "CIDR_BLOCK"
     protocol         = "all"
   }

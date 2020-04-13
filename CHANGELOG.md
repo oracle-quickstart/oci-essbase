@@ -6,6 +6,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [19.3.0.0.3]
+
+### Changed
+- Provision private object storage bucket for storing temporary provisioning metadata to resolve some issues seen when using remote-exec operations.
+- Use pre-built OCI image for bastion instances. This image is prebuilt with the configuration changes that were previously applied during the provisioning process.
+- Revert change for whitelisting VCN for provisioned Autonomous Database. This resolves some intermittent issues that were seen preventing the compute node from properly access the database during provisioning.
+
+### Noteworthy Image Changes
+- Update base image to [Oracle-Linux-7.7-2020.02.21-0](https://docs.cloud.oracle.com/en-us/iaas/images/image/957e74db-0375-4918-b897-a8ce93753ad9/).
+- Apply Essbase Cumulative Bundle Patch (30464311).
+- Added security-util.sh script to register users with Essbase roles.
+
 ## [19.3.0.0.2]
 
 ### Added

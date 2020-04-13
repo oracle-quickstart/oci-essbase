@@ -1,22 +1,5 @@
-## Copyright (c) 2020, Oracle and/or its affiliates.
-## All rights reserved. The Universal Permissive License (UPL), Version 1.0 as shown at http://oss.oracle.com/licenses/upl
-
-
-locals {
-
-  cloud_init = <<TMPL
-Content-Type: multipart/mixed; boundary="boundary-0123456789"
-MIME-Version: 1.0
-
---boundary-0123456789
-MIME-Version: 1.0
-Content-Type: text/cloud-config; charset="us-ascii"
-
-${file("${path.module}/userdata/bastion-bootstrap")}
---boundary-0123456789--
-TMPL
-
-}
+## Copyright (c) 2019, 2020, Oracle and/or its affiliates.
+## Licensed under the Universal Permissive License v1.0 as shown at http://oss.oracle.com/licenses/upl.
 
 resource "oci_core_instance" "bastion-instance" {
   count = var.enabled ? 1 : 0
@@ -35,14 +18,18 @@ resource "oci_core_instance" "bastion-instance" {
     skip_source_dest_check = true
   }
 
+  # prevent the bastion from destroying and recreating itself if the image ocid changes
+  lifecycle {
+    ignore_changes = [source_details[0].source_id]
+  }
+
   metadata = {
     ssh_authorized_keys = var.ssh_authorized_keys
-    user_data           = base64gzip(local.cloud_init)
   }
 
   source_details {
     source_type = "image"
-    source_id   = var.bastion_instance_image_ocid[var.region]
+    source_id   = var.image_id
   }
 
   timeouts {

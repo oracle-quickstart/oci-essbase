@@ -1,0 +1,56 @@
+{
+  "variables": {
+     "region": "us-ashburn-1",
+     "availability_domain": "",
+     "compartment_ocid": "",
+     "base_image_ocid": "ocid1.image.oc1.iad.aaaaaaaavzjw65d6pngbghgrujb76r7zgh2s64bdl4afombrdocn4wdfrwdq",
+     "subnet_ocid": "",
+
+     "bastion_host": "",
+     "bastion_private_key_file": "",
+
+     "IMAGE_NAME": ""
+  },
+  "builders": [
+     {
+        "type": "oracle-oci",
+        "access_cfg_file": "{{user `access_cfg_file`}}",
+        "key_file": "{{user `key_file`}}",
+        "compartment_ocid": "{{user `compartment_ocid`}}",
+        "region": "{{user `region`}}",
+        "availability_domain": "{{user `availability_domain`}}",
+        "base_image_ocid": "{{user `base_image_ocid`}}",
+        "subnet_ocid": "{{user `subnet_ocid`}}",
+        "shape": "VM.Standard2.1",
+        "use_private_ip": true,
+        "ssh_username": "opc",
+        "ssh_timeout": "10m",
+        "ssh_bastion_host": "{{user `bastion_host`}}",
+        "ssh_bastion_private_key_file": "{{user `bastion_private_key_file`}}",
+        "ssh_bastion_username": "opc",
+        "image_name": "{{user `IMAGE_NAME`}}",
+        "metadata": {
+           "IMAGE_NAME": "{{user `IMAGE_NAME`}}"
+        }
+     }
+  ],
+  "provisioners": [
+
+     { "type": "file",
+       "source": "setup.sh",
+       "destination": "/tmp/setup.sh"
+     },
+     { "type": "shell",
+       "execute_command": "chmod +x {{ .Path }}; sudo /bin/bash -c '{{ .Vars }} {{ .Path }}'",
+       "scripts": [
+           "/tmp/setup.sh"
+       ]
+     }
+   ],
+   "post-processors": [
+     {
+       "type": "manifest",
+       "output": "/tmp/manifest.json"
+     }
+   ]
+}

@@ -41,9 +41,10 @@
        "destination": "/tmp/setup.sh"
      },
      { "type": "shell",
-       "execute_command": "chmod +x {{ .Path }}; sudo /bin/bash -c '{{ .Vars }} {{ .Path }}'",
-       "scripts": [
-           "/tmp/setup.sh"
+       "inline": [
+          "sudo chmod +x /tmp/setup.sh",
+          "sudo /tmp/setup.sh",
+          "sudo rm -rf /tmp/setup.sh"
        ]
      }
    ],

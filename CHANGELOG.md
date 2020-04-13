@@ -6,7 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [19.3.0.0.3]
+## [19.3.0.2.3]
 
 ### Changed
 - Provision private object storage bucket for storing temporary provisioning metadata to resolve some issues seen when using remote-exec operations.

@@ -1,6 +1,12 @@
 name: 'essbase-stack'
 
-on: [push, pull_request]
+on:
+  push:
+    paths-ignore:
+    - 'packer-image/**'
+  pull_request:
+    paths-ignore:
+    - 'packer-image/**'
 
 jobs:
   terraform_generate_packages:

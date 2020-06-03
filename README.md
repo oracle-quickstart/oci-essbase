@@ -152,6 +152,33 @@ Refer to the [documentation](https://docs.oracle.com/en/database/other-databases
 
 These terraform scripts are licensed under the Universal Permissive License 1.0.  See [LICENSE](./LICENSE) for more details.
 
+There are two licensing options available:
+
+### Universal Credits Model (UCM)
+The listing in OCI Marketplace can be found here: https://cloudmarketplace.oracle.com/marketplace/en_US/listing/67812026
+When deploying using UCM, the Essbase license in governed by the following Licensing terms: https://cloudmarketplace.oracle.com/marketplace/content?contentId=70514770&render=inline
+
+### Bring Your Own License (BYOL)
+The listing in OCI Marketplace can be found here: https://cloudmarketplace.oracle.com/marketplace/en_US/listing/63497640
+When deploying using BYOL, the Essbase license is governed by the following Licensing terms: https://cloudmarketplace.oracle.com/marketplace/content?contentId=18088784&render=inline
+
+The Oracle Essbase product requires an on-premises purchased license and active support contract. This allows customers to leverage BYOL option for deploying Essbase on OCI.
+
+Conversion Ratios that apply for BYOL:
+
+For each supported Processor license You may activate up to 2 OCPUs of this BYOL offering.
+For Named User Plus licenses You may activate any supported compute shape provided the number of users is within licensed limits.
+For more details refer: http://www.oracle.com/us/corporate/contracts/processor-core-factor-table-070634.pdf
+
+Any of the following supported program licenses may be aggregated to meet the conversion ratio above.
+
+Business Intelligence Suite Foundation Edition; OR
+Oracle Business Intelligence Foundation Suite; OR
+Oracle Essbase Plus
+
+
+
+
 The Oracle Essbase product requires an on-premises purchased license and active support contract. This allows customers to leverage BYOL option for deploying Essbase on OCI.
 
 Conversion Ratios that apply for BYOL: 

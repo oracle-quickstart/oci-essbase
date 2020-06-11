@@ -164,35 +164,6 @@ When deploying using BYOL, the Essbase license is governed by the following Lice
 
 The Oracle Essbase product requires an on-premises purchased license and active support contract. This allows customers to leverage BYOL option for deploying Essbase on OCI.
 
-Conversion Ratios that apply for BYOL:
-
-For each supported Processor license You may activate up to 2 OCPUs of this BYOL offering.
-For Named User Plus licenses You may activate any supported compute shape provided the number of users is within licensed limits.
-For more details refer: http://www.oracle.com/us/corporate/contracts/processor-core-factor-table-070634.pdf
-
-Any of the following supported program licenses may be aggregated to meet the conversion ratio above.
-
-Business Intelligence Suite Foundation Edition; OR
-Oracle Business Intelligence Foundation Suite; OR
-Oracle Essbase Plus
-
-
-
-
-The Oracle Essbase product requires an on-premises purchased license and active support contract. This allows customers to leverage BYOL option for deploying Essbase on OCI.
-
-Conversion Ratios that apply for BYOL: 
-
-* For each supported Processor license You may activate up to 2 OCPUs of this BYOL offering.
-* For Named User Plus licenses You may activate any supported compute shape provided the number of users is within licensed limits.
-
-For more details refer: http://www.oracle.com/us/corporate/contracts/processor-core-factor-table-070634.pdf
-
-Any of the following supported program licenses may be aggregated to meet the conversion ratio above.
-* Business Intelligence Suite Foundation Edition; OR
-* Oracle Business Intelligence Foundation Suite; OR
-* Oracle Essbase Plus
-
 ## Questions
 
 If you have an issue or a question, please take a look at our [FAQs](./FAQs.md) or [open an issue](https://github.com/oracle-quickstart/oci-essbase/issues/new).

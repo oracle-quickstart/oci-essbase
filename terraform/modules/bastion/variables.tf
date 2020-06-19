@@ -1,5 +1,5 @@
 ## Copyright (c) 2019, 2020, Oracle and/or its affiliates.
-## Licensed under the Universal Permissive License v1.0 as shown at http://oss.oracle.com/licenses/upl.
+## Licensed under the Universal Permissive License v1.0 as shown at https://oss.oracle.com/licenses/upl.
 
 variable "enabled" {
   type    = bool
@@ -32,7 +32,19 @@ variable "subnet_id" {
   type        = string
 }
 
-variable "image_id" {
+variable "listing_id" {
+  description = "the OCID of the resource listing id"
+  type = string
+  default = ""
+}
+
+variable "listing_resource_version" {
+  description = "Version of the resource listing to use"
+  type = string
+  default = ""
+}
+
+variable "listing_resource_id" {
   description = "The OCID of the bastion image"
   type        = string
 }

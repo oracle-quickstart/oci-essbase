@@ -54,6 +54,8 @@ groupings:
   - ${existing_application_subnet_id}
   - ${create_private_application_subnet}
   - ${assign_instance_public_ip}
+  - ${bastion_listing_id}
+  - ${bastion_listing_resource_version}
   - ${bastion_listing_resource_id}
   - ${bastion_instance_shape}
   - ${bastion_subnet_cidr}
@@ -209,6 +211,14 @@ variables:
       compartmentId: ${existing_application_subnet_compartment_id}
       vcnId: ${existing_vcn_id}
     required: true
+
+  bastion_listing_id:
+    title: Bastion Image Listing OCID
+    visible: false
+
+  bastion_listing_resource_version:
+    title: Bastion Image Version
+    visible: false
 
   bastion_listing_resource_id:
     title: Bastion Image OCID

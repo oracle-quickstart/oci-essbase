@@ -20,7 +20,7 @@ locals {
   resource_name_prefix = var.service_name != "" ? var.service_name : local.generated_name_prefix
   rcu_schema_prefix    = var.rcu_schema_prefix != "" ? var.rcu_schema_prefix : local.generated_rcu_schema_prefix
 
-  assign_instance_public_ip = var.assign_instance_public_ip && var.use_existing_vcn || (! var.use_existing_vcn) && (! var.create_private_application_subnet)
+  assign_instance_public_ip = (var.use_existing_vcn && var.assign_instance_public_ip) || (!var.use_existing_vcn && !var.create_private_application_subnet && var.assign_instance_public_ip)
 
   enable_bastion = (! local.assign_instance_public_ip)
 
@@ -127,7 +127,10 @@ module "bastion" {
   freeform_tags       = local.freeform_tags
   defined_tags        = local.defined_tags
   instance_shape      = var.bastion_instance_shape
-  image_id            = var.bastion_listing_resource_id
+
+  listing_id          = var.bastion_listing_id
+  listing_resource_version = var.bastion_listing_resource_version
+  listing_resource_id = var.bastion_listing_resource_id
 }
 
 module "database" {

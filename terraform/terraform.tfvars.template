@@ -4,7 +4,7 @@
 ### OCI Authentication details
 tenancy_ocid = "<tenancy OCID>"
 user_ocid = "<user OCID>"
-fingerprint = "<PEM key fingerprint>"
+fingerprint= "<PEM key fingerprint>"
 private_key_path = "<path to the private key that matches the fingerprint above>"
 region = "<region in which to operate, example: us-ashburn-1, us-phoenix-1>"
 

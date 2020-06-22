@@ -53,6 +53,16 @@ variable "existing_application_subnet_id" {
   default = ""
 }
 
+variable "bastion_listing_id" {
+  type    = string
+  default = ""
+}
+
+variable "bastion_listing_resource_version" {
+  type    = string
+  default = ""
+}
+
 variable "bastion_listing_resource_id" {
   type    = string
   default = ""

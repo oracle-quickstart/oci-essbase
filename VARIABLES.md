@@ -22,7 +22,7 @@
 | compartment_ocid | Y | | The target compartment OCID in which all provisioned resources will be created. |
 | stack_display_name | N | | Display name prefix for all generated resources. If not specified, this will be automatically generated. |
 
-## Vault Variables 
+## Vault Variables
 | Name | Required | Default | Description |
 | ---- | -------- | ------- | ----------- |
 | kms_key_id | Y | | The OCID for the encryption key used for the provided credentials. |

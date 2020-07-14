@@ -1,7 +1,17 @@
 ## Copyright (c) 2019, 2020, Oracle and/or its affiliates.
-## Licensed under the Universal Permissive License v1.0 as shown at http://oss.oracle.com/licenses/upl.
+## Licensed under the Universal Permissive License v1.0 as shown at https://oss.oracle.com/licenses/upl.
 
-variable "image_id" {
+variable "listing_id" {
+  type        = string
+  default     = ""
+}
+
+variable "listing_resource_version" {
+  type        = string
+  default     = ""
+}
+
+variable "listing_resource_id" {
   description = "The OCID of the Essbase node image"
   type        = string
 }
@@ -38,7 +48,7 @@ variable "instance_uuid" {
   type        = string
 }
 
-variable "node_hostname_prefix" {
+variable "hostname_label_prefix" {
   description = "The hostname for the essbase node"
   type        = string
   default     = ""
@@ -55,6 +65,12 @@ variable "shape" {
   default     = "VM.Standard2.1"
 }
 
+variable "shape_ocpus" {
+  description = "Number of OCPUs for the flexible shape."
+  type        = number
+  default     = null
+}
+
 variable "assign_public_ip" {
   description = "Whether the VNIC should be assigned a public IP address. Default 'true' assigns a public IP address."
   type        = string
@@ -66,41 +82,37 @@ variable "ssh_authorized_keys" {
   type        = string
 }
 
-variable "ssh_private_key" {
-  description = "Private key to be used to access this instance"
-  type        = string
-}
-
-variable "enable_data_volume" {
-  description = "Enable the data volume for storing application data in an isolated volume"
-  type        = bool
-  default     = true
-}
-
 variable "data_volume_size" {
   description = "The size of the data volume in gigabytes"
   type        = number
   default     = 1024
 }
 
-variable "enable_config_volume" {
-  description = "Enable the config volume to store configuraiton content in an isolated volume"
-  type        = bool
-  default     = true
+variable "data_volume_vpus_per_gb" {
+  description = "The performance units for the data volume"
+  type        = number
+  default     = 10
 }
 
 variable "config_volume_size" {
   description = "The size of the config volume in gigabytes"
   type        = number
-  default     = 256
+  default     = 64
 }
+
+variable "temp_volume_size" {
+  description = "The size of the temp volume in gigabytes"
+  type        = number
+  default     = 64
+}
+
 
 variable "admin_username" {
   description = "The administrator username"
   type        = string
 }
 
-variable "admin_password" {
+variable "admin_password_encrypted" {
   description = "The administrator password"
   type        = string
 }
@@ -111,7 +123,7 @@ variable "security_mode" {
   default = "embedded"
 }
 
-variable "idcs_client_tenant" {
+variable "idcs_tenant" {
   type    = string
   default = ""
 }
@@ -121,12 +133,12 @@ variable "idcs_client_id" {
   default = ""
 }
 
-variable "idcs_client_secret" {
+variable "idcs_client_secret_encrypted" {
   type    = string
   default = ""
 }
 
-variable "idcs_external_admin_username" {
+variable "external_admin_username" {
   type    = string
   default = ""
 }
@@ -141,7 +153,7 @@ variable "db_admin_username" {
   type        = string
 }
 
-variable "db_admin_password" {
+variable "db_admin_password_encrypted" {
   description = "Database admin password"
   type        = string
 }
@@ -180,6 +192,21 @@ variable "reset_system" {
   default = false
 }
 
+variable "enable_monitoring" {
+  type    = bool
+  default = false
+}
+
+variable "stack_id" {
+  type    = string
+  default = ""
+}
+
+variable "stack_display_name" {
+  type    = string
+  default = ""
+}
+
 // KMS Settings
 variable "kms_key_id" {
   type = string
@@ -189,10 +216,16 @@ variable "kms_crypto_endpoint" {
   type = string
 }
 
-// Bastion host settings
-variable "bastion_host" {
-  type    = string
+// Notification settings
+variable "notification_topic_id" {
+  type = string
   default = ""
+}
+
+// Sidecar proxy
+variable "enable_embedded_proxy" {
+  type    = bool
+  default = true
 }
 
 // Tags
@@ -205,3 +238,4 @@ variable "defined_tags" {
   type = map(string)
   default = null
 }
+

@@ -53,6 +53,7 @@ resource "oci_core_instance" "bastion-instance" {
 
   metadata = {
     ssh_authorized_keys = var.ssh_authorized_keys
+    notification_topic_id = var.notification_topic_id
   }
 
   source_details {

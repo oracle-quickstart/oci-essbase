@@ -1,5 +1,5 @@
 ## Copyright (c) 2019, 2020, Oracle and/or its affiliates.
-## Licensed under the Universal Permissive License v1.0 as shown at http://oss.oracle.com/licenses/upl.
+## Licensed under the Universal Permissive License v1.0 as shown at https://oss.oracle.com/licenses/upl.
 
 # OCI Service
 variable "compartment_id" {
@@ -41,6 +41,11 @@ variable "dhcp_options_id" {
 
 variable "route_table_id" {
   type = string
+}
+
+variable "create_private_subnet" {
+  type = bool
+  default = false
 }
 
 // Tags

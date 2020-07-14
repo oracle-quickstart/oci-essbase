@@ -1,5 +1,5 @@
 ## Copyright (c) 2019, 2020, Oracle and/or its affiliates.
-## Licensed under the Universal Permissive License v1.0 as shown at http://oss.oracle.com/licenses/upl.
+## Licensed under the Universal Permissive License v1.0 as shown at https://oss.oracle.com/licenses/upl.
 
 locals {
   all_cidr      = "0.0.0.0/0"
@@ -17,8 +17,9 @@ resource "oci_core_security_list" "load-balancer" {
   defined_tags   = var.defined_tags
 
   ingress_security_rules {
-    protocol = "6"
+    protocol = 6
     source   = local.all_cidr
+    description = "Allow inbound traffic for HTTPS"
 
     tcp_options {
       min = local.incoming_port
@@ -31,6 +32,7 @@ resource "oci_core_security_list" "load-balancer" {
     protocol  = 1
     source    = local.all_cidr
     stateless = false
+    description = "Allow inbound traffic for ICMP"
 
     icmp_options {
       type = 3
@@ -55,7 +57,7 @@ resource "oci_core_subnet" "load-balancer" {
   defined_tags   = var.defined_tags
 
   cidr_block = var.cidr_block
-
+  prohibit_public_ip_on_vnic = var.create_private_subnet
   security_list_ids = oci_core_security_list.load-balancer.*.id
 
   dhcp_options_id = var.dhcp_options_id
@@ -63,7 +65,7 @@ resource "oci_core_subnet" "load-balancer" {
 }
 
 resource "oci_core_route_table_attachment" "load-balancer" {
-  count          = local.use_existing_subnet ? 0 : local.enabled_count
+  count          = local.use_existing_subnet || var.create_private_subnet ? 0 : local.enabled_count
   subnet_id      = join("", oci_core_subnet.load-balancer.*.id)
   route_table_id = var.route_table_id
 }

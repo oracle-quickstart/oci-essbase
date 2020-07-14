@@ -1,5 +1,5 @@
 ## Copyright (c) 2019, 2020, Oracle and/or its affiliates.
-## Licensed under the Universal Permissive License v1.0 as shown at http://oss.oracle.com/licenses/upl.
+## Licensed under the Universal Permissive License v1.0 as shown at https://oss.oracle.com/licenses/upl.
 
 # OCI Service
 variable "compartment_id" {
@@ -19,6 +19,10 @@ variable "vcn_id" {
 variable "display_name_prefix" {
   description = "Display name prefix for the resources created."
   type        = string
+}
+
+variable "instance_listen_port" {
+  type = number
 }
 
 variable "cidr_block" {

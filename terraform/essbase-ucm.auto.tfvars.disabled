@@ -1,7 +1,7 @@
 ## Copyright (c) 2020, Oracle and/or its affiliates.
-## Licensed under the Universal Permissive License v1.0 as shown at http://oss.oracle.com/licenses/upl.
+## Licensed under the Universal Permissive License v1.0 as shown at https://oss.oracle.com/licenses/upl.
 
 # Listing details for the Essbase custom image for Universal Credits.
-mp_listing_id="ocid1.appcataloglisting.oc1..aaaaaaaanstxnoz6uttexhw5jfpqhu4gkwsp2ebmw4i2p7gkq65sr3e7z4gq"
-mp_listing_resource_version="19.3.0.0.3-2004011557"
-mp_listing_resource_id="ocid1.image.oc1..aaaaaaaal6buavzgpciviq6cxl5mvszi34azgsrsroezd2sn4ikcmv5tpopa"
+essbase_listing_id="ocid1.appcataloglisting.oc1..aaaaaaaanstxnoz6uttexhw5jfpqhu4gkwsp2ebmw4i2p7gkq65sr3e7z4gq"
+essbase_listing_resource_version="19.3.0.0.3-2004011557"
+essbase_listing_resource_id="ocid1.image.oc1..aaaaaaaal6buavzgpciviq6cxl5mvszi34azgsrsroezd2sn4ikcmv5tpopa"

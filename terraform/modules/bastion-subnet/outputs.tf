@@ -1,5 +1,5 @@
 ## Copyright (c) 2019, 2020, Oracle and/or its affiliates.
-## Licensed under the Universal Permissive License v1.0 as shown at http://oss.oracle.com/licenses/upl.
+## Licensed under the Universal Permissive License v1.0 as shown at https://oss.oracle.com/licenses/upl.
 
 output "id" {
   value = local.use_existing_subnet ? join("", data.oci_core_subnet.bastion.*.id) : join("", oci_core_subnet.bastion.*.id)

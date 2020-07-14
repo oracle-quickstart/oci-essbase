@@ -1,5 +1,5 @@
 ## Copyright (c) 2019, 2020, Oracle and/or its affiliates.
-## Licensed under the Universal Permissive License v1.0 as shown at http://oss.oracle.com/licenses/upl.
+## Licensed under the Universal Permissive License v1.0 as shown at https://oss.oracle.com/licenses/upl.
 
 variable "enabled" {
   type    = bool
@@ -17,18 +17,16 @@ variable "subnet_count" {
 }
 
 variable "subnet_ids" {
-  description = "The subnet id for the Essbase node."
+  description = "The subnet ids for the load balancer."
   type        = list(string)
 }
 
-variable "node_count" {
-  description = "The number of nodes in the cluster...workaround for count issue"
-  type        = number
-}
-
-variable "node_ip_addresses" {
-  description = "The target ip addresses of the Essbase nodes"
-  type        = list(string)
+variable "backend_node" {
+  description = "The target Essbase backend node."
+  type        = object({
+    ip_address = string
+    port       = number
+  })
 }
 
 variable "display_name_prefix" {
@@ -45,6 +43,11 @@ variable "shape" {
 variable "idle_timeout" {
   type    = number
   default = 300
+}
+
+variable "is_private" {
+  type    = bool
+  default = false
 }
 
 // Tags

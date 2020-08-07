@@ -38,22 +38,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Experimental: Support for disabling internal httpd proxy.
 
 ### Image Details
-- [Oracle-Linux-7.8-2020.06.30-0](https://docs.cloud.oracle.com/en-us/iaas/images/image/0c6332bc-a5ec-4ddf-99b8-5f33b0bc461a/)
+- [Oracle-Linux-7.8-2020.07.28-0](https://docs.cloud.oracle.com/en-us/iaas/images/image/229363c7-b01f-4b71-8c19-0661df7e16b5/)
 - Oracle Fusion Middleware 12.2.1.3.0 GA
 - Oracle Essbase 19.3.0.0.0 GA
-- Oracle JDK 8 update 251 Server JRE
+- Oracle JDK 8 update 261 Server JRE
 - Applied patches:
-  - 28186730 - OPatch 13.9.4.2.2 for FMW/WLS 12.2.1.3.0 and 12.2.1.4.0
-  - 31101362 - NGInst SPU for 13.9.4.2.2 for jackson-databind update to 2.10.2
-  - 30965714 - WebLogic Patch Set Update 12.2.1.3.200227 (ID:200227.1409)
-  - 31030882 - Coherence 12.2.1.3.7 Cumulative Patch using OPatch
-  - 30170398 - ADF Bundle Patch 12.2.1.3.200311 (ID:200311.2214.S)
+  - 28186730 - OPatch 13.9.4.2.4 for FMW/WLS 12.2.1.3.0 and 12.2.1.4.0
+  - 30965714 - WebLogic Patch Set Update 12.2.1.3.200227
+  - 31470751 - Coherence 12.2.1.3.10 Cumulative Patch using OPatch
+  - 31532341 - ADF Bundle Patch 12.2.1.3.200623
   - 30146350 - OPSS Bundle Patch 12.2.1.3.191015
-  - 30170398 - WebLogic Samples SPU 12.2.1.3.191015
   - 29650702 - FMW Platform 12.2.1.3.0 SPU April 2019
-  - 30977621 - Essbase Cumulative Bundle Patch
   - 20623024 - RCU Patch
   - 29840258 - RCU Patch for invalid FMWREGISTRY password
+  - 30977621 - Essbase Cumulative Bundle Patch
 
 ## [19.3.0.2.3-1]
 

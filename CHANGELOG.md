@@ -51,7 +51,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - 29650702 - FMW Platform 12.2.1.3.0 SPU April 2019
   - 20623024 - RCU Patch
   - 29840258 - RCU Patch for invalid FMWREGISTRY password
-  - 30977621 - Essbase Cumulative Bundle Patch
+  - 30977621 - Essbase 19.3.0.3.4 Cumulative Bundle Patch
 
 ## [19.3.0.2.3-1]
 

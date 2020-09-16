@@ -23,7 +23,7 @@ The above digram shows the default topology supported by the terraform scripts. 
 
 ![Full Topology Diagram](./images/image-full_topology.png)
 
-The above digram shows the full topology supported by the terraform scripts.  In this scenario, the application subnet is private. To access the Essbase user interface, an OCI load balancer is provisioned in another public regional subnet.  A bastion host is also provisioned to support connectivity from the Resource Manager.
+The above digram shows the full topology supported by the terraform scripts.  In this scenario, the application subnet is private. To access the Essbase user interface, an OCI load balancer is provisioned in either public or private regional subnet.  A bastion host (optional) is provisioned to allow access through a public ip address.
 
 ## Before You Begin with Oracle Essbase
 

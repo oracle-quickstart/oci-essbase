@@ -32,6 +32,11 @@ variable "subnet_id" {
   type        = string
 }
 
+variable "notification_topic_id" {
+  type = string
+  default = ""
+}
+
 variable "listing_id" {
   description = "the OCID of the resource listing id"
   type = string

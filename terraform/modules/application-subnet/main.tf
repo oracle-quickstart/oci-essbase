@@ -1,5 +1,5 @@
 ## Copyright (c) 2019, 2020, Oracle and/or its affiliates.
-## Licensed under the Universal Permissive License v1.0 as shown at http://oss.oracle.com/licenses/upl.
+## Licensed under the Universal Permissive License v1.0 as shown at https://oss.oracle.com/licenses/upl.
 
 locals {
   all_cidr = "0.0.0.0/0"
@@ -15,23 +15,25 @@ resource "oci_core_security_list" "application" {
   defined_tags   = var.defined_tags
 
   ingress_security_rules {
-    // Allow inbound traffic to WLS ports
-    protocol  = "6" // tcp
+
+    protocol  = 6 // tcp
     source    = local.all_cidr
     stateless = false
+    description = "Allow inbound traffic to HTTPS"
 
     tcp_options {
       // These values correspond to the destination port range.
-      min = "443"
-      max = "443"
+      min = var.instance_listen_port
+      max = var.instance_listen_port
     }
   }
 
   ingress_security_rules {
-    // Allow inbound ssh traffic for now...
-    protocol  = "6" // tcp
+    // Allow inbound ssh traffic...
+    protocol  = 6 // tcp
     source    = local.all_cidr
     stateless = false
+    description = "Allow inbound traffic for SSH"
 
     tcp_options {
       // These values correspond to the destination port range.
@@ -45,6 +47,7 @@ resource "oci_core_security_list" "application" {
     protocol  = 1
     source    = local.all_cidr
     stateless = false
+    description = "Allow inbound traffic for ICMP"
 
     icmp_options {
       type = 3

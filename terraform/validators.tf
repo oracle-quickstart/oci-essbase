@@ -1,5 +1,5 @@
 ## Copyright (c) 2019, 2020, Oracle and/or its affiliates.
-## Licensed under the Universal Permissive License v1.0 as shown at http://oss.oracle.com/licenses/upl.
+## Licensed under the Universal Permissive License v1.0 as shown at https://oss.oracle.com/licenses/upl.
 
 #
 # Essbase Administrator Validation
@@ -54,8 +54,8 @@ resource "null_resource" "missing_idcs_client_secret" {
   }
 }
 
-resource "null_resource" "missing_idcs_client_tenant" {
-  count = var.security_mode == "idcs" && var.idcs_client_tenant == "" ? 1 : 0
+resource "null_resource" "missing_idcs_tenant" {
+  count = var.security_mode == "idcs" && var.idcs_tenant == "" ? 1 : 0
   provisioner "local-exec" {
     command = "echo 'ESSPROV-00007 - Missing value for IDCS Instance GUID. The value has to set if using IDCS.' && exit 1"
   }
@@ -73,7 +73,7 @@ resource "null_resource" "input_validation" {
     null_resource.invalid_essbase_admin_username,
     null_resource.missing_existing_db_id,
     null_resource.missing_idcs_client_id,
-    null_resource.missing_idcs_client_tenant,
+    null_resource.missing_idcs_tenant,
     null_resource.missing_idcs_external_admin_username,
   ]
 }

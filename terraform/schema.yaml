@@ -229,7 +229,7 @@ variables:
 
   mp_listing_resource_id:
     title: Instance Image OCID
-    type: oci:core:image:id
+    type: string
     visible:
       not:
       - ${use_marketplace_image}

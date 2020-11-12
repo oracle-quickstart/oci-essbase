@@ -280,7 +280,7 @@ variables:
   mp_listing_resource_id:
     title: Essbase Compute Image OCID
     description: The published image that will be used for the Essbase compute instance.
-    type: oci:core:image:id
+    type: string
     pattern: "^ocid1\\.image\\.[a-zA-Z0-9\\.\\-\\_]+$"
     required: true
 

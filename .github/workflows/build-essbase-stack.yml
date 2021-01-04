@@ -15,21 +15,21 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Terraform Init
-      uses: hashicorp/terraform-github-actions@master
+      uses: hashicorp/setup-terraform@v1
       with:
-        tf_actions_version: 0.12.17
-        tf_actions_subcommand: 'init'
-        tf_actions_working_dir: terraform
+        terraform_version: ~0.13.0
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      working-directory: ./terraform
+      run: terraform init
     - name: 'Terraform Validate'
       uses: hashicorp/terraform-github-actions@master
       with:
-        tf_actions_version: 0.12.17
-        tf_actions_subcommand: 'validate'
-        tf_actions_working_dir: terraform
+        terraform_version: ~0.13.0
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      working-directory: ./terraform 
+      run: terraform validate -no-color
     - name: Build artifacts
       run: |
         /bin/bash -e build.sh

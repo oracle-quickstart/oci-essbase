@@ -17,7 +17,6 @@ jobs:
     - uses: hashicorp/setup-terraform@v1
       with:
         terraform_version: ~0.13.0
-
     - name: Terraform Init
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

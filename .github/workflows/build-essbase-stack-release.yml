@@ -11,18 +11,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    - name: Terraform Init
-      uses: hashicorp/setup-terraform@v1
+    - uses: hashicorp/setup-terraform@v1
       with:
         terraform_version: ~0.13.0
+    - name: Terraform Init
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       working-directory: ./terraform
       run: terraform init
     - name: 'Terraform Validate'
-      uses: hashicorp/terraform-github-actions@master
-      with:
-        terraform_version: ~0.13.0
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       working-directory: ./terraform

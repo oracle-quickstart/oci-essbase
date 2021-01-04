@@ -6,6 +6,33 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+- Essbase 21.1 GA Release
+- Fusion Middleware 12.2.1.4.0
+- Migrate scripts to terraform 0.13 syntax.
+- Switch from encrypted keys to secrets in vault.
+- Support for flex compute shapes.
+- Support for secure mode selection.
+- Support for existing Autonomous Databases configured with private endpoint.
+- Rename variable `security_mode` to `identity_provider`
+- Disable bastion creation when using an existing network.
+
+### Image Details
+- [Oracle-Linux-7.9-2020.11.10-1](https://docs.cloud.oracle.com/en-us/iaas/images/image/3318ef81-3970-4d69-92bc-e91392f87a13/)
+- Oracle Fusion Middleware 12.2.1.4.0 GA
+- Oracle Essbase 21.1.0.0.0 GA
+- Oracle JDK 8 update 271 Server JRE
+- Applied patches:
+  - 28186730 - OPatch 13.9.4.2.2 for FMW/WLS 12.2.1.3.0 and 12.2.1.4.0
+  - 31960985 - WebLogic Patch Set Update 12.2.1.4.201001
+  - 32097167 - WebLogic Overlay Patch for 12.2.1.4.201001
+  - 31544353 - ADR for WebLogic Server 12.2.1.4.0 July CPU 2020
+  - 31806259 - Coherence 12.2.1.4.6 Cumulative Patch
+  - 31676526 - RCU Patches for ADWC
+  - 30540494 - RCU Patches for ADWC
+  - 31666198 - OPSS Bundle Patch 12.2.1.4.200724
+  - 32099048 - ADF Bundle Patch 12.2.1.4.201101
+
 ## [19.3.0.3.4]
 
 ### Added

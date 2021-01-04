@@ -4,14 +4,14 @@
 # Output the private and public IPs of the instance
 
 output "display_name" {
-  value = join("", concat(oci_core_instance.bastion-instance.*.display_name, list("")))
+  value = oci_core_instance.bastion-instance.display_name
 }
 
 output "id" {
-  value = join("", concat(oci_core_instance.bastion-instance.*.id, list("")))
+  value = oci_core_instance.bastion-instance.id
 }
 
 output "public_ip" {
-  value = join("", concat(oci_core_instance.bastion-instance.*.public_ip, list("")))
+  value = oci_core_instance.bastion-instance.public_ip
 }
 

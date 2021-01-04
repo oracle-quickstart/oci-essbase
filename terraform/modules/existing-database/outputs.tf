@@ -2,7 +2,7 @@
 ## Licensed under the Universal Permissive License v1.0 as shown at https://oss.oracle.com/licenses/upl.
 
 output "database_id" {
-  value = oci_database_autonomous_database.autonomous_database.id
+  value = data.oci_database_autonomous_database.autonomous_database.id
 }
 
 output "db_name" {
@@ -10,24 +10,19 @@ output "db_name" {
 }
 
 output "compartment_id" {
-  value = var.compartment_id
+  value = data.oci_database_autonomous_database.autonomous_database.compartment_id
 }
 
 output "tns_alias" {
   value = local.tns_alias
 }
 
-output "bootstrap_password" {
-  value     = local.bootstrap_password
-  sensitive = true
+output "private_endpoint" {
+  value = local.private_endpoint
 }
 
-output "backup_bucket_namespace" {
-  value = module.backup-bucket.namespace
-}
-
-output "backup_bucket_name" {
-  value = module.backup-bucket.name
+output "private_endpoint_ip" {
+  value = local.private_endpoint_ip
 }
 
 output "private_endpoint_mappings" {

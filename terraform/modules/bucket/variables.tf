@@ -11,18 +11,13 @@ variable "bucket_name" {
   type        = string
 }
 
-variable "enabled" {
-  type    = bool
-  default = true
-}
-
 // Tags
 variable "freeform_tags" {
-  type = map(string)
+  type    = map(string)
   default = null
 }
 
 variable "defined_tags" {
-  type = map(string)
+  type    = map(string)
   default = null
 }

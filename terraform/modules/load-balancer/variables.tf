@@ -1,19 +1,10 @@
 ## Copyright (c) 2019, 2020, Oracle and/or its affiliates.
 ## Licensed under the Universal Permissive License v1.0 as shown at https://oss.oracle.com/licenses/upl.
 
-variable "enabled" {
-  type    = bool
-  default = true
-}
-
 # OCI Service
 variable "compartment_id" {
   description = "Compartment OCID where the loadbalancer VCN is created."
   type        = string
-}
-
-variable "subnet_count" {
-  type = number
 }
 
 variable "subnet_ids" {
@@ -21,12 +12,12 @@ variable "subnet_ids" {
   type        = list(string)
 }
 
-variable "backend_node" {
-  description = "The target Essbase backend node."
-  type        = object({
+variable "backend_nodes" {
+  description = "The target Essbase backend nodes."
+  type = list(object({
     ip_address = string
     port       = number
-  })
+  }))
 }
 
 variable "display_name_prefix" {
@@ -52,11 +43,11 @@ variable "is_private" {
 
 // Tags
 variable "freeform_tags" {
-  type = map(string)
+  type    = map(string)
   default = null
 }
 
 variable "defined_tags" {
-  type = map(string)
+  type    = map(string)
   default = null
 }

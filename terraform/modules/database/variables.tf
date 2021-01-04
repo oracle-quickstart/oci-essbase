@@ -1,22 +1,12 @@
 ## Copyright (c) 2019, 2020, Oracle and/or its affiliates.
 ## Licensed under the Universal Permissive License v1.0 as shown at https://oss.oracle.com/licenses/upl.
 
-variable "enabled" {
-  type = bool
-  default = true
-}
-
 variable "compartment_id" {
   type = string
 }
 
 variable "display_name_prefix" {
   type = string
-}
-
-variable "database_id" {
-  type    = string
-  default = ""
 }
 
 variable "db_name" {
@@ -28,21 +18,23 @@ variable "db_admin_username" {
   default = "ADMIN"
 }
 
-variable "db_admin_password_encrypted" {
-  type = string
-}
-
-variable "kms_crypto_endpoint" {
-  type = string
-}
-
-variable "kms_key_id" {
+variable "db_admin_password_id" {
   type = string
 }
 
 variable "license_model" {
   type    = string
   default = "LICENSE_INCLUDED"
+}
+
+variable "subnet_id" {
+  type    = string
+  default = null
+}
+
+variable "nsg_ids" {
+  type    = list(string)
+  default = null
 }
 
 variable "whitelisted_ips" {
@@ -52,11 +44,11 @@ variable "whitelisted_ips" {
 
 // Tags
 variable "freeform_tags" {
-  type = map(string)
+  type    = map(string)
   default = null
 }
 
 variable "defined_tags" {
-  type = map(string)
+  type    = map(string)
   default = null
 }

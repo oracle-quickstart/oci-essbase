@@ -59,7 +59,8 @@ essbase_admin_password_encrypted = "<Password encrypted with provided vault key>
 # enable_embedded_proxy = "true"
 
 ### Security Details
-# security_mode = "idcs"
+# secure_mode = "true"
+# identity_provider = "idcs"
 # idcs_tenant = ""
 # idcs_client_id = ""
 # idcs_client_secret_encrypted = ""

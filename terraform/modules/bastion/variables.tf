@@ -1,11 +1,6 @@
 ## Copyright (c) 2019, 2020, Oracle and/or its affiliates.
 ## Licensed under the Universal Permissive License v1.0 as shown at https://oss.oracle.com/licenses/upl.
 
-variable "enabled" {
-  type    = bool
-  default = false
-}
-
 variable "compartment_id" {
   type = string
 }
@@ -33,20 +28,20 @@ variable "subnet_id" {
 }
 
 variable "notification_topic_id" {
-  type = string
+  type    = string
   default = ""
 }
 
 variable "listing_id" {
   description = "the OCID of the resource listing id"
-  type = string
-  default = ""
+  type        = string
+  default     = ""
 }
 
 variable "listing_resource_version" {
   description = "Version of the resource listing to use"
-  type = string
-  default = ""
+  type        = string
+  default     = ""
 }
 
 variable "listing_resource_id" {
@@ -56,11 +51,11 @@ variable "listing_resource_id" {
 
 // Tags
 variable "freeform_tags" {
-  type = map(string)
+  type    = map(string)
   default = null
 }
 
 variable "defined_tags" {
-  type = map(string)
+  type    = map(string)
   default = null
 }

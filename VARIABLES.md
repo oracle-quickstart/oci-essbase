@@ -82,7 +82,7 @@
 ## Security Details
 | Name | Required | Default | Description |
 | ---- | -------- | ------- | ----------- |
-| security_mode | N | idcs | Choose embedded LDAP or integration with Identity Cloud Service (IDCS). The use of embedded LDAP is not recommended for production workloads. | 
+| identity_provider | N | idcs | Choose embedded LDAP or integration with Identity Cloud Service (IDCS). The use of embedded LDAP is not recommended for production workloads. | 
 | idcs_tenant | if `security_mode=idcs` | | The ID of your Identity Cloud Service instance, which typically has the format idcs-<guid>, and is part of the host name that you use to access Identity Cloud Service. |
 | idcs_client_id | if `security_mode=idcs` | | The client ID for the IDCS application. |
 | idcs_client_secret_encrypted | if `security_mode=idcs` | | The client secret for the IDCS application, encrypted with the provided vault key. |

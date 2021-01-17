@@ -128,6 +128,9 @@ Content-Type: text/cloud-config; charset="us-ascii"
 
 #cloud-config
 # vim: syntax=yaml
+%{ if var.timezone != "" ~}
+timezone: ${var.timezone}
+%{ endif ~}
 runcmd:
 %{ for mapping in var.additional_host_mappings ~}
 - echo "${mapping.ip_address} ${mapping.host}" >> /etc/hosts

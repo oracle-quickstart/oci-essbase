@@ -214,6 +214,11 @@ variable "ssh_authorized_keys" {
   type = string
 }
 
+variable "instance_timezone" {
+  type = string
+  default = ""
+}
+
 variable "data_volume_size" {
   // (gigabytes)
   type    = number

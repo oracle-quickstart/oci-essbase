@@ -241,6 +241,11 @@ variable "enable_embedded_proxy" {
   default = true
 }
 
+variable "timezone" {
+  type    = string
+  default = ""
+}
+
 // Tags
 variable "freeform_tags" {
   type    = map(string)

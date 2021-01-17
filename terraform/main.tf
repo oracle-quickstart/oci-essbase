@@ -245,6 +245,7 @@ module "essbase" {
   idcs_client_secret_id   = var.identity_provider == "idcs" ? var.idcs_client_secret_id : null
   external_admin_username = var.identity_provider == "idcs" ? var.idcs_external_admin_username : null
 
+  timezone              = var.instance_timezone
   enable_embedded_proxy = var.enable_embedded_proxy
 
   enable_monitoring  = var.enable_essbase_monitoring

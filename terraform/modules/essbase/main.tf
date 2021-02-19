@@ -143,10 +143,7 @@ TMPL
   is_flex_shape = var.shape == "VM.Standard.E3.Flex"
 
   flex_ocpus        = var.shape_ocpus == null ? 4 : var.shape_ocpus
-  flex_max_memory   = min(1024, local.flex_ocpus * 64)
-  flex_min_memory   = max(4, local.flex_ocpus * 4)
-  flex_memory       = var.shape_memory == null ? local.flex_ocpus * 16 : max(min(var.shape_memory, local.flex_max_memory), local.flex_min_memory)
-  flex_shape_config = local.is_flex_shape ? [{ "ocpus" : local.flex_ocpus, "memory" : local.flex_memory }] : []
+  flex_shape_config = local.is_flex_shape ? [{ "ocpus" : local.flex_ocpus }] : []
 }
 
 #
@@ -164,7 +161,6 @@ resource "oci_core_instance" "essbase" {
     for_each = local.flex_shape_config
     content {
       ocpus         = shape_config.value.ocpus
-      memory_in_gbs = shape_config.value.memory
     }
   }
 
@@ -200,7 +196,7 @@ resource "oci_core_instance" "essbase" {
     admin_password_id = var.admin_password_id
     rcu_schema_prefix = var.rcu_schema_prefix
 
-    secure_mode             = var.secure_mode
+    secure_mode             = false
     identity_provider       = var.identity_provider
     external_admin_username = var.external_admin_username
 
@@ -268,7 +264,7 @@ resource "oci_core_instance" "essbase" {
 
 locals {
 
-  nodes = [for i in range(length(oci_core_instance.essbase)) : {
+  nodes = [for i in range(local.node_count) : {
     id           = oci_core_instance.essbase[i].id,
     display_name = oci_core_instance.essbase[i].display_name,
     hostname     = local.hostnames[i],
@@ -295,7 +291,7 @@ resource "oci_objectstorage_object" "essbase_cluster_metadata" {
 # Data volume attachment
 #
 resource "oci_core_volume_attachment" "essbase_data" {
-  count           = length(oci_core_instance.essbase)
+  count           = local.node_count
   attachment_type = "iscsi"
   instance_id     = oci_core_instance.essbase[count.index].id
   volume_id       = oci_core_volume.essbase_data.id
@@ -303,7 +299,7 @@ resource "oci_core_volume_attachment" "essbase_data" {
 }
 
 resource "oci_objectstorage_object" "essbase_data_volume_metadata" {
-  count     = length(oci_core_instance.essbase)
+  count     = local.node_count
   bucket    = module.metadata-bucket.name
   namespace = module.metadata-bucket.namespace
   object    = format("%s/%s.dat", oci_core_instance.essbase[count.index].id, oci_core_volume.essbase_data.id)
@@ -318,7 +314,7 @@ resource "oci_objectstorage_object" "essbase_data_volume_metadata" {
 # Config volume attachment
 #
 resource "oci_core_volume_attachment" "essbase_config" {
-  count           = length(oci_core_instance.essbase)
+  count           = local.node_count
   attachment_type = "iscsi"
   instance_id     = oci_core_instance.essbase[count.index].id
   volume_id       = oci_core_volume.essbase_config[count.index].id
@@ -326,7 +322,7 @@ resource "oci_core_volume_attachment" "essbase_config" {
 }
 
 resource "oci_objectstorage_object" "essbase_config_volume_metadata" {
-  count     = length(oci_core_instance.essbase)
+  count     = local.node_count
   bucket    = module.metadata-bucket.name
   namespace = module.metadata-bucket.namespace
   object    = format("%s/%s.dat", oci_core_instance.essbase[count.index].id, oci_core_volume.essbase_config[count.index].id)
@@ -341,7 +337,7 @@ resource "oci_objectstorage_object" "essbase_config_volume_metadata" {
 # Temp volume attachment
 #
 resource "oci_core_volume_attachment" "essbase_temp" {
-  count           = length(oci_core_instance.essbase)
+  count           = local.node_count
   attachment_type = "iscsi"
   instance_id     = oci_core_instance.essbase[count.index].id
   volume_id       = oci_core_volume.essbase_temp[count.index].id
@@ -349,7 +345,7 @@ resource "oci_core_volume_attachment" "essbase_temp" {
 }
 
 resource "oci_objectstorage_object" "essbase_temp_volume_metadata" {
-  count     = length(oci_core_instance.essbase)
+  count     = local.node_count
   bucket    = module.metadata-bucket.name
   namespace = module.metadata-bucket.namespace
   object    = format("%s/%s.dat", oci_core_instance.essbase[count.index].id, oci_core_volume.essbase_temp[count.index].id)

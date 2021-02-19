@@ -1,7 +1,7 @@
 ## Copyright (c) 2019, 2021, Oracle and/or its affiliates.
 ## Licensed under the Universal Permissive License v1.0 as shown at https://oss.oracle.com/licenses/upl.
 
-resource "random_string" "bootstrap_password_1" {
+resource "random_password" "bootstrap_password_1" {
   length  = 1
   upper   = true
   lower   = true
@@ -9,7 +9,7 @@ resource "random_string" "bootstrap_password_1" {
   special = false
 }
 
-resource "random_string" "bootstrap_password_2" {
+resource "random_password" "bootstrap_password_2" {
   length           = 24
   upper            = true
   min_upper        = 2
@@ -23,7 +23,7 @@ resource "random_string" "bootstrap_password_2" {
 }
 
 locals {
-  bootstrap_password = "${random_string.bootstrap_password_1.result}${random_string.bootstrap_password_2.result}"
+  bootstrap_password = "${random_password.bootstrap_password_1.result}${random_password.bootstrap_password_2.result}"
 }
 
 resource "oci_database_autonomous_database" "autonomous_database" {

@@ -62,7 +62,6 @@ resource "oci_load_balancer_backend_set" "essbase" {
 
   health_checker {
     protocol            = "HTTP"
-    response_body_regex = ".*"
     url_path            = "/weblogic/ready"
 
     interval_ms       = 5000
@@ -169,6 +168,26 @@ resource "oci_load_balancer_rule_set" "essbase" {
 
 }
 
+resource "oci_load_balancer_rule_set" "essbase-ssl-headers" {
+
+  load_balancer_id = oci_load_balancer.loadbalancer.id
+  name             = "ssl_headers"
+
+  items {
+    action = "ADD_HTTP_REQUEST_HEADER"
+    header = "WL-Proxy-SSL"
+    value  = "true"
+  }
+
+  items {
+    action = "ADD_HTTP_REQUEST_HEADER"
+    header = "is_ssl"
+    value  = "ssl"
+  }
+
+}
+
+
 resource "oci_load_balancer_listener" "essbase" {
 
   load_balancer_id         = oci_load_balancer.loadbalancer.id
@@ -177,7 +196,10 @@ resource "oci_load_balancer_listener" "essbase" {
   port                     = 443
   protocol                 = "HTTP"
 
-  rule_set_names = [oci_load_balancer_rule_set.essbase.name]
+  rule_set_names = [
+    oci_load_balancer_rule_set.essbase.name,
+    oci_load_balancer_rule_set.essbase-ssl-headers.name
+  ]
 
   ssl_configuration {
     certificate_name        = oci_load_balancer_certificate.demo-cert.certificate_name

@@ -129,6 +129,17 @@ variable "bastion_subnet_cidr" {
   }
 }
 
+// USED ONLY FOR RESOURCE MANAGER
+variable "existing_bastion_subnet_compartment_id" {
+  type    = string
+  default = ""
+}
+
+variable "existing_bastion_subnet_id" {
+  type    = string
+  default = ""
+}
+
 variable "bastion_instance_shape" {
   type    = string
   default = "VM.Standard.E2.1"
@@ -191,11 +202,6 @@ variable "instance_shape_ocpus" {
   default = null
 }
 
-variable "instance_shape_memory" {
-  type    = number
-  default = null
-}
-
 variable "instance_availability_domain" {
   type = string
 }
@@ -205,7 +211,7 @@ variable "instance_hostname_label_prefix" {
   default = ""
 
   validation {
-    condition     = var.instance_hostname_label_prefix == "" || can(regex("^((?![0-9]+$)(?!.*-$)(?!-)[a-zA-Z0-9-]{1,60})?$", var.instance_hostname_label_prefix))
+    condition     = var.instance_hostname_label_prefix == "" || can(regex("^[a-zA-Z0-9]([a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?$", var.instance_hostname_label_prefix))
     error_message = "ESSPROV-00000 - Invalid input."
   }
 }
@@ -283,12 +289,6 @@ variable "rcu_schema_prefix" {
 }
 
 variable "enable_embedded_proxy" {
-  type    = bool
-  default = true
-}
-
-// Security configuration
-variable "secure_mode" {
   type    = bool
   default = true
 }

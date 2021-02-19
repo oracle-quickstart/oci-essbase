@@ -2,7 +2,7 @@
 ## Licensed under the Universal Permissive License v1.0 as shown at https://oss.oracle.com/licenses/upl.
 
 terraform {
-  required_version = ">= 0.13"
+  required_version = "~> 0.13"
   required_providers {
     local = {
       source  = "hashicorp/local"
@@ -26,7 +26,7 @@ terraform {
     }
     oci = {
       source  = "hashicorp/oci"
-      version = "~> 4.5.0"
+      version = "~> 4.13"
     }
   }
 }

@@ -71,12 +71,6 @@ variable "shape_ocpus" {
   default     = null
 }
 
-variable "shape_memory" {
-  description = "Amount of memory for the flexible shape."
-  type        = number
-  default     = null
-}
-
 variable "assign_public_ip" {
   description = "Whether the VNIC should be assigned a public IP address. Default 'true' assigns a public IP address."
   type        = string
@@ -120,12 +114,6 @@ variable "admin_username" {
 variable "admin_password_id" {
   description = "The administrator password secret id"
   type        = string
-}
-
-// Security configuration
-variable "secure_mode" {
-  type    = bool
-  default = true
 }
 
 variable "identity_provider" {

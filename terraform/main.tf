@@ -25,7 +25,7 @@ locals {
   instance_hostname_label_prefix = var.instance_hostname_label_prefix != "" ? var.instance_hostname_label_prefix : local.generated_instance_hostname_prefix
 
   create_load_balancer = var.create_load_balancer
-  create_bastion       = !var.use_existing_vcn && ! var.create_public_essbase_instance && var.create_bastion
+  create_bastion       = !var.create_public_essbase_instance && var.create_bastion
 
   db_type_map = {
     "Autonomous Database" = "adb"
@@ -100,6 +100,7 @@ module "existing-network" {
 
   existing_vcn_id = var.existing_vcn_id
   existing_application_subnet_id = var.existing_application_subnet_id
+  existing_bastion_subnet_id = var.existing_bastion_subnet_id
   existing_load_balancer_subnet_ids = local.create_load_balancer ? compact([ var.existing_load_balancer_subnet_id, var.existing_load_balancer_subnet_id_2 ]) : []
 }
 
@@ -209,7 +210,6 @@ module "essbase" {
   hostname_label_prefix = local.instance_hostname_label_prefix
   shape                 = var.instance_shape
   shape_ocpus           = var.instance_shape_ocpus
-  shape_memory          = var.instance_shape_memory
   subnet_id             = join("", concat(module.existing-network.*.application_subnet_id, module.network.*.application_subnet_id))
   assign_public_ip      = var.create_public_essbase_instance
 
@@ -236,8 +236,6 @@ module "essbase" {
   db_backup_bucket      = lookup(local.db_type_backup_bucket, local.db_type, null)
 
   additional_host_mappings = lookup(local.db_type_host_mappings, local.db_type, [])
-
-  secure_mode = var.secure_mode
 
   identity_provider       = var.identity_provider
   idcs_tenant             = var.identity_provider == "idcs" ? var.idcs_tenant : null

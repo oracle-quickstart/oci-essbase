@@ -31,14 +31,12 @@ groupings:
   - ${instance_availability_domain}
   - ${instance_shape}
   - ${instance_shape_ocpus}
-  - ${instance_shape_memory}
   - ${data_volume_size}
   - ${config_volume_size}
   - ${temp_volume_size}
   - ${ssh_authorized_keys}
   - ${essbase_admin_username}
   - ${essbase_admin_password_id}
-  - ${secure_mode}
   - ${instance_timezone}
   - ${enable_embedded_proxy}
 
@@ -107,6 +105,10 @@ groupings:
   - ${existing_bastion_subnet_compartment_id}
   - ${existing_bastion_subnet_id}
 
+- title: "Marketplace Configuration"
+  variables:
+  - ${marketplace_source_images}
+
 variables:
   # General Configuration
   tenancy_ocid:
@@ -143,6 +145,10 @@ variables:
   private_key_path:
     title: Private Key Path
     type: string
+    visible: false
+
+  marketplace_source_images:
+    required: false
     visible: false
 
   stack_version:
@@ -258,11 +264,8 @@ variables:
     type: boolean
     default: false
     visible:
-      and:
-      - not: 
-        - ${use_existing_vcn}
-      - not:
-        - ${create_public_essbase_instance}
+      not:
+      - ${create_public_essbase_instance}
 
   bastion_listing_id:
     title: Bastion Listing OCID
@@ -286,8 +289,6 @@ variables:
       - ${create_bastion}
       - not:
         - ${create_public_essbase_instance}
-      - not:
-        - ${use_existing_vcn}
     dependsOn:
       compartmentId: ${compartment_ocid}
 
@@ -307,6 +308,34 @@ variables:
         - ${use_existing_vcn}
     required: true
 
+  existing_bastion_subnet_compartment_id:
+    title: Target bastion subnet compartment
+    description: Select the compartment containing the target bastion subnet.
+    type: oci:identity:compartment:id
+    default: ${compartment_ocid}
+    visible:
+      and:
+      - ${use_existing_vcn}
+      - ${create_bastion}
+      - not:
+        - ${create_public_essbase_instance}
+    required: true
+
+  existing_bastion_subnet_id:
+    title: Select Bastion Subnet
+    description: Select an existing subnet for creating the bastion host
+    type: oci:core:subnet:id
+    visible:
+      and:
+      - ${use_existing_vcn}
+      - ${create_bastion}
+      - not:
+        - ${create_public_essbase_instance}
+    required: true
+    dependsOn:
+      compartmentId: ${existing_bastion_subnet_compartment_id}
+      vcnId: ${existing_vcn_id}
+
   bastion_instance_shape:
     title: Bastion Instance Shape
     description: The shape for the bastion compute instance.
@@ -317,8 +346,6 @@ variables:
       - ${create_bastion}
       - not:
         - ${create_public_essbase_instance}
-      - not:
-        - ${use_existing_vcn}
     required: true
     dependsOn:
       compartmentId: ${compartment_ocid}
@@ -352,24 +379,11 @@ variables:
 
   instance_shape_ocpus:
     title: Essbase Instance OCPUs
-    description: The number of OCPUs for the Essbase compute instance. Using anything less than four OCPUs is not recommended for production workloads.
+    description: The number of OCPUs for the Essbase compute instance. Fewer than four OCPUs is not recommended for production workloads.
     type: integer
     default: 4
     minimum: 1
     maximum: 64
-    required: true
-    visible:
-      eq:
-      - ${instance_shape}
-      - "VM.Standard.E3.Flex"
-
-  instance_shape_memory:
-    title: Essbase Instance Memory
-    description: The total amount of memory (in GB) for the Essbase compute instance. The minimum memory will be set to four times the number of OCPUs. The maximum memory will be set to 64 times the number of OCPUs selected or 1024GB.  Using anything less than 8GB is not recommended for production workloads.
-    type: integer
-    default: 8
-    minimum: 4
-    maximum: 1024
     required: true
     visible:
       eq:
@@ -388,7 +402,7 @@ variables:
     title: Essbase Instance Hostname Prefix
     description: The DNS hostname prefix for the Essbase compute instance. The hostname must be unique within the target subnet. If not provided, a random value will be generated.
     type: string
-    pattern: "^((?![0-9]+$)(?!.*-$)(?!-)[a-zA-Z0-9-]{1,60})?$"
+    pattern: "^([a-zA-Z0-9]([a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)?$"
     required: false
     visible: ${show_advanced_options}
 
@@ -1133,14 +1147,6 @@ variables:
         - "Database System"
       - ${use_existing_db}
     required: true
-
- 
-  # Security settings
-  secure_mode:
-    title: Enable Secure Mode
-    description: Select to enable TLS communication for all internal Essbase components.
-    type: boolean
-    default: true
 
   identity_provider:
     title: Identity Provider

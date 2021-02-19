@@ -151,7 +151,7 @@ allow group group_name to manage orm-jobs in compartment compartment_name
 
 ## Post-Deployment Tasks
 
-Refer to the [documentation](https://docs.oracle.com/en/database/other-databases/essbase/19.3/essad/complete-deployment-tasks.html) for a list of post-deployment tasks.
+Refer to the [documentation](https://docs.oracle.com/en/database/other-databases/essbase/21/essad/complete-deployment-tasks.html) for a list of post-deployment tasks.
 
 ## License
 

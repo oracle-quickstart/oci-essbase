@@ -12,10 +12,6 @@ region = "<region in which to operate, example: us-ashburn-1, us-phoenix-1>"
 compartment_ocid = "<compartment OCID>"
 # stack_display_name = ""
 
-### Vault Details
-kms_key_id = "<kms key OCID>"
-kms_crypto_endpoint = "<http endpoint for the corresponding key>"
-
 ### Notification details
 # notification_topic_id = "<notifiction topic OCID>"
 

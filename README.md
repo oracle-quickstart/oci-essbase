@@ -173,8 +173,8 @@ The Oracle Essbase product requires an on-premises purchased license and active 
 
 If you have an issue or a question, please take a look at our [FAQs](./FAQs.md) or [open an issue](https://github.com/oracle-quickstart/oci-essbase/issues/new).
 
-[essbase]: https://docs.oracle.com/en/database/other-databases/essbase/19.3/index.html
+[essbase]: https://docs.oracle.com/en/database/other-databases/essbase/21/index.html
 [oci]: https://cloud.oracle.com/cloud-infrastructure
 [orm]: https://docs.cloud.oracle.com/iaas/Content/ResourceManager/Concepts/resourcemanager.htm
-[kms]: https://docs.cloud.oracle.com/iaas/Content/KeyManagement/Concepts/keyoverview.htm
+[vault]: https://docs.cloud.oracle.com/iaas/Content/KeyManagement/Concepts/keyoverview.htm
 [tf]: https://www.terraform.io

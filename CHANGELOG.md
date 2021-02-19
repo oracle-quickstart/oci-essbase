@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [21.1.0.0.1]
 
 ### Changed
 - Essbase 21.1 GA Release
@@ -12,26 +12,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Migrate scripts to terraform 0.13 syntax.
 - Switch from encrypted keys to secrets in vault.
 - Support for flex compute shapes.
-- Support for secure mode selection.
 - Support for existing Autonomous Databases configured with private endpoint.
 - Rename variable `security_mode` to `identity_provider`
 - Disable bastion creation when using an existing network.
+- Support selection of timezone for the compute instance.
 
 ### Image Details
-- [Oracle-Linux-7.9-2020.11.10-1](https://docs.cloud.oracle.com/en-us/iaas/images/image/3318ef81-3970-4d69-92bc-e91392f87a13/)
+- [Oracle-Linux-7.9-2021.01.12-0](https://docs.oracle.com/en-us/iaas/images/image/b6a7b057-03a8-4624-b08b-c12caa2c63a0/)
 - Oracle Fusion Middleware 12.2.1.4.0 GA
 - Oracle Essbase 21.1.0.0.0 GA
-- Oracle JDK 8 update 271 Server JRE
+- Oracle JDK 8 update 281 Server JRE
 - Applied patches:
-  - 28186730 - OPatch 13.9.4.2.2 for FMW/WLS 12.2.1.3.0 and 12.2.1.4.0
-  - 31960985 - WebLogic Patch Set Update 12.2.1.4.201001
-  - 32097167 - WebLogic Overlay Patch for 12.2.1.4.201001
+  - 28186730 - OPatch 13.9.4.2.5 for FMW/WLS 12.2.1.3.0 and 12.2.1.4.0
+  - 32253037 - WebLogic Patch Set Update 12.2.1.4.201209
   - 31544353 - ADR for WebLogic Server 12.2.1.4.0 July CPU 2020
-  - 31806259 - Coherence 12.2.1.4.6 Cumulative Patch
-  - 31676526 - RCU Patches for ADWC
-  - 30540494 - RCU Patches for ADWC
+  - 32124456 - Coherence 12.2.1.4.7 Cumulative Patch
+  - 31676526 - RCU Patches for ADB
+  - 30540494 - RCU Patches for ADB
+  - 30754186 - RCU Patches for ADB
   - 31666198 - OPSS Bundle Patch 12.2.1.4.200724
-  - 32099048 - ADF Bundle Patch 12.2.1.4.201101
+  - 32357288 - ADF Bundle Patch 12.2.1.4.210107
 
 ## [19.3.0.3.4]
 

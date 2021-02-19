@@ -22,12 +22,6 @@
 | compartment_ocid | Y | | The target compartment OCID in which all provisioned resources will be created. |
 | stack_display_name | N | | Display name prefix for all generated resources. If not specified, this will be automatically generated. |
 
-## Vault Variables
-| Name | Required | Default | Description |
-| ---- | -------- | ------- | ----------- |
-| kms_key_id | Y | | The OCID for the encryption key used for the provided credentials. |
-| kms_crypto_endpoint | Y | | The crypto endpoint for the vault. |
-
 ## Notification Details
 | Name | Required | Default | Description |
 | ---- | -------- | ------- | ----------- |
@@ -73,7 +67,7 @@
 | config_volume_size | N | 64 | Define the target size of the configuration volume, which stored the Essbase system data, such as logs. |
 | temp_volume_size | N | 64 | Defined the target size of runtime temporary data. |
 | essbase_admin_username | N | admin | The name of the Essbase system administrator. |
-| essbase_admin_password_encrypted | Y | | The password for the Essbase system administrator, encrypted with the provided vaule key. Use a password that starts with a letter, is between 8 and 30 characters long, contains at least one number, and, optionally, any number of the special characters (`$` `#` `_`). For example, `Ach1z0#d`. |
+| essbase_admin_password_id | Y | | The OCID for the vault secret that holds the password for the Essbase system administrator. Use a password that starts with a letter, is between 8 and 30 characters long, contains at least one number, and, optionally, any number of the special characters (`$` `#` `_`). For example, `Ach1z0#d`. |
 | rcu_schema_prefix | N | | Schema prefix to use when running RCU. A value with be automatically generated if not specified. |
 | create_public_essbase_instance | N | false | Create the Essbase compute instance with a public IP address. |
 | enable_essbase_monitoring | N | false | If enabled, the Essbase compute instance will emit telemetry data to the OCI Monitoring service. |
@@ -83,10 +77,10 @@
 | Name | Required | Default | Description |
 | ---- | -------- | ------- | ----------- |
 | identity_provider | N | idcs | Choose embedded LDAP or integration with Identity Cloud Service (IDCS). The use of embedded LDAP is not recommended for production workloads. | 
-| idcs_tenant | if `security_mode=idcs` | | The ID of your Identity Cloud Service instance, which typically has the format idcs-<guid>, and is part of the host name that you use to access Identity Cloud Service. |
-| idcs_client_id | if `security_mode=idcs` | | The client ID for the IDCS application. |
-| idcs_client_secret_encrypted | if `security_mode=idcs` | | The client secret for the IDCS application, encrypted with the provided vault key. |
-| idcs_external_admin_username | if `security_mode=idcs` | | A user id to be registered as an Essbase administrator. This user must exist in the provided Identity Cloud Service instance. |
+| idcs_tenant | if `identity_provider=idcs` | | The ID of your Identity Cloud Service instance, which typically has the format idcs-<guid>, and is part of the host name that you use to access Identity Cloud Service. |
+| idcs_client_id | if `identity_provider=idcs` | | The client ID for the IDCS application. |
+| idcs_client_secret_id | if `identity_provider=idcs` | | The OCID for the vault secret that holds the client secret for the IDCS application. |
+| idcs_external_admin_username | if `identity_provider=idcs` | | A user id to be registered as an Essbase administrator. This user must exist in the provided Identity Cloud Service instance. |
 
 ## Database Details
 | Name | Required | Default | Description |
@@ -94,9 +88,9 @@
 | use_existing_db | N | false | Select this option to enable support of an existing database for the internal Essbase repository. |
 | existing_db_type | N | Autonomous Database |  Select which database you will use |
 | existing_db_id | N | | Target ATP database in which to create the Essbase schema. |
-| db_admin_password_encrypted | if `existing_db_type=Autonomous Database` | | The password for the database administrator, encrypted with the provided vault key. Use a password that starts with a letter, is between 12 and 30 characters long, contains at least one number, and at least one of the special characters (`$` `#` `_`). For example, `BEstr0ng_#12`. |
+| db_admin_password_id | if `existing_db_type=Autonomous Database` | | The OCID for the vault secret that holds the password for the database administrator. Use a password that starts with a letter, is between 12 and 30 characters long, contains at least one number, and at least one of the special characters (`$` `#` `_`). For example, `BEstr0ng_#12`. |
 | db_license_model | N | LICENSE_INCLUDED | |
 | existing_oci_db_system_database_id | N | | The database within the DB System in which to create the Essbase schema. |
 | existing_oci_db_system_database_pdb_name | N | | The name of the pdb in the target database. Required if not using the default pdb created during database provision. |
 | oci_db_admin_username | N | SYS | The username for the database administrator. |
-| oci_db_admin_password_encrypted | if `existing_db_type=OCI` | | The password for the database administrator, encrypted with the provided vault key. Use a password that starts with a letter, is between 12 and 30 characters long, contains at least one number, and at least one of the special characters (`$` `#` `_`). For example, `BEstr0ng_#12`. |
+| oci_db_admin_password_id | if `existing_db_type=OCI` | | The OCID for the vault secret that holds the password for the database administrator. Use a password that starts with a letter, is between 12 and 30 characters long, contains at least one number, and at least one of the special characters (`$` `#` `_`). For example, `BEstr0ng_#12`. |

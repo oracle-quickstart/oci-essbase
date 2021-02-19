@@ -14,7 +14,7 @@
 
 This Quick Start automates the deployment of Oracle Essbase on [Oracle Cloud Infrastructure (OCI)][oci]. It can also deploy additional stack components required – Autonomous Database, Load Balancer, Storage, Virtual Cloud Network (VCN) as part of the deployment.
 
-For more details on deploying the Essbase stack on Oracle Cloud Infrastructure, please visit the [Administering Oracle Essbase](https://docs.oracle.com/en/database/other-databases/essbase/21.1/essad/index.html) guide.
+For more details on deploying the Essbase stack on Oracle Cloud Infrastructure, please visit the [Administering Oracle Essbase](https://docs.oracle.com/en/database/other-databases/essbase/21/essad/index.html) guide.
 
 ### Default Topology
 
@@ -30,7 +30,7 @@ The above digram shows the full topology supported by the terraform scripts.  In
 
 ## Before You Begin with Oracle Essbase
 
-Refer to the [documentation](https://docs.oracle.com/en/database/other-databases/essbase/21.1/essad/you-begin-oracle-essbase.html) for the pre-requisite steps to using Essbase on OCI.
+Refer to the [documentation](https://docs.oracle.com/en/database/other-databases/essbase/21/essad/you-begin-oracle-essbase.html) for the pre-requisite steps to using Essbase on OCI.
 
 ### Encrypt Values using KMS
 

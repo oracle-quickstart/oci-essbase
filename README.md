@@ -32,9 +32,9 @@ The above digram shows the full topology supported by the terraform scripts.  In
 
 Refer to the [documentation](https://docs.oracle.com/en/database/other-databases/essbase/21/essad/you-begin-oracle-essbase.html) for the pre-requisite steps to using Essbase on OCI.
 
-### Encrypt Values using KMS
+### Create Secrets with OCI Vault
 
-Oracle Cloud Infrastructure [Key Management (KMS)][kms] enables you to manage sensitive information when creating a stack. You are required to use KMS to encrypt credentials during provisioning by creating a key. Passwords chosen for Essbase administrator and Database must meet their respective password requirements.
+Oracle Cloud Infrastructure [Vault][vault] enables you to manage sensitive information when creating a stack. You are required to store your credentials in the vault prior to provisioning the Essbase stack. Passwords chosen for Essbase administrator and Database must meet their respective password requirements.
 
 ### Create Dynamic Group
 

@@ -1,4 +1,4 @@
-## Copyright (c) 2019, 2020, Oracle and/or its affiliates.
+## Copyright (c) 2019, 2021, Oracle and/or its affiliates.
 ## Licensed under the Universal Permissive License v1.0 as shown at https://oss.oracle.com/licenses/upl.
 
 variable "tenancy_ocid" {
@@ -29,9 +29,8 @@ variable "private_key_path" {
 }
 
 provider "oci" {
-  version = "~> 3.82.0"
-  tenancy_ocid = var.tenancy_ocid
-  region       = var.region
+  tenancy_ocid     = var.tenancy_ocid
+  region           = var.region
   user_ocid        = var.user_ocid
   fingerprint      = var.fingerprint
   private_key_path = var.private_key_path

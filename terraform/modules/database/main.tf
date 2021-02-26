@@ -1,33 +1,39 @@
-## Copyright (c) 2019, 2020, Oracle and/or its affiliates.
+## Copyright (c) 2019, 2021, Oracle and/or its affiliates.
 ## Licensed under the Universal Permissive License v1.0 as shown at https://oss.oracle.com/licenses/upl.
 
+resource "random_password" "bootstrap_password_1" {
+  length  = 1
+  upper   = true
+  lower   = true
+  number  = false
+  special = false
+}
+
+resource "random_password" "bootstrap_password_2" {
+  length           = 24
+  upper            = true
+  min_upper        = 2
+  lower            = true
+  min_lower        = 2
+  number           = true
+  min_numeric      = 2
+  special          = true
+  override_special = "#_$"
+  min_special      = 2
+}
+
 locals {
-  use_existing_db = var.database_id != ""
-}
-
-data "oci_identity_compartment" "db_compartment" {
-  count      = var.enabled && !local.use_existing_db ? 1 : 0
-  id         = var.compartment_id
-}
-
-data "oci_kms_decrypted_data" "decrypted_db_admin_password" {
-  count           = var.enabled && !local.use_existing_db ? 1 : 0
-  ciphertext      = var.db_admin_password_encrypted
-  crypto_endpoint = var.kms_crypto_endpoint
-  key_id          = var.kms_key_id
+  bootstrap_password = "${random_password.bootstrap_password_1.result}${random_password.bootstrap_password_2.result}"
 }
 
 resource "oci_database_autonomous_database" "autonomous_database" {
-  count                    = var.enabled && !local.use_existing_db ? 1 : 0
-  admin_password           = chomp(base64decode(join("", data.oci_kms_decrypted_data.decrypted_db_admin_password.*.plaintext)))
-  compartment_id           = join("", data.oci_identity_compartment.db_compartment.*.id)
+  admin_password           = local.bootstrap_password
+  compartment_id           = var.compartment_id
   cpu_core_count           = "1"
   data_storage_size_in_tbs = "1"
   db_name                  = var.db_name
   db_workload              = "OLTP"
   is_auto_scaling_enabled  = true
-
-  whitelisted_ips = var.whitelisted_ips
 
   display_name  = "${var.display_name_prefix}-database"
   freeform_tags = var.freeform_tags
@@ -39,14 +45,25 @@ resource "oci_database_autonomous_database" "autonomous_database" {
   }
 }
 
-data "oci_database_autonomous_database" "autonomous_database" {
-  count                  = var.enabled && local.use_existing_db ? 1 : 0
-  autonomous_database_id = var.database_id
+
+module "backup-bucket" {
+
+  source = "../bucket"
+
+  compartment_id = var.compartment_id
+
+  # Bucket name needs to match a predefined patter
+  bucket_name = format("backup_%s", oci_database_autonomous_database.autonomous_database.db_name)
+
+  freeform_tags = var.freeform_tags
+  defined_tags  = var.defined_tags
 }
 
+
 locals {
-  db_name = join("", concat(data.oci_database_autonomous_database.autonomous_database.*.db_name, oci_database_autonomous_database.autonomous_database.*.db_name))
-  is_dedicated_values = compact(concat(data.oci_database_autonomous_database.autonomous_database.*.is_dedicated, oci_database_autonomous_database.autonomous_database.*.is_dedicated))
-  is_dedicated = var.enabled && length(local.is_dedicated_values) > 0 ? tobool(join("", local.is_dedicated_values)) : false
-  tns_alias = var.enabled ? lower(local.is_dedicated ? "${local.db_name}_low_tls" : "${local.db_name}_low") : ""
+  db_name             = oci_database_autonomous_database.autonomous_database.db_name
+  is_dedicated        = oci_database_autonomous_database.autonomous_database.is_dedicated
+  tns_alias           = lower(local.is_dedicated ? "${local.db_name}_low_tls" : "${local.db_name}_low")
+  private_endpoint    = oci_database_autonomous_database.autonomous_database.private_endpoint
+  private_endpoint_ip = oci_database_autonomous_database.autonomous_database.private_endpoint_ip
 }

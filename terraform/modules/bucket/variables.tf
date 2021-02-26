@@ -1,4 +1,4 @@
-## Copyright (c) 2019, 2020, Oracle and/or its affiliates.
+## Copyright (c) 2019, 2021, Oracle and/or its affiliates.
 ## Licensed under the Universal Permissive License v1.0 as shown at https://oss.oracle.com/licenses/upl.
 
 variable "compartment_id" {
@@ -11,18 +11,13 @@ variable "bucket_name" {
   type        = string
 }
 
-variable "enabled" {
-  type    = bool
-  default = true
-}
-
 // Tags
 variable "freeform_tags" {
-  type = map(string)
+  type    = map(string)
   default = null
 }
 
 variable "defined_tags" {
-  type = map(string)
+  type    = map(string)
   default = null
 }

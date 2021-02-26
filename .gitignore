@@ -13,4 +13,4 @@ build
 
 # .tfvars files
 *.tfvars
-!essbase-byol.auto.tfvars
+!essbase.auto.tfvars*

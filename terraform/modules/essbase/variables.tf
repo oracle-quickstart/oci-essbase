@@ -1,14 +1,14 @@
-## Copyright (c) 2019, 2020, Oracle and/or its affiliates.
+## Copyright (c) 2019, 2021, Oracle and/or its affiliates.
 ## Licensed under the Universal Permissive License v1.0 as shown at https://oss.oracle.com/licenses/upl.
 
 variable "listing_id" {
-  type        = string
-  default     = ""
+  type    = string
+  default = ""
 }
 
 variable "listing_resource_version" {
-  type        = string
-  default     = ""
+  type    = string
+  default = ""
 }
 
 variable "listing_resource_id" {
@@ -106,19 +106,17 @@ variable "temp_volume_size" {
   default     = 64
 }
 
-
 variable "admin_username" {
   description = "The administrator username"
   type        = string
 }
 
-variable "admin_password_encrypted" {
-  description = "The administrator password"
+variable "admin_password_id" {
+  description = "The administrator password secret id"
   type        = string
 }
 
-// Security configuration
-variable "security_mode" {
+variable "identity_provider" {
   type    = string
   default = "embedded"
 }
@@ -133,7 +131,7 @@ variable "idcs_client_id" {
   default = ""
 }
 
-variable "idcs_client_secret_encrypted" {
+variable "idcs_client_secret_id" {
   type    = string
   default = ""
 }
@@ -153,9 +151,15 @@ variable "db_admin_username" {
   type        = string
 }
 
-variable "db_admin_password_encrypted" {
-  description = "Database admin password"
+variable "db_admin_password_id" {
+  description = "Database admin password secret id"
   type        = string
+}
+
+variable "db_bootstrap_password" {
+  description = "Database admin password used to bootstrap a newly created db"
+  type        = string
+  default     = null
 }
 
 variable "db_database_id" {
@@ -167,18 +171,16 @@ variable "db_alias_name" {
 }
 
 variable "db_connect_string" {
-  type = string
-  default = ""
-}
-
-variable "db_backup_bucket_namespace" {
   type    = string
   default = ""
 }
 
-variable "db_backup_bucket_name" {
-  type    = string
-  default = ""
+variable "db_backup_bucket" {
+  type = object({
+    namespace = string
+    name      = string
+  })
+  default  = null
 }
 
 variable "rcu_schema_prefix" {
@@ -207,19 +209,18 @@ variable "stack_display_name" {
   default = ""
 }
 
-// KMS Settings
-variable "kms_key_id" {
-  type = string
-}
-
-variable "kms_crypto_endpoint" {
-  type = string
-}
-
 // Notification settings
 variable "notification_topic_id" {
-  type = string
+  type    = string
   default = ""
+}
+
+variable "additional_host_mappings" {
+  type    = list(object({
+     host = string
+     ip_address = string
+  }))
+  default = []
 }
 
 // Sidecar proxy
@@ -228,14 +229,19 @@ variable "enable_embedded_proxy" {
   default = true
 }
 
+variable "timezone" {
+  type    = string
+  default = ""
+}
+
 // Tags
 variable "freeform_tags" {
-  type = map(string)
+  type    = map(string)
   default = null
 }
 
 variable "defined_tags" {
-  type = map(string)
+  type    = map(string)
   default = null
 }
 

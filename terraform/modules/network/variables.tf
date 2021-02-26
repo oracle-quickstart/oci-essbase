@@ -1,4 +1,4 @@
-## Copyright (c) 2019, 2020, Oracle and/or its affiliates.
+## Copyright (c) 2019, 2021, Oracle and/or its affiliates.
 ## Licensed under the Universal Permissive License v1.0 as shown at https://oss.oracle.com/licenses/upl.
 
 # OCI Service
@@ -7,14 +7,8 @@ variable "compartment_id" {
   type        = string
 }
 
-variable "existing_vcn_id" {
+variable "vcn_cidr_block" {
   type    = string
-  default = ""
-}
-
-variable "vcn_cidr" {
-  type    = string
-  default = "10.1.0.0/16"
 }
 
 variable "display_name_prefix" {
@@ -27,23 +21,52 @@ variable "dns_label" {
   type        = string
 }
 
-variable "enable_internet_gateway" {
+// Application subnet
+variable "application_subnet_cidr_block" {
+  type = string
+}
+
+variable "instance_listen_port" {
+  type = number
+}
+
+variable "create_private_application_subnet" {
   type    = bool
   default = true
 }
 
-variable "enable_nat_gateway" {
+// Load balancer subnet
+variable "create_load_balancer_subnet" {
   type    = bool
   default = false
 }
 
+variable "load_balancer_subnet_cidr_block" {
+  type = string
+}
+
+variable "create_private_load_balancer_subnet" {
+  type    = bool
+  default = false
+}
+
+// Bastion subnet
+variable "create_bastion_subnet" {
+  type    = bool
+  default = false
+}
+
+variable "bastion_subnet_cidr_block" {
+  type = string
+}
+
 // Tags
 variable "freeform_tags" {
-  type = map(string)
+  type    = map(string)
   default = null
 }
 
 variable "defined_tags" {
-  type = map(string)
+  type    = map(string)
   default = null
 }

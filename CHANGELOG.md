@@ -4,7 +4,34 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [21.1.0.0.1]
+
+### Changed
+- Essbase 21.1 GA Release
+- Fusion Middleware 12.2.1.4.0
+- Migrate scripts to terraform 0.13 syntax.
+- Switch from encrypted keys to secrets in vault.
+- Support for flex compute shapes.
+- Support for existing Autonomous Databases configured with private endpoint.
+- Rename variable `security_mode` to `identity_provider`
+- Disable bastion creation when using an existing network.
+- Support selection of timezone for the compute instance.
+
+### Image Details
+- [Oracle-Linux-7.9-2021.01.12-0](https://docs.oracle.com/en-us/iaas/images/image/b6a7b057-03a8-4624-b08b-c12caa2c63a0/)
+- Oracle Fusion Middleware 12.2.1.4.0 GA
+- Oracle Essbase 21.1.0.0.0 GA
+- Oracle JDK 8 update 281 Server JRE
+- Applied patches:
+  - 28186730 - OPatch 13.9.4.2.5 for FMW/WLS 12.2.1.3.0 and 12.2.1.4.0
+  - 32253037 - WebLogic Patch Set Update 12.2.1.4.201209
+  - 31544353 - ADR for WebLogic Server 12.2.1.4.0 July CPU 2020
+  - 32124456 - Coherence 12.2.1.4.7 Cumulative Patch
+  - 31676526 - RCU Patches for ADB
+  - 30540494 - RCU Patches for ADB
+  - 30754186 - RCU Patches for ADB
+  - 31666198 - OPSS Bundle Patch 12.2.1.4.200724
+  - 32357288 - ADF Bundle Patch 12.2.1.4.210107
 
 ## [19.3.0.3.4]
 

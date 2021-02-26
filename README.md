@@ -8,13 +8,13 @@
 ![essbase-stack](https://github.com/oracle-quickstart/oci-essbase/workflows/essbase-stack/badge.svg)
 
 [![Deploy to Oracle Cloud](https://oci-resourcemanager-plugin.plugins.oci.oraclecloud.com/latest/deploy-to-oracle-cloud.svg)
-](https://console.us-phoenix-1.oraclecloud.com/resourcemanager/stacks/create?region=home&zipUrl=https://github.com/oracle-quickstart/oci-essbase/releases/download/v19.3.0.3.4/essbase-stack-v19.3.0.3.4-byol.zip)
+](https://console.us-phoenix-1.oraclecloud.com/resourcemanager/stacks/create?region=home&zipUrl=https://github.com/oracle-quickstart/oci-essbase/releases/download/v21.1.0.0.1/essbase-stack-v21.1.0.0.1-byol.zip)
 
 [Oracle Essbase][essbase] is a business analytics solution that uses a proven, flexible, best-in-class architecture for analysis, reporting, and collaboration. It delivers instant value and greater productivity for your business users, analysts, modelers, and decision-makers, across all lines of business within your organization. You can interact with Essbase, through a web or Microsoft Office interface, to analyze, model, collaborate, and report.
 
 This Quick Start automates the deployment of Oracle Essbase on [Oracle Cloud Infrastructure (OCI)][oci]. It can also deploy additional stack components required – Autonomous Database, Load Balancer, Storage, Virtual Cloud Network (VCN) as part of the deployment.
 
-For more details on deploying the Essbase stack on Oracle Cloud Infrastructure, please visit the [Administering Oracle Essbase](https://docs.oracle.com/en/database/other-databases/essbase/19.3/essad/index.html) guide.
+For more details on deploying the Essbase stack on Oracle Cloud Infrastructure, please visit the [Administering Oracle Essbase](https://docs.oracle.com/en/database/other-databases/essbase/21/essad/index.html) guide.
 
 ### Default Topology
 
@@ -30,11 +30,11 @@ The above digram shows the full topology supported by the terraform scripts.  In
 
 ## Before You Begin with Oracle Essbase
 
-Refer to the [documentation](https://docs.oracle.com/en/database/other-databases/essbase/19.3/essad/you-begin-oracle-essbase.html) for the pre-requisite steps to using Essbase on OCI.
+Refer to the [documentation](https://docs.oracle.com/en/database/other-databases/essbase/21/essad/you-begin-oracle-essbase.html) for the pre-requisite steps to using Essbase on OCI.
 
-### Encrypt Values using KMS
+### Create Secrets with OCI Vault
 
-Oracle Cloud Infrastructure [Key Management (KMS)][kms] enables you to manage sensitive information when creating a stack. You are required to use KMS to encrypt credentials during provisioning by creating a key. Passwords chosen for Essbase administrator and Database must meet their respective password requirements.
+Oracle Cloud Infrastructure [Vault][vault] enables you to manage sensitive information when creating a stack. You are required to store your credentials in the vault prior to provisioning the Essbase stack. Passwords chosen for Essbase administrator and Database must meet their respective password requirements.
 
 ### Create Dynamic Group
 
@@ -57,6 +57,7 @@ allow group group_name to manage buckets in compartment compartment_name
 allow group group_name to manage objects in compartment compartment_name
 allow group group_name to use vaults in compartment compartment_name
 allow group group_name to use keys in compartment compartment_name
+allow group group_name to use secrets in compartment compartment_name
 ```
 
 Some policies may be optional, depending on expected use. For example, if you're not using a load balancer, you don't need a policy that allows management of load balancers.
@@ -73,6 +74,7 @@ allow dynamic-group group_name to manage autonomous-backups in compartment compa
 allow dynamic-group group_name to read buckets in compartment compartment_name
 allow dynamic-group group_name to manage objects in compartment compartment_name
 allow dynamic-group group_name to use keys in compartment compartment_name
+allow dynamic-group group_name to use secrets in compartment compartment_name
 ```
 
 ## Using the Terraform command line tool
@@ -97,7 +99,7 @@ terraform init
 
 ### Configure
 
-Choose the Essbase image that corresponds to the desired [license](#License), by removing the `.disabled` extension on appropriate `essbase-<license>.auto.tfvars.disabled` file.  Set the remaining [variables](./VARIABLES.md) needed to drive the stack creation.  This can be done by creating the terraform.tfvars from the [template file](./terraform/terraform.tfvars.template), or using environment variables as described here.
+By default, the Essbase image selected is the BYOL [license](#License). To use the UCM [license](#License), replace the `essbase.auto.tfvars` file with `essbase.auto.tfvars.ucm`. Set the remaining [variables](./VARIABLES.md) needed to drive the stack creation.  This can be done by creating the terraform.tfvars from the [template file](./terraform/terraform.tfvars.template), or using environment variables as described here.
 
 Let's make sure the plan looks good:
 
@@ -149,7 +151,7 @@ allow group group_name to manage orm-jobs in compartment compartment_name
 
 ## Post-Deployment Tasks
 
-Refer to the [documentation](https://docs.oracle.com/en/database/other-databases/essbase/19.3/essad/complete-deployment-tasks.html) for a list of post-deployment tasks.
+Refer to the [documentation](https://docs.oracle.com/en/database/other-databases/essbase/21/essad/complete-deployment-tasks.html) for a list of post-deployment tasks.
 
 ## License
 
@@ -171,8 +173,8 @@ The Oracle Essbase product requires an on-premises purchased license and active 
 
 If you have an issue or a question, please take a look at our [FAQs](./FAQs.md) or [open an issue](https://github.com/oracle-quickstart/oci-essbase/issues/new).
 
-[essbase]: https://docs.oracle.com/en/database/other-databases/essbase/19.3/index.html
+[essbase]: https://docs.oracle.com/en/database/other-databases/essbase/21/index.html
 [oci]: https://cloud.oracle.com/cloud-infrastructure
 [orm]: https://docs.cloud.oracle.com/iaas/Content/ResourceManager/Concepts/resourcemanager.htm
-[kms]: https://docs.cloud.oracle.com/iaas/Content/KeyManagement/Concepts/keyoverview.htm
+[vault]: https://docs.cloud.oracle.com/iaas/Content/KeyManagement/Concepts/keyoverview.htm
 [tf]: https://www.terraform.io

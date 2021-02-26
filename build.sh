@@ -14,8 +14,7 @@ mkdir -p $folder
 cd $folder
 cp -R $SCRIPT_DIR/terraform/* .
 rm -rf .terraform
-rm -rf essbase-ucm*
-for file in *.disabled; do mv $file ${file//.disabled/}; done
+rm -rf *.ucm
 ls -la
 zip -r $SCRIPT_DIR/build/essbase-stack-byol.zip *
 cd $SCRIPT_DIR
@@ -28,8 +27,7 @@ mkdir -p $folder
 cd $folder
 cp -R $SCRIPT_DIR/terraform/* .
 rm -rf .terraform
-rm -rf essbase-byol*
-for file in *.disabled; do mv $file ${file//.disabled/}; done
+for file in *.ucm; do mv $file ${file//.ucm/}; done
 ls -la
 zip -r $SCRIPT_DIR/build/essbase-stack-ucm.zip *
 cd $SCRIPT_DIR

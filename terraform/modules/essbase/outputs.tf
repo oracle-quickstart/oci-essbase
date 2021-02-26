@@ -1,16 +1,8 @@
-## Copyright (c) 2019, 2020, Oracle and/or its affiliates.
+## Copyright (c) 2019, 2021, Oracle and/or its affiliates.
 ## Licensed under the Universal Permissive License v1.0 as shown at https://oss.oracle.com/licenses/upl.
 
-output "node" {
-
-  value = {
-     id = oci_core_instance.essbase.id,
-     display_name = oci_core_instance.essbase.display_name,
-     public_ip = oci_core_instance.essbase.public_ip,
-     private_ip = oci_core_instance.essbase.private_ip,
-     listen_port = local.listen_port
-  }
-
+output "nodes" {
+  value = local.nodes
 }
 
 output "rcu_schema_prefix" {

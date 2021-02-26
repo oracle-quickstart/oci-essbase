@@ -1,4 +1,4 @@
-## Copyright (c) 2019, 2020, Oracle and/or its affiliates.
+## Copyright (c) 2019, 2021, Oracle and/or its affiliates.
 ## Licensed under the Universal Permissive License v1.0 as shown at https://oss.oracle.com/licenses/upl.
 
 ### OCI Authentication details
@@ -11,10 +11,6 @@ region = "<region in which to operate, example: us-ashburn-1, us-phoenix-1>"
 ### General
 compartment_ocid = "<compartment OCID>"
 # stack_display_name = ""
-
-### Vault Details
-kms_key_id = "<kms key OCID>"
-kms_crypto_endpoint = "<http endpoint for the corresponding key>"
 
 ### Notification details
 # notification_topic_id = "<notifiction topic OCID>"
@@ -52,29 +48,29 @@ ssh_authorized_keys = "<Public key used on the instance>"
 # config_volume_size = "64"
 # temp_volume_size = "64"
 # essbase_admin_username = "admin"
-essbase_admin_password_encrypted = "<Password encrypted with provided vault key>"
+essbase_admin_password_id = "<OCID for vault secret>"
 # rcu_schema_prefix = ""
 # create_public_essbase_instance = "false"
 # enable_essbase_monitoring = "false"
 # enable_embedded_proxy = "true"
 
-### Security Details
-# security_mode = "idcs"
+### Identity Provider Details
+# identity_provider = "idcs"
 # idcs_tenant = ""
 # idcs_client_id = ""
-# idcs_client_secret_encrypted = ""
+# idcs_client_secret_id = ""
 # idcs_external_admin_username = ""
 
 ### Database Details
 # use_existing_db = "false"
 # existing_db_type = "Autonomous Database"
 # existing_db_id = "<autonomous database OCID>"
-# db_admin_password_encrypted = "<Password encrypted with provided vault key>"
+# db_admin_password_id = "<OCID for vault secret>"
 # db_license_model = "LICENSE_INCLUDED"
 
 # existing_oci_db_system_database_id = "<oci database system OCID>"
 # existing_oci_db_system_database_pdb_name = "<oci database PDB name>"
 # oci_db_admin_username = "SYS"
-# oci_db_admin_password_encrypted = "<Password encrypted with provided vault key>"
+# oci_db_admin_password_id = "<OCID for vault secret>"
 
 # existing_db_connect_string = "<database connection string>"

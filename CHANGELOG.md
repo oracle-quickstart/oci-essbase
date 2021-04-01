@@ -6,6 +6,29 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [19.3.0.4.5]
+
+### Changed
+- Support flex compute shapes. Removes experimental flag.
+- Support for existing Autonomous Databases configured with private endpoint.
+
+### Image Details
+- [Oracle-Linux-7.9-2021.02.16-0](https://docs.oracle.com/en-us/iaas/images/image/03dd617d-2545-44ee-a8be-597e255284c9/)
+- Oracle Fusion Middleware 12.2.1.3.0 GA
+- Oracle Essbase 19.3.0.0.0 GA
+- Oracle JDK 8 update 281 Server JRE
+- Applied patches:
+  - 28186730 - OPatch 13.9.4.2.4 for FMW/WLS 12.2.1.3.0 and 12.2.1.4.0
+  - 32300397 - WebLogic Patch Set Update 12.2.1.3.201217
+  - 31470751 - Coherence 12.2.1.3.12 Cumulative Patch
+  - 32366874 - ADF Bundle Patch 12.2.1.3.210111
+  - 30922486 - OPSS Bundle Patch 12.2.1.3.201020
+  - 29650702 - FMW Platform 12.2.1.3.0 SPU April 2019
+  - 20623024 - RCU Patch
+  - 29840258 - RCU Patch for invalid FMWREGISTRY password
+  - 31544340 - ADR FOR WEBLOGIC SERVER 12.2.1.3.0 JULY CPU 2020 (Patch)
+  - 31907358 - Essbase Cumulative Bundle Patch 19.3.0.4.5
+
 ## [19.3.0.3.4]
 
 ### Added

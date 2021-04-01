@@ -1,4 +1,4 @@
-## Copyright (c) 2019, 2020, Oracle and/or its affiliates.
+## Copyright (c) 2019, 2021, Oracle and/or its affiliates.
 ## Licensed under the Universal Permissive License v1.0 as shown at https://oss.oracle.com/licenses/upl.
 
 // Random suffix to make things unique
@@ -199,6 +199,13 @@ locals {
      "oci" = module.database-oci.connect_string
      "manual" = var.existing_db_connect_string
   }
+
+  db_type_host_mappings = {
+    "adb"  = module.database.private_endpoint == "" ? [] : [{ host = module.database.private_endpoint,
+                                                              ip_address = module.database.private_endpoint_ip
+                                                            }]
+  }
+
   
 
 }
@@ -247,6 +254,8 @@ module "essbase" {
 
   db_backup_bucket_namespace = module.database-backup-bucket.bucket_namespace
   db_backup_bucket_name      = module.database-backup-bucket.bucket_name
+
+  additional_host_mappings = lookup(local.db_type_host_mappings, local.db_type, [])
 
   security_mode                = var.security_mode
   idcs_tenant                  = var.security_mode == "idcs" ? var.idcs_tenant : null

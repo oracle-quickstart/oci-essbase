@@ -1,4 +1,4 @@
-## Copyright (c) 2019, 2020, Oracle and/or its affiliates.
+## Copyright (c) 2019, 2021, Oracle and/or its affiliates.
 ## Licensed under the Universal Permissive License v1.0 as shown at https://oss.oracle.com/licenses/upl.
 
 locals {
@@ -49,4 +49,8 @@ locals {
   is_dedicated_values = compact(concat(data.oci_database_autonomous_database.autonomous_database.*.is_dedicated, oci_database_autonomous_database.autonomous_database.*.is_dedicated))
   is_dedicated = var.enabled && length(local.is_dedicated_values) > 0 ? tobool(join("", local.is_dedicated_values)) : false
   tns_alias = var.enabled ? lower(local.is_dedicated ? "${local.db_name}_low_tls" : "${local.db_name}_low") : ""
+
+  private_endpoint    = join("", compact(concat(data.oci_database_autonomous_database.autonomous_database.*.private_endpoint, oci_database_autonomous_database.autonomous_database.*.private_endpoint)))
+  private_endpoint_ip = join("", compact(concat(data.oci_database_autonomous_database.autonomous_database.*.private_endpoint_ip, oci_database_autonomous_database.autonomous_database.*.private_endpoint_ip)))
+
 }

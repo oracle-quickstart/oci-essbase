@@ -103,6 +103,10 @@ groupings:
   - ${existing_bastion_subnet_compartment_id}
   - ${existing_bastion_subnet_id}
 
+- title: "Marketplace Configuration"
+  variables:
+  - ${marketplace_source_images}
+
 variables:
   # General Configuration
   tenancy_ocid:
@@ -139,6 +143,10 @@ variables:
   private_key_path:
     title: Private Key Path
     type: string
+    visible: false
+
+  marketplace_source_images:
+    required: false
     visible: false
 
   stack_version:
@@ -371,16 +379,20 @@ variables:
 
   instance_shape_ocpus:
     title: Essbase Instance OCPUs
-    description: The number of OCPUs for the Essbase compute instance. Using anything less than four OCPUs is not recommended for production workloads. Flex shape support is currently, experimental.
+    description: The number of OCPUs for the Essbase compute instance. Using anything less than four OCPUs is not recommended for production workloads.
     type: integer
     default: 4
     minimum: 1
     maximum: 64
     required: true
     visible:
-      eq:
-      - ${instance_shape}
-      - "VM.Standard.E3.Flex"
+      or:
+      - eq:
+        - ${instance_shape}
+        - "VM.Standard.E3.Flex"
+      - eq:
+        - ${instance_shape}
+        - "VM.Standard.E4.Flex"
 
   instance_availability_domain:
     title: Essbase Availability Domain

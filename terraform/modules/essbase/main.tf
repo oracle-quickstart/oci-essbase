@@ -1,4 +1,4 @@
-## Copyright (c) 2019, 2020, Oracle and/or its affiliates.
+## Copyright (c) 2019, 2021, Oracle and/or its affiliates.
 ## Licensed under the Universal Permissive License v1.0 as shown at https://oss.oracle.com/licenses/upl.
 
 locals {
@@ -122,11 +122,14 @@ Content-Type: text/cloud-config; charset="us-ascii"
 #cloud-config
 # vim: syntax=yaml
 runcmd:
+%{ for mapping in var.additional_host_mappings ~}
+- echo "${mapping.ip_address} ${mapping.host}" >> /etc/hosts
+%{ endfor ~}
 - /u01/vmtools/init/essbase-init.sh
 --boundary-0123456789--
 TMPL
 
-   is_flex_shape = var.shape == "VM.Standard.E3.Flex" ? [ var.shape_ocpus ] : []
+   is_flex_shape = var.shape == "VM.Standard.E3.Flex" || var.shape == "VM.Standard.E4.Flex" ? [ var.shape_ocpus ] : []
 }
 
 #
@@ -155,6 +158,10 @@ resource "oci_core_instance" "essbase" {
   source_details {
     source_type = "image"
     source_id   = local.image_id
+  }
+
+  instance_options {
+    are_legacy_imds_endpoints_disabled = true
   }
 
   metadata = {

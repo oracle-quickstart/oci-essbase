@@ -1,4 +1,4 @@
-## Copyright (c) 2019, 2020, Oracle and/or its affiliates.
+## Copyright (c) 2019, 2021, Oracle and/or its affiliates.
 ## Licensed under the Universal Permissive License v1.0 as shown at https://oss.oracle.com/licenses/upl.
 
 locals {
@@ -44,6 +44,10 @@ resource "oci_core_instance" "bastion-instance" {
   create_vnic_details {
     subnet_id              = var.subnet_id
     skip_source_dest_check = true
+  }
+
+  instance_options {
+    are_legacy_imds_endpoints_disabled = true
   }
 
   # prevent the bastion from destroying and recreating itself if the image ocid changes

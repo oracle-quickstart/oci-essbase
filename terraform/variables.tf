@@ -60,6 +60,11 @@ variable "application_subnet_cidr" {
   }
 }
 
+variable "storage_subnet_cidr" {
+  type    = string
+  default = "10.0.5.0/24"
+}
+
 variable "create_public_essbase_instance" {
   type    = bool
   default = false
@@ -86,6 +91,17 @@ variable "existing_application_subnet_id" {
   type    = string
   default = ""
 }
+
+variable "existing_storage_subnet_compartment_id" {
+  type    = string
+  default = ""
+}
+
+variable "existing_storage_subnet_id" {
+  type    = string
+  default = ""
+}
+
 
 // Bastion configuration
 variable "create_bastion" {
@@ -204,6 +220,16 @@ variable "instance_shape_ocpus" {
 
 variable "instance_availability_domain" {
   type = string
+}
+
+variable "enable_cluster" {
+  type    = bool
+  default = false
+}
+
+variable "instance_count" {
+  type    = number
+  default = 1
 }
 
 variable "instance_hostname_label_prefix" {

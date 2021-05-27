@@ -28,7 +28,9 @@ groupings:
   - ${essbase_listing_id}
   - ${essbase_listing_resource_version}
   - ${essbase_listing_resource_id}
+  - ${enable_cluster}
   - ${instance_availability_domain}
+  - ${instance_count}
   - ${instance_shape}
   - ${instance_shape_ocpus}
   - ${data_volume_size}
@@ -65,6 +67,9 @@ groupings:
   - ${application_subnet_cidr}
   - ${existing_application_subnet_compartment_id}
   - ${existing_application_subnet_id}
+  - ${storage_subnet_cidr}
+  - ${existing_storage_subnet_compartment_id}
+  - ${existing_storage_subnet_id}
   - ${instance_hostname_label_prefix}
 
 - title: "Database Configuration"
@@ -216,6 +221,21 @@ variables:
         - ${use_existing_vcn}
     required: true
 
+  storage_subnet_cidr:
+    title: Storage Subnet CIDR
+    description: The CIDR to assign to the storage subnet for the target Essbase compute node. This will be created as a regional subnet.
+    type: string
+    default: 10.0.5.0/24
+    pattern: "^(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\\/(3[0-2]|[1-2]?[0-9])$"
+    visible:
+      and:
+      - ${show_advanced_options}
+      - ${enable_cluster}
+      - not:
+        - ${use_existing_vcn}
+    required: true
+
+
   create_public_essbase_instance:
     title: Public Essbase node visibility
     description: Select if you want the Essbase node to have a public IP address.
@@ -256,6 +276,30 @@ variables:
       compartmentId: ${existing_application_subnet_compartment_id}
       vcnId: ${existing_vcn_id}
       hidePrivateSubnet: ${create_public_essbase_instance}
+    required: true
+
+  existing_storage_subnet_compartment_id:
+    title: Target storage subnet compartment
+    description: Select the compartment containing the target application subnet.
+    type: oci:identity:compartment:id
+    default: ${compartment_ocid}
+    visible:
+      and:
+      - ${enable_cluster}
+      - ${use_existing_vcn}
+    required: true
+
+  existing_storage_subnet_id:
+    title: Select Storage Subnet
+    description: Select an existing subnet for the target Essbase instance.
+    type: oci:core:subnet:id
+    visible:
+      and:
+      - ${enable_cluster}
+      - ${use_existing_vcn}
+    dependsOn:
+      compartmentId: ${existing_storage_subnet_compartment_id}
+      vcnId: ${existing_vcn_id}
     required: true
 
   create_bastion:
@@ -386,9 +430,20 @@ variables:
     maximum: 64
     required: true
     visible:
-      eq:
-      - ${instance_shape}
-      - "VM.Standard.E3.Flex"
+      or:
+      - eq:
+        - ${instance_shape}
+        - "VM.Standard.E3.Flex"
+      - eq:
+        - ${instance_shape}
+        - "VM.Standard.E4.Flex"
+
+  enable_cluster:
+    title: Enable Cluster Topology
+    description: Select this to enable clustering support.
+    type: boolean
+    default: false
+    visible: false
 
   instance_availability_domain:
     title: Essbase Availability Domain
@@ -398,9 +453,18 @@ variables:
     dependsOn:
       compartmentId: ${compartment_ocid}
 
+  instance_count:
+    title: Number of Nodes
+    description: Number of nodes to create.
+    type: integer
+    default: 1
+    minimum: 1
+    maximum: 3
+    visible: ${enable_cluster}
+
   instance_hostname_label_prefix:
     title: Essbase Instance Hostname Prefix
-    description: The DNS hostname prefix for the Essbase compute instance. The hostname must be unique within the target subnet. If not provided, a random value will be generated.
+    description: The DNS hostname prefix for the Essbase compute instance. The hostname must be unique within the target subnet. If not provided, a random value will be generated. This value is ignored when using an existing network that does not allow for hostnames.
     type: string
     pattern: "^([a-zA-Z0-9]([a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)?$"
     required: false
@@ -915,13 +979,19 @@ variables:
     description: Provision a load balancer in Oracle Cloud Infrastructure. The load balancer will be provisioned with a demo certificate. The use of demo certificate is not recommended for production workloads.
     type: boolean
     default: false
+    visible:
+      not:
+      - ${enable_cluster}
 
   create_public_load_balancer:
     title: Public Load Balancer Visibility
     description: Select if you want the load balancer to have a public IP address.
     type: boolean
     default: true
-    visible: ${create_load_balancer}
+    visible:
+      or:
+      - ${enable_cluster}
+      - ${create_load_balancer}
 
   load_balancer_shape:
     title: Load Balancer Shape
@@ -932,7 +1002,10 @@ variables:
     - 400Mbps
     - 8000Mbps
     default: 100Mbps
-    visible: ${create_load_balancer}
+    visible:
+      or:
+      - ${enable_cluster}
+      - ${create_load_balancer}
 
   load_balancer_subnet_cidr:
     title: Load Balancer Subnet CIDR
@@ -943,7 +1016,9 @@ variables:
     visible:
       and:
       - ${show_advanced_options}
-      - ${create_load_balancer}
+      - or:
+        - ${enable_cluster}
+        - ${create_load_balancer}
       - not:
         - ${use_existing_vcn}
     required: true
@@ -955,7 +1030,9 @@ variables:
     default: ${compartment_ocid}
     visible:
       and:
-      - ${create_load_balancer}
+      - or:
+        - ${enable_cluster}
+        - ${create_load_balancer}
       - ${use_existing_vcn}
     required: true
 
@@ -965,7 +1042,9 @@ variables:
     type: oci:core:subnet:id
     visible: 
       and:
-      - ${create_load_balancer}
+      - or:
+        - ${enable_cluster}
+        - ${create_load_balancer}
       - ${use_existing_vcn}
     required: true
     dependsOn:
@@ -979,7 +1058,9 @@ variables:
     type: oci:core:subnet:id
     visible: 
       and:
-      - ${create_load_balancer}
+      - or:
+        - ${enable_cluster}
+        - ${create_load_balancer}
       - ${use_existing_vcn}
       - ${create_public_load_balancer}
     dependsOn:
@@ -1012,8 +1093,8 @@ variables:
     required: true
 
   existing_db_id:
-    title: Target ATP database
-    description: Target ATP database in which to create the Essbase schema.
+    title: Target autonomous database
+    description: Target Autonomous Database instance in which to create the Essbase schema.
     type: oci:database:autonomousdatabase:id
     visible:
       and:
@@ -1241,6 +1322,9 @@ outputs:
   essbase_node_private_ips:
     title: Essbase Node Private IPs
     type: list
+  essbase_node_domain_names:
+    title: Essbase Node FQDNs
+    type: list
   bastion_host_id:
     title: Bastion Host Instance OCID
     type: ocid
@@ -1268,15 +1352,16 @@ outputGroups:
   - ${stack_display_name}
   - ${stack_version}
 
-- title: Essbase Instance Details
+- title: Essbase Cluster Details
   outputs:
   - ${essbase_node_display_names}
   - ${essbase_node_ids}
   - ${essbase_node_public_ips}
   - ${essbase_node_private_ips}
+  - ${essbase_node_domain_names}
+  - ${rcu_schema_prefix}
   - ${essbase_url}
   - ${essbase_external_url}
-  - ${rcu_schema_prefix}
 
 - title: Bastion Host Details
   outputs:

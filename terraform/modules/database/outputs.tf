@@ -13,21 +13,9 @@ output "compartment_id" {
   value = var.compartment_id
 }
 
-output "tns_alias" {
-  value = local.tns_alias
-}
-
 output "bootstrap_password" {
   value     = local.bootstrap_password
   sensitive = true
-}
-
-output "backup_bucket_namespace" {
-  value = module.backup-bucket.namespace
-}
-
-output "backup_bucket_name" {
-  value = module.backup-bucket.name
 }
 
 output "private_endpoint_mappings" {

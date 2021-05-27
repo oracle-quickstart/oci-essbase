@@ -4,5 +4,5 @@
 # Listing details for the Essbase custom image.
 # The resource_id values here should match the build script and oci_images.tf
 essbase_listing_id="ocid1.appcataloglisting.oc1..aaaaaaaanstxnoz6uttexhw5jfpqhu4gkwsp2ebmw4i2p7gkq65sr3e7z4gq"
-essbase_listing_resource_version="21.1.0.0.1-2102092244"
-essbase_listing_resource_id="ocid1.image.oc1..aaaaaaaad7k2t55e26e57xabczrrjqgugtomu4pav3kj6rrcnuhhz3t4vk7a"
+essbase_listing_resource_version="21.2.0.0.1-2105122046"
+essbase_listing_resource_id="ocid1.image.oc1..aaaaaaaazakzfglpraj7iir4n43er6zswlkcua7lwxgk4tjalivehxfyiofq"

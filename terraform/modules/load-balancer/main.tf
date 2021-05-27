@@ -88,28 +88,19 @@ resource "oci_load_balancer_backend" "essbase" {
   port             = var.backend_nodes[count.index].port
 }
 
-resource "oci_load_balancer_path_route_set" "essbase" {
+resource "oci_load_balancer_load_balancer_routing_policy" "essbase_routing_policy" {
 
-  #Required
+  condition_language_version = "V1"
   load_balancer_id = oci_load_balancer.loadbalancer.id
-  name             = "essbase"
+  name = "essbase"
+  rules {
+     actions {
+        name = "FORWARD_TO_BACKENDSET"
+        backend_set_name = oci_load_balancer_backend_set.essbase.name
+     }
 
-  path_routes {
-    backend_set_name = oci_load_balancer_backend_set.essbase.name
-    path             = "/essbase"
-
-    path_match_type {
-      match_type = "EXACT_MATCH"
-    }
-  }
-
-  path_routes {
-    backend_set_name = oci_load_balancer_backend_set.essbase.name
-    path             = "/essbase/"
-
-    path_match_type {
-      match_type = "PREFIX_MATCH"
-    }
+     condition = "any(http.request.url.path eq '/essbase', http.request.url.path sw '/essbase/')"
+     name = "essbase_url_match"
   }
 }
 

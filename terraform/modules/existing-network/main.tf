@@ -9,6 +9,11 @@ data "oci_core_subnet" "application" {
   subnet_id = var.existing_application_subnet_id
 }
 
+data "oci_core_subnet" "storage" {
+  count     = var.existing_storage_subnet_id != "" ? 1 : 0
+  subnet_id = var.existing_storage_subnet_id
+}
+
 data "oci_core_subnet" "bastion" {
   count     = var.existing_bastion_subnet_id != "" ? 1 : 0
   subnet_id = var.existing_bastion_subnet_id

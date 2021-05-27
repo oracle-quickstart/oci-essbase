@@ -4,6 +4,35 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [21.2.0.0.1]
+
+### Changed
+- Enable failover support. Experimental.
+- Use _tp connection type for Autonomous Transaction Processing (ATP) Database connections.
+- Enable Analytic View Feature when using an Autonomous Data Warehouse Serverless database.
+- Updated backup/restore functionality
+  - Removed backup bucket for created Autonomous Database resource.
+  - Created separate backup bucket for storing Essbase backup content.
+- Migrate scripts to terrform 0.14 syntax
+
+### Image Details
+- [Oracle-Linux-7.9-2021.04.09-0](https://docs.oracle.com/en-us/iaas/images/image/8274a097-bc2b-46c7-ada3-dd138048c072/)
+- Oracle Fusion Middleware 12.2.1.4.0 GA
+- Oracle Essbase 21.1.0.0.0 GA
+- Oracle JDK 8 update 291 Server JRE
+- Applied patches:
+  - 28186730 - OPatch 13.9.4.2.5 for FMW/WLS 12.2.1.3.0 and 12.2.1.4.0
+  - 32253037 - WebLogic Patch Set Update 12.2.1.4.201209
+  - 31544353 - ADR for WebLogic Server 12.2.1.4.0 July CPU 2020
+  - 32124456 - Coherence 12.2.1.4.7 Cumulative Patch
+  - 31676526 - RCU Patches for ADB
+  - 30540494 - RCU Patches for ADB
+  - 30754186 - RCU Patches for ADB
+  - 31666198 - OPSS Bundle Patch 12.2.1.4.200724
+  - 32357288 - ADF Bundle Patch 12.2.1.4.210107
+  - 31949360 - Essbase Release Update 21.2.0.0.0
+
+
 ## [21.1.0.0.1]
 
 ### Changed

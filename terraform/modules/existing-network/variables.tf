@@ -14,6 +14,11 @@ variable "existing_bastion_subnet_id" {
   default = ""
 }
 
+variable "existing_storage_subnet_id" {
+  type    = string
+  default = ""
+}
+
 variable "existing_load_balancer_subnet_ids" {
   type    = list(string)
   default = []

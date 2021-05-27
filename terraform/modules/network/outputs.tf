@@ -9,6 +9,10 @@ output "application_subnet_id" {
   value = oci_core_subnet.application.id
 }
 
+output "storage_subnet_id" {
+  value = join("", oci_core_subnet.storage.*.id)
+}
+
 output "load_balancer_subnet_ids" {
   value = oci_core_subnet.load-balancer.*.id
 }
@@ -16,3 +20,4 @@ output "load_balancer_subnet_ids" {
 output "bastion_subnet_id" {
   value = join("", oci_core_subnet.bastion.*.id)
 }
+

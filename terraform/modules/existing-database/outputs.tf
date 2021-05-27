@@ -13,10 +13,6 @@ output "compartment_id" {
   value = data.oci_database_autonomous_database.autonomous_database.compartment_id
 }
 
-output "tns_alias" {
-  value = local.tns_alias
-}
-
 output "private_endpoint" {
   value = local.private_endpoint
 }

@@ -1,19 +1,13 @@
 ## Copyright (c) 2019, 2021, Oracle and/or its affiliates.
 ## Licensed under the Universal Permissive License v1.0 as shown at https://oss.oracle.com/licenses/upl.
 
-variable "listing_id" {
-  type    = string
-  default = ""
-}
-
-variable "listing_resource_version" {
-  type    = string
-  default = ""
-}
-
-variable "listing_resource_id" {
+variable "image_id" {
   description = "The OCID of the Essbase node image"
   type        = string
+}
+
+variable "node_index" {
+  type = number
 }
 
 # OCI Service
@@ -22,14 +16,14 @@ variable "compartment_id" {
   type        = string
 }
 
-variable "region" {
-  description = "Region"
+variable "availability_domain" {
+  description = "The availability domain for the Essbase node."
   type        = string
 }
 
-variable "availability_domain" {
-  description = "The availability domain for the Essbase nodes."
-  type        = string
+variable "fault_domain" {
+  type = string
+  default = ""
 }
 
 variable "subnet_id" {
@@ -37,14 +31,14 @@ variable "subnet_id" {
   type        = string
 }
 
-variable "enable_storage_vnic" {
-  type    = bool
-  default = true
-}
-
 variable "storage_subnet_id" {
   type    = string
   default = ""
+}
+
+variable "secure_mode" {
+  type    = bool
+  default = false
 }
 
 variable "enable_cluster" {
@@ -52,34 +46,13 @@ variable "enable_cluster" {
   default = false
 }
 
-variable "instance_count" {
-  type        = number
-  default     = 1
-}
-
-variable "metadata_bucket" {
-  type = object({
-    id        = string
-    namespace = string
-    name      = string
-  })
-}
-
-variable "backup_bucket" {
-  type = object({
-    id        = string
-    namespace = string
-    name      = string
-  })
-}
-
-variable "hostname_label_prefix" {
+variable "hostname_label" {
   description = "The hostname for the essbase node"
   type        = string
-  default     = ""
+  default     = null
 }
 
-variable "display_name_prefix" {
+variable "display_name" {
   description = "Display name prefix for the resources created."
   type        = string
 }
@@ -107,28 +80,22 @@ variable "ssh_authorized_keys" {
   type        = string
 }
 
-variable "data_volume_size" {
-  description = "The size of the data volume in gigabytes"
-  type        = number
-  default     = 1024
+variable "data_volume" {
+  type        = object({
+     id = string
+  })
 }
 
-variable "data_volume_vpus_per_gb" {
-  description = "The performance units for the data volume"
-  type        = number
-  default     = 10
+variable "config_volume" {
+  type        = object({
+     id = string
+  })
 }
 
-variable "config_volume_size" {
-  description = "The size of the config volume in gigabytes"
-  type        = number
-  default     = 64
-}
-
-variable "temp_volume_size" {
-  description = "The size of the temp volume in gigabytes"
-  type        = number
-  default     = 64
+variable "temp_volume" {
+  type        = object({
+     id = string
+  })
 }
 
 variable "admin_username" {
@@ -188,7 +155,6 @@ variable "db_database_id" {
 
 variable "db_alias_name" {
   type = string
-  default = null
 }
 
 variable "db_connect_string" {
@@ -200,11 +166,6 @@ variable "rcu_schema_prefix" {
   description = "Schema prefix"
   type        = string
   default     = "ESS1"
-}
-
-variable "reset_system" {
-  type    = bool
-  default = false
 }
 
 variable "enable_monitoring" {
@@ -245,6 +206,22 @@ variable "enable_embedded_proxy" {
 variable "timezone" {
   type    = string
   default = ""
+}
+
+variable "metadata_bucket" {
+  type = object({
+     id        = string
+     namespace = string
+     name      = string
+  })
+}
+
+variable "backup_bucket" {
+  type = object({
+     id        = string
+     namespace = string
+     name      = string
+  })
 }
 
 // Tags

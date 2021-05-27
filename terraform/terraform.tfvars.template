@@ -32,7 +32,7 @@ compartment_ocid = "<compartment OCID>"
 ### Load Balancer Details
 # create_load_balancer = "false"
 # create_public_load_balancer = "true"
-# load_balancer_shape = "100Mbps"
+# load_balancer_shape = "100Mbps" # "800Mbps"
 
 ### Bastion Details
 # create_bastion = "false"
@@ -41,8 +41,10 @@ compartment_ocid = "<compartment OCID>"
 
 ### Essbase instance details
 # instance_shape = "VM.Standard2.4"
+# instance_shape_ocpus = "4"
 instance_availability_domain = "<Availability domain in region>"
 # instance_hostname_label_prefix = ""
+# instance_timezone = "UTC"
 ssh_authorized_keys = "<Public key used on the instance>"
 # data_volume_size = "1024"
 # config_volume_size = "64"
@@ -55,7 +57,7 @@ essbase_admin_password_id = "<OCID for vault secret>"
 # enable_embedded_proxy = "true"
 
 ### Identity Provider Details
-# identity_provider = "idcs"
+# identity_provider = "idcs" # "embedded"
 # idcs_tenant = ""
 # idcs_client_id = ""
 # idcs_client_secret_id = ""
@@ -66,7 +68,7 @@ essbase_admin_password_id = "<OCID for vault secret>"
 # existing_db_type = "Autonomous Database"
 # existing_db_id = "<autonomous database OCID>"
 # db_admin_password_id = "<OCID for vault secret>"
-# db_license_model = "LICENSE_INCLUDED"
+# db_license_model = "LICENSE_INCLUDED" # "BRING_YOUR_OWN_LICENSE"
 
 # existing_oci_db_system_database_id = "<oci database system OCID>"
 # existing_oci_db_system_database_pdb_name = "<oci database PDB name>"

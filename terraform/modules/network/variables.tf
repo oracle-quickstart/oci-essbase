@@ -35,6 +35,17 @@ variable "create_private_application_subnet" {
   default = true
 }
 
+// Storage subnet
+variable "storage_subnet_cidr_block" {
+  type    = string
+  default = ""
+}
+
+variable "create_storage_subnet" {
+  type    = bool
+  default = false
+}
+
 // Load balancer subnet
 variable "create_load_balancer_subnet" {
   type    = bool

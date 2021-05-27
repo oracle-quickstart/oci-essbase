@@ -49,6 +49,76 @@ resource "oci_core_security_list" "application" {
     }
   }
 
+  ingress_security_rules {
+    // Allow inbound traffic to WebLogic node manager
+    protocol    = 6 // tcp
+    source      = var.application_subnet_cidr_block
+    stateless   = false
+    description = "Allow inbound traffic to WebLogic node manager"
+
+    tcp_options {
+      // These values correspond to the destination port range.
+      min = 9556
+      max = 9556
+    }
+  }
+
+  ingress_security_rules {
+    // Allow inbound traffic to WebLogic admin server
+    protocol    = 6 // tcp
+    source      = var.application_subnet_cidr_block
+    stateless   = false
+    description = "Allow inbound traffic to WebLogic admin server t3/t3s ports"
+
+    tcp_options {
+      // These values correspond to the destination port range.
+      min = 9071
+      max = 9072
+    }
+  }
+
+  ingress_security_rules {
+    // Allow inbound traffic to WebLogic admin server
+    protocol    = 6 // tcp
+    source      = var.application_subnet_cidr_block
+    stateless   = false
+    description = "Allow inbound traffic to WebLogic managed servers t3/t3s ports"
+
+    tcp_options {
+      // These values correspond to the destination port range.
+      min = 9081
+      max = 9082
+    }
+  }
+
+  ingress_security_rules {
+    // Allow inbound traffic to JAgent listen port
+    protocol    = 6 // tcp
+    source      = var.application_subnet_cidr_block
+    stateless   = false
+    description = "Allow inbound traffic to JAgent listen port"
+
+    tcp_options {
+      // These values correspond to the destination port range.
+      min = 1423
+      max = 1423
+    }
+  }
+
+  ingress_security_rules {
+    // Allow inbound traffic to JAgent listen port
+    protocol    = 6 // tcp
+    source      = var.application_subnet_cidr_block
+    stateless   = false
+    description = "Allow inbound traffic to JAgent listen port"
+
+    tcp_options {
+      // These values correspond to the destination port range.
+      min = 6423
+      max = 6423
+    }
+  }
+
   egress_security_rules {
     // Allow all outbound traffic
     destination      = local.all_cidr

@@ -9,6 +9,10 @@ output "application_subnet_id" {
   value = data.oci_core_subnet.application.id
 }
 
+output "storage_subnet_id" {
+  value = join("", data.oci_core_subnet.storage.*.id)
+}
+
 output "load_balancer_subnet_ids" {
   value = data.oci_core_subnet.load-balancer.*.id
 }

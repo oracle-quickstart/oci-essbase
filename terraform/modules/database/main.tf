@@ -46,24 +46,10 @@ resource "oci_database_autonomous_database" "autonomous_database" {
 }
 
 
-module "backup-bucket" {
-
-  source = "../bucket"
-
-  compartment_id = var.compartment_id
-
-  # Bucket name needs to match a predefined patter
-  bucket_name = format("backup_%s", oci_database_autonomous_database.autonomous_database.db_name)
-
-  freeform_tags = var.freeform_tags
-  defined_tags  = var.defined_tags
-}
-
-
 locals {
   db_name             = oci_database_autonomous_database.autonomous_database.db_name
   is_dedicated        = oci_database_autonomous_database.autonomous_database.is_dedicated
-  tns_alias           = lower(local.is_dedicated ? "${local.db_name}_low_tls" : "${local.db_name}_low")
+
   private_endpoint    = oci_database_autonomous_database.autonomous_database.private_endpoint
   private_endpoint_ip = oci_database_autonomous_database.autonomous_database.private_endpoint_ip
 }

@@ -6,7 +6,7 @@ output "stack_version" {
 }
 
 output "stack_id" {
-  value = local.stack_id
+  value = local.instance_uuid
 }
 
 output "stack_display_name" {
@@ -27,6 +27,10 @@ output "essbase_node_public_ips" {
 
 output "essbase_node_private_ips" {
   value = compact(module.essbase.nodes[*].private_ip)
+}
+
+output "essbase_node_domain_names" {
+  value = compact(module.essbase.nodes[*].domain_name)
 }
 
 output "essbase_url" {
@@ -66,5 +70,5 @@ output "bastion_host_public_ip" {
 }
 
 output "z_messages" {
-  value = "\n\n*********************\nOracle Essbase stack has been provisioned and is continuing configuration in the background.\nIt may take up to 20 minutes for configuration to complete.\n*********************\n"
+  value = "\n\n*********************\nOracle Essbase stack has been provisioned and is continuing configuration in the background.\nIt may take up to 20 minutes for configuration to complete.\nLog details can be found on the target nodes at /var/log/essbase-init.log.\n*********************\n"
 }

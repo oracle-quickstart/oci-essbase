@@ -4,3 +4,4 @@
   <h1>Frequently Asked Questions</h1>
   <br/>
 </p>
+How should I submit the pull request?

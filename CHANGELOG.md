@@ -4,6 +4,33 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [21.3.0.0.1]
+
+### Changed
+- Remove creation of bastion. Customers are encouraged to use the OCI Bastions service for accessing their environment.
+
+### Image Details
+
+- [Oracle-Linux-7.9-2021.04.09-0](https://docs.oracle.com/en-us/iaas/images/image/8274a097-bc2b-46c7-ada3-dd138048c072/)
+- Oracle Fusion Middleware 12.2.1.4.0 GA
+- Oracle Essbase 21.1.0.0.0 GA
+- Oracle JDK 8 update 291 Server JRE
+- Applied patches:
+  - 33455144 - WebLogic Stack Patch Bundle 12.2.1.4.211011
+  -	28186730 - OPatch 13.9.4.2.7 for FMW/WLS 12.2.1.3.0 and 12.2.1.4.0
+  -	33416868 - WLS Patch Set Update 12.2.1.4.210930
+  -	33286160 - Coherence 12.2.1.4 Cumulative Patch 11 (12.2.1.4.11)
+  -	32148640 - WebLogic Samples SPU 12.2.1.4.210119
+  -	31544353 - ADR for WebLogic Server 12.2.1.4.0
+  -	32772437 - FMW platform 12.2.1.4.0 SPU Patch
+  -	31676526 - RCU Patches for ADB
+  -	30540494 - RCU Patches for ADB
+  -	30754186 - RCU Patches for ADB
+  -	32784652 - OPSS Bundle Patch 12.2.1.4.210418
+  -	33313802 - ADF Bundle Patch 12.2.1.4.210903
+  -	32646479 - Essbase Release Update 21.3.0.0.0
+  -	33671996 - WebLogic overlay patch for October 2021 PSU for CVE-2021-44228 and CVE-2021-45046
+
 ## [21.2.0.0.1]
 
 ### Changed

@@ -9,11 +9,6 @@ variable "existing_application_subnet_id" {
   type    = string
 }
 
-variable "existing_bastion_subnet_id" {
-  type    = string
-  default = ""
-}
-
 variable "existing_storage_subnet_id" {
   type    = string
   default = ""

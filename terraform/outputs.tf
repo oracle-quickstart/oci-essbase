@@ -61,14 +61,6 @@ output "rcu_schema_prefix" {
   value = module.essbase.rcu_schema_prefix
 }
 
-output "bastion_host_id" {
-  value = join("", module.bastion.*.id)
-}
-
-output "bastion_host_public_ip" {
-  value = join("", module.bastion.*.public_ip)
-}
-
 output "z_messages" {
   value = "\n\n*********************\nOracle Essbase stack has been provisioned and is continuing configuration in the background.\nIt may take up to 20 minutes for configuration to complete.\nLog details can be found on the target nodes at /var/log/essbase-init.log.\n*********************\n"
 }

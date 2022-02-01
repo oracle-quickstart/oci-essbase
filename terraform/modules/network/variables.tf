@@ -61,16 +61,6 @@ variable "create_private_load_balancer_subnet" {
   default = false
 }
 
-// Bastion subnet
-variable "create_bastion_subnet" {
-  type    = bool
-  default = false
-}
-
-variable "bastion_subnet_cidr_block" {
-  type = string
-}
-
 // Tags
 variable "freeform_tags" {
   type    = map(string)

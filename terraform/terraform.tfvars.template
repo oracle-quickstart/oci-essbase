@@ -1,4 +1,4 @@
-## Copyright (c) 2019, 2021, Oracle and/or its affiliates.
+## Copyright (c) 2019, 2021, 2022 Oracle and/or its affiliates.
 ## Licensed under the Universal Permissive License v1.0 as shown at https://oss.oracle.com/licenses/upl.
 
 ### OCI Authentication details
@@ -19,25 +19,18 @@ compartment_ocid = "<compartment OCID>"
 # use_existing_vcn = "false"
 # existing_vcn_id = "<vcn OCID>"
 # existing_application_subnet_id = "<subnet OCID>"
-# existing_bastion_subnet_id = "<subnet OCID>"
 # existing_load_balancer_subnet_id = "<subnet OCID>"
 # existing_load_balancer_subnet_id_2 = "<subnet OCID>"
 
 # vcn_cidr = "10.0.0.0/16"
 # vcn_dns_label = ""
 # application_subnet_cidr = "10.0.1.0/24"
-# bastion_subnet_cidr = "10.0.3.0/24"
 # load_balancer_subnet_cidr = "10.0.4.0/24"
 
 ### Load Balancer Details
 # create_load_balancer = "false"
 # create_public_load_balancer = "true"
 # load_balancer_shape = "100Mbps" # "800Mbps"
-
-### Bastion Details
-# create_bastion = "false"
-# bastion_instance_shape = "VM.Standard.E2.1"
-# bastion_availability_domain = "<Availability domain in region>"
 
 ### Essbase instance details
 # instance_shape = "VM.Standard2.4"

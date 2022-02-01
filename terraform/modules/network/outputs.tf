@@ -17,7 +17,3 @@ output "load_balancer_subnet_ids" {
   value = oci_core_subnet.load-balancer.*.id
 }
 
-output "bastion_subnet_id" {
-  value = join("", oci_core_subnet.bastion.*.id)
-}
-

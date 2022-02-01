@@ -14,11 +14,6 @@ data "oci_core_subnet" "storage" {
   subnet_id = var.existing_storage_subnet_id
 }
 
-data "oci_core_subnet" "bastion" {
-  count     = var.existing_bastion_subnet_id != "" ? 1 : 0
-  subnet_id = var.existing_bastion_subnet_id
-}
-
 data "oci_core_subnet" "load-balancer" {
   count     = length(var.existing_load_balancer_subnet_ids)
   subnet_id = var.existing_load_balancer_subnet_ids[count.index]

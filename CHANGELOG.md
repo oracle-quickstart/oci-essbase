@@ -11,7 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Image Details
 
-- [Oracle-Linux-7.9-2021.04.09-0](https://docs.oracle.com/en-us/iaas/images/image/8274a097-bc2b-46c7-ada3-dd138048c072/)
+- [Oracle-Linux-7.9-2021.08.27-0](https://docs.oracle.com/en-us/iaas/images/image/33995e8a-13e8-4ebe-8a27-8beae9e57043/)
 - Oracle Fusion Middleware 12.2.1.4.0 GA
 - Oracle Essbase 21.1.0.0.0 GA
 - Oracle JDK 8 update 291 Server JRE

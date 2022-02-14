@@ -38,4 +38,3 @@ use_existing_db					= "false"
 db_admin_password_id 			= "ocid1.vaultsecret.oc1.iad.amaaaaaa63ksotiaoddlvvslp7oozj3ppsjr4hzroe5dinvjtuu4u6doje4a"  # REPLACE
 db_license_model 				= "BRING_YOUR_OWN_LICENSE"
 
-

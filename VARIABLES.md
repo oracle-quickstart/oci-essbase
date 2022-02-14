@@ -33,13 +33,11 @@
 | use_existing_vcn | N | false | Select this option to support deployment of Essbase components into an existing virtual cloud network (VCN). |
 | existing_vcn_id | if `use_existing_vcn=true` | | An existing VCN in which to create the compute resources. |
 | existing_application_subnet_id | if `use_existing_vcn=true` | | An existing subnet for the target Essbase instance. |
-| existing_bastion_subnet_id | if `use_existing_vcn=true` | | An existing subnet for creating the bastion host |
 | existing_load_balancer_subnet_id | if `use_existing_vcn=true` | | An existing subnet to use for the load balancer. |
 | existing_load_balancer_subnet_id_2 | if `use_existing_vcn=true` | | An existing subnet to use for the second load balancer node. This field is required only if you are not using regional subnets. |
 | vcn_cidr | N | 10.0.0.0/16 | The CIDR to assign to the new virtual cloud network (VCN) to create for this service. |
 | vcn_dns_label | N | | The DNS label to assign to the VCN. If not provided, the value will be randomly generated. |
 | application_subnet_cidr | N | 10.0.1.0/24 | The CIDR to assign to the subnet for the target Essbase compute node. This will be created as a regional subnet. |
-| bastion_subnet_cidr | N | 10.0.3.0/24 | The CIDR to assign to the subnet for the bastion host. This will be created as a regional subnet. |
 | load_balancer_subnet_cidr | N | 10.0.4.0/24 | The CIDR to assign to the subnet for the load balancer.  This will be created as regional subnet. |
 
 ## Load Balancer Details
@@ -48,13 +46,6 @@
 | create_load_balancer | N | false | Provision a load balancer in Oracle Cloud Infrastructure. The load balancer will be provisioned with a demo certificate. The use of demo certificate is not recommended for production workloads. |
 | create_public_load_balancer | N | true | Provision the load balancer with a public IP address. |
 | load_balancer_shape | N | 100Mbps | Select which load balancer shape. |
-
-## Bastion Details
-| Name | Required | Default | Description |
-| ---- | -------- | ------- | ----------- |
-| create_bastion | N | false | Create a bastion host. |
-| bastion_instance_shape | if `create_bastion=true` | VM.Standard.E2.1 | The shape for the bastion compute instance. |
-| bastion_availability_domain | if `create_bastion=true` | | The target availability domain for the bastion. |
 
 ## Essbase instance details
 | Name | Required | Default | Description |

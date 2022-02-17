@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [21.3.0.0.1]
 
 ### Changed
-- Remove creation of bastion. Customers are encouraged to use the OCI Bastions service for accessing their environment.
+- Remove creation of bastion. Customers are encouraged to use the OCI Bastion service for accessing their environment.
 
 ### Image Details
 

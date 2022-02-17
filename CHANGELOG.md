@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - Remove creation of bastion. Customers are encouraged to use the OCI Bastion service for accessing their environment.
+- Support for Terraform 1.0
 
 ### Image Details
 

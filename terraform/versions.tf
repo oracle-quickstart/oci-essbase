@@ -1,32 +1,31 @@
-## Copyright (c) 2019, 2021, Oracle and/or its affiliates.
+## Copyright (c) 2019-2022 Oracle and/or its affiliates.
 ## Licensed under the Universal Permissive License v1.0 as shown at https://oss.oracle.com/licenses/upl.
 
 terraform {
-  required_version = "~> 0.14"
+  required_version = "~> 1.0"
   required_providers {
     local = {
       source  = "hashicorp/local"
-      version = "~> 1.4"
+      version = "~> 2.1"
     }
     null = {
       source  = "hashicorp/null"
-      version = "~> 2.1"
+      version = "~> 3.1"
     }
     random = {
       source  = "hashicorp/random"
-      version = "~> 2.3"
+      version = "~> 3.1"
     }
     template = {
       source  = "hashicorp/template"
-      version = "~> 2.1"
     }
     tls = {
       source  = "hashicorp/tls"
-      version = "~> 2.0"
+      version = "~> 3.1"
     }
     oci = {
       source  = "hashicorp/oci"
-      version = "~> 4.19"
+      version = "~> 4.33"
     }
   }
 }

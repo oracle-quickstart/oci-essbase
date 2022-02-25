@@ -26,7 +26,7 @@ The above digram shows the default topology supported by the terraform scripts. 
 
 ![Full Topology Diagram](./images/image-full_topology.png)
 
-The above digram shows the full topology supported by the terraform scripts.  In this scenario, the application subnet is private. To access the Essbase user interface, an OCI load balancer is provisioned in either public or private regional subnet.  A bastion host (optional) is provisioned to allow access through a public ip address.
+The above diagram shows the full topology supported by the terraform scripts.  In this scenario, the application subnet is private. To access the Essbase user interface, an OCI load balancer is provisioned in either public or private regional subnet.  An OCI Bastion Service instance can be used from OCI to allow access through a public ip address.
 
 ## Before You Begin with Oracle Essbase
 
@@ -43,6 +43,7 @@ You create dynamic groups of Oracle Cloud Infrastructure compute instances, and 
 ### Setup Policies
 
 Set up policies that are appropriate for your organization's security setup. The following is an example of a policy template, with each row being a policy statement.
+Please refer to the 21c Oracle documentation for the up-to-date list.
 
 ```
 allow group group_name to manage virtual-network-family in compartment compartment_name

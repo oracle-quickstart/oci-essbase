@@ -1,4 +1,4 @@
-## Copyright (c) 2019, 2021, Oracle and/or its affiliates.
+## Copyright (c) 2019-2022 Oracle and/or its affiliates.
 ## Licensed under the Universal Permissive License v1.0 as shown at https://oss.oracle.com/licenses/upl.
 
 // General settings
@@ -100,65 +100,6 @@ variable "existing_storage_subnet_compartment_id" {
 variable "existing_storage_subnet_id" {
   type    = string
   default = ""
-}
-
-
-// Bastion configuration
-variable "create_bastion" {
-  type    = bool
-  default = false
-}
-
-variable "bastion_listing_id" {
-  type    = string
-  default = ""
-}
-
-variable "bastion_listing_resource_version" {
-  type    = string
-  default = ""
-}
-
-variable "bastion_listing_resource_id" {
-  type    = string
-  default = ""
-
-  validation {
-    condition     = var.bastion_listing_resource_id == "" || can(regex("^ocid1\\.image\\.[a-zA-Z0-9\\.\\-\\_]+$", var.bastion_listing_resource_id))
-    error_message = "ESSPROV-00000 - Invalid input."
-  }
-
-}
-
-variable "bastion_availability_domain" {
-  type    = string
-  default = ""
-}
-
-variable "bastion_subnet_cidr" {
-  type    = string
-  default = "10.0.2.0/24"
-
-  validation {
-    condition     = can(cidrnetmask(var.bastion_subnet_cidr))
-    error_message = "ESSPROV-00000 - Invalid input."
-  }
-}
-
-// USED ONLY FOR RESOURCE MANAGER
-variable "existing_bastion_subnet_compartment_id" {
-  type    = string
-  default = ""
-}
-
-variable "existing_bastion_subnet_id" {
-  type    = string
-  default = ""
-}
-
-variable "bastion_instance_shape" {
-  type    = string
-  default = "VM.Standard.E2.1"
 }
 
 variable "load_balancer_subnet_cidr" {

@@ -1,4 +1,4 @@
-## Copyright (c) 2019, 2021, Oracle and/or its affiliates.
+## Copyright (c) 2019-2022 Oracle and/or its affiliates.
 ## Licensed under the Universal Permissive License v1.0 as shown at https://oss.oracle.com/licenses/upl.
 
 data "oci_core_vcn" "vcn" {
@@ -12,11 +12,6 @@ data "oci_core_subnet" "application" {
 data "oci_core_subnet" "storage" {
   count     = var.existing_storage_subnet_id != "" ? 1 : 0
   subnet_id = var.existing_storage_subnet_id
-}
-
-data "oci_core_subnet" "bastion" {
-  count     = var.existing_bastion_subnet_id != "" ? 1 : 0
-  subnet_id = var.existing_bastion_subnet_id
 }
 
 data "oci_core_subnet" "load-balancer" {

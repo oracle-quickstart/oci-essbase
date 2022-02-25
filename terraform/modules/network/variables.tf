@@ -1,4 +1,4 @@
-## Copyright (c) 2019, 2021, Oracle and/or its affiliates.
+## Copyright (c) 2019-2022 Oracle and/or its affiliates.
 ## Licensed under the Universal Permissive License v1.0 as shown at https://oss.oracle.com/licenses/upl.
 
 # OCI Service
@@ -59,16 +59,6 @@ variable "load_balancer_subnet_cidr_block" {
 variable "create_private_load_balancer_subnet" {
   type    = bool
   default = false
-}
-
-// Bastion subnet
-variable "create_bastion_subnet" {
-  type    = bool
-  default = false
-}
-
-variable "bastion_subnet_cidr_block" {
-  type = string
 }
 
 // Tags

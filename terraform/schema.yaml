@@ -98,18 +98,6 @@ groupings:
   - ${existing_load_balancer_subnet_id}
   - ${existing_load_balancer_subnet_id_2}
 
-- title: "Bastion Configuration"
-  variables:
-  - ${create_bastion}
-  - ${bastion_listing_id}
-  - ${bastion_listing_resource_version}
-  - ${bastion_listing_resource_id}
-  - ${bastion_availability_domain}
-  - ${bastion_instance_shape}
-  - ${bastion_subnet_cidr}
-  - ${existing_bastion_subnet_compartment_id}
-  - ${existing_bastion_subnet_id}
-
 - title: "Marketplace Configuration"
   variables:
   - ${marketplace_source_images}
@@ -301,99 +289,6 @@ variables:
       compartmentId: ${existing_storage_subnet_compartment_id}
       vcnId: ${existing_vcn_id}
     required: true
-
-  create_bastion:
-    title: Provision Bastion
-    description: Provision a bastion in Oracle Cloud Infrastructure to allow for connections.
-    type: boolean
-    default: false
-    visible:
-      not:
-      - ${create_public_essbase_instance}
-
-  bastion_listing_id:
-    title: Bastion Listing OCID
-    visible: false
-
-  bastion_listing_resource_version:
-    title: Bastion Image OCID
-    visible: false
-
-  bastion_listing_resource_id:
-    title: Bastion Image OCID
-    visible: false
-
-  bastion_availability_domain:
-    title: Bastion Availability Domain
-    description: The name of the availability domain in which to create the bastion host.
-    type: oci:identity:availabilitydomain:name
-    required: true
-    visible:
-      and:
-      - ${create_bastion}
-      - not:
-        - ${create_public_essbase_instance}
-    dependsOn:
-      compartmentId: ${compartment_ocid}
-
-  bastion_subnet_cidr:
-    title: Bastion Subnet CIDR
-    description: The CIDR to assign to the subnet for the bastion host. This will be created as a regional subnet.
-    type: string
-    default: 10.0.2.0/24
-    pattern: "^(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\\/(3[0-2]|[1-2]?[0-9])$"
-    visible:
-      and:
-      - ${show_advanced_options}
-      - ${create_bastion}
-      - not:
-        - ${create_public_essbase_instance}
-      - not:
-        - ${use_existing_vcn}
-    required: true
-
-  existing_bastion_subnet_compartment_id:
-    title: Target bastion subnet compartment
-    description: Select the compartment containing the target bastion subnet.
-    type: oci:identity:compartment:id
-    default: ${compartment_ocid}
-    visible:
-      and:
-      - ${use_existing_vcn}
-      - ${create_bastion}
-      - not:
-        - ${create_public_essbase_instance}
-    required: true
-
-  existing_bastion_subnet_id:
-    title: Select Bastion Subnet
-    description: Select an existing subnet for creating the bastion host
-    type: oci:core:subnet:id
-    visible:
-      and:
-      - ${use_existing_vcn}
-      - ${create_bastion}
-      - not:
-        - ${create_public_essbase_instance}
-    required: true
-    dependsOn:
-      compartmentId: ${existing_bastion_subnet_compartment_id}
-      vcnId: ${existing_vcn_id}
-
-  bastion_instance_shape:
-    title: Bastion Instance Shape
-    description: The shape for the bastion compute instance.
-    type: oci:core:instanceshape:name
-    default: VM.Standard.E2.1
-    visible:
-      and:
-      - ${create_bastion}
-      - not:
-        - ${create_public_essbase_instance}
-    required: true
-    dependsOn:
-      compartmentId: ${compartment_ocid}
-      imageId: ${bastion_listing_resource_id}
 
   # Essbase instance configuration
   essbase_listing_id:
@@ -1325,12 +1220,6 @@ outputs:
   essbase_node_domain_names:
     title: Essbase Node FQDNs
     type: list
-  bastion_host_id:
-    title: Bastion Host Instance OCID
-    type: ocid
-  bastion_host_public_ip:
-    title: Bastion Host Public IP
-    type: string
   rcu_schema_prefix:
     title: RCU Schema Prefix
     type: string
@@ -1362,11 +1251,6 @@ outputGroups:
   - ${rcu_schema_prefix}
   - ${essbase_url}
   - ${essbase_external_url}
-
-- title: Bastion Host Details
-  outputs:
-  - ${bastion_host_id}
-  - ${bastion_host_public_ip}
 
 - title: Identity Cloud Service Details
   outputs:

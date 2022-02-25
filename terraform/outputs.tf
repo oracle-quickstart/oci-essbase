@@ -1,4 +1,4 @@
-## Copyright (c) 2019, 2021, Oracle and/or its affiliates.
+## Copyright (c) 2019-2022 Oracle and/or its affiliates.
 ## Licensed under the Universal Permissive License v1.0 as shown at https://oss.oracle.com/licenses/upl.
 
 output "stack_version" {
@@ -59,14 +59,6 @@ output "idcs_client_id" {
 
 output "rcu_schema_prefix" {
   value = module.essbase.rcu_schema_prefix
-}
-
-output "bastion_host_id" {
-  value = join("", module.bastion.*.id)
-}
-
-output "bastion_host_public_ip" {
-  value = join("", module.bastion.*.public_ip)
 }
 
 output "z_messages" {

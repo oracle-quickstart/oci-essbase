@@ -1,4 +1,4 @@
-## Copyright (c) 2019, 2021, Oracle and/or its affiliates.
+## Copyright (c) 2019-2022 Oracle and/or its affiliates.
 ## Licensed under the Universal Permissive License v1.0 as shown at https://oss.oracle.com/licenses/upl.
 
 // Random string to make things unique
@@ -25,8 +25,7 @@ locals {
   instance_count = var.enable_cluster ? var.instance_count : 1
 
   create_load_balancer = var.enable_cluster || var.create_load_balancer
-  create_bastion       = !var.create_public_essbase_instance && var.create_bastion
-
+  
   db_type_map = {
     "Autonomous Database" = "adb"
     "Database System"     = "oci"
@@ -113,9 +112,6 @@ module "network" {
   create_load_balancer_subnet = local.create_load_balancer
   create_private_load_balancer_subnet = !var.create_public_load_balancer
 
-  bastion_subnet_cidr_block = var.bastion_subnet_cidr
-  create_bastion_subnet = local.create_bastion
-
   freeform_tags       = local.freeform_tags
   defined_tags        = local.defined_tags
 }
@@ -130,27 +126,8 @@ module "existing-network" {
   existing_vcn_id = var.existing_vcn_id
   existing_application_subnet_id = var.existing_application_subnet_id
   existing_storage_subnet_id = local.enable_storage_vnic ? var.existing_storage_subnet_id : ""
-  existing_bastion_subnet_id = var.existing_bastion_subnet_id
+  #existing_bastion_subnet_id = var.existing_bastion_subnet_id
   existing_load_balancer_subnet_ids = local.create_load_balancer ? compact([ var.existing_load_balancer_subnet_id, var.existing_load_balancer_subnet_id_2 ]) : []
-}
-
-
-module "bastion" {
-  source = "./modules/bastion"
-
-  count                    = local.create_bastion ? 1 : 0
-  compartment_id           = data.oci_identity_compartment.compartment.id
-  availability_domain      = var.bastion_availability_domain != "" ? var.bastion_availability_domain : var.instance_availability_domain
-  subnet_id                = join("", compact(concat(module.existing-network.*.bastion_subnet_id, module.network.*.bastion_subnet_id)))
-  ssh_authorized_keys      = var.ssh_authorized_keys
-  display_name_prefix      = local.resource_name_prefix
-  freeform_tags            = local.freeform_tags
-  defined_tags             = local.defined_tags
-  instance_shape           = var.bastion_instance_shape
-  listing_id               = var.bastion_listing_id
-  listing_resource_version = var.bastion_listing_resource_version
-  listing_resource_id      = var.bastion_listing_resource_id
-  notification_topic_id    = var.notification_topic_id
 }
 
 module "database" {

@@ -1,11 +1,11 @@
-## Copyright (c) 2019, 2021, Oracle and/or its affiliates.
+## Copyright (c) 2019-2022 Oracle and/or its affiliates.
 ## Licensed under the Universal Permissive License v1.0 as shown at https://oss.oracle.com/licenses/upl.
 
 locals {
   // If VCN is /16, each tier will get /20
   all_cidr         = "0.0.0.0/0"
 
-  create_internet_gateway = !var.create_private_application_subnet || (var.create_load_balancer_subnet && !var.create_private_load_balancer_subnet) || var.create_bastion_subnet
+  create_internet_gateway = !var.create_private_application_subnet || (var.create_load_balancer_subnet && !var.create_private_load_balancer_subnet)
 
   create_nat_gateway = var.create_private_application_subnet
 }

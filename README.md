@@ -43,6 +43,7 @@ You create dynamic groups of Oracle Cloud Infrastructure compute instances, and 
 ### Setup Policies
 
 Set up policies that are appropriate for your organization's security setup. The following is an example of a policy template, with each row being a policy statement.
+Please refer to the 21c Oracle documentation for the up-to-date list.
 
 ```
 allow group group_name to manage virtual-network-family in compartment compartment_name

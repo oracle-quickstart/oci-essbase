@@ -1,4 +1,4 @@
-## Copyright (c) 2019-2022 Oracle and/or its affiliates.
+## Copyright (c) 2019 - 2022, Oracle and/or its affiliates.
 ## Licensed under the Universal Permissive License v1.0 as shown at https://oss.oracle.com/licenses/upl.
 
 output "node_index" {
@@ -26,7 +26,7 @@ output "private_ip" {
 }
 
 output "storage_ip" {
-  value = local.enable_storage_vnic ? data.oci_core_vnic.storage_vnic[0].private_ip_address : null
+  value = var.enable_storage_vnic ? data.oci_core_vnic.storage_vnic[0].private_ip_address : null
 }
 
 output "listen_address" {

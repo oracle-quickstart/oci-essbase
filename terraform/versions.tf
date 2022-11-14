@@ -1,4 +1,4 @@
-## Copyright (c) 2019-2022 Oracle and/or its affiliates.
+## Copyright (c) 2019 - 2022, Oracle and/or its affiliates.
 ## Licensed under the Universal Permissive License v1.0 as shown at https://oss.oracle.com/licenses/upl.
 
 terraform {
@@ -16,9 +16,10 @@ terraform {
       source  = "hashicorp/random"
       version = "~> 3.1"
     }
-    template = {
-      source  = "hashicorp/template"
-    }
+    #template = {
+     # source  = "hashicorp/template"
+      #version = "~> 2.1"
+    #}
     tls = {
       source  = "hashicorp/tls"
       version = "~> 3.1"

@@ -1,4 +1,4 @@
-## Copyright (c) 2019-2022 Oracle and/or its affiliates.
+## Copyright (c) 2019 - 2022, Oracle and/or its affiliates.
 ## Licensed under the Universal Permissive License v1.0 as shown at https://oss.oracle.com/licenses/upl.
 
 variable "idcs_tenant" {
@@ -6,7 +6,7 @@ variable "idcs_tenant" {
   default = ""
 
   validation {
-    condition = var.idcs_tenant != ""
+    condition     = var.idcs_tenant != ""
     error_message = "ESSPROV-00007 - Missing value for IDCS Instance GUID. The value has to set if using IDCS."
   }
 }
@@ -16,7 +16,7 @@ variable "idcs_client_id" {
   default = ""
 
   validation {
-    condition = var.idcs_client_id != ""
+    condition     = var.idcs_client_id != ""
     error_message = "ESSPROV-00005 - Missing IDCS Application Client ID. The value has to set if using IDCS."
   }
 }
@@ -28,7 +28,7 @@ variable "idcs_client_secret_id" {
   validation {
     condition     = can(regex("^ocid1\\.vaultsecret\\.[a-zA-Z0-9\\.\\-\\_]+$", var.idcs_client_secret_id))
     error_message = "ESSPROV-00006 - Invalid IDCS Application Client Secret. The value has to set if using IDCS."
-  } 
+  }
 }
 
 variable "idcs_external_admin_username" {
@@ -36,7 +36,7 @@ variable "idcs_external_admin_username" {
   default = ""
 
   validation {
-    condition = var.idcs_external_admin_username != ""
+    condition     = var.idcs_external_admin_username != ""
     error_message = "ESSPROV-00008 - Missing value for the IDCS Essbase Admin username. The value has to set if using IDCS."
   }
 }

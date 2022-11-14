@@ -1,15 +1,10 @@
-## Copyright (c) 2019-2022 Oracle and/or its affiliates.
+## Copyright (c) 2019 - 2022, Oracle and/or its affiliates.
 ## Licensed under the Universal Permissive License v1.0 as shown at https://oss.oracle.com/licenses/upl.
 
 #
 # Cloud Init Script
 #
 locals {
-
-  data_volume_device   = "/dev/oracleoci/oraclevdd"
-  config_volume_device = "/dev/oracleoci/oraclevdc"
-  temp_volume_device   = "/dev/oracleoci/oraclevdb"
-  enable_storage_vnic = var.enable_cluster && var.storage_subnet_id != null && var.storage_subnet_id != ""
 
   cloud_init = <<TMPL
 Content-Type: multipart/mixed; boundary="boundary-0123456789"
@@ -21,18 +16,18 @@ Content-Type: text/cloud-config; charset="us-ascii"
 
 #cloud-config
 # vim: syntax=yaml
-%{ if var.timezone != "" ~}
+%{if var.timezone != ""~}
 timezone: ${var.timezone}
-%{ endif ~}
+%{endif~}
 runcmd:
-%{ for mapping in var.additional_host_mappings ~}
+%{for mapping in var.additional_host_mappings~}
 - echo "${mapping.ip_address} ${mapping.host}" >> /etc/hosts
-%{ endfor ~}
+%{endfor~}
 - /u01/vmtools/init/essbase-init.sh
 --boundary-0123456789--
 TMPL
 
-  is_flex_shape = var.shape == "VM.Standard.E3.Flex" || var.shape == "VM.Standard.E4.Flex"
+  is_flex_shape     = (var.shape == "VM.Standard.E3.Flex" || var.shape == "VM.Standard.E4.Flex") || (var.shape == "VM.Optimized3.Flex" || var.shape == "VM.Standard3.Flex")
   flex_ocpus        = var.shape_ocpus == null ? 4 : var.shape_ocpus
   flex_shape_config = local.is_flex_shape ? [{ "ocpus" : local.flex_ocpus }] : []
 }
@@ -47,7 +42,7 @@ resource "oci_core_instance" "essbase" {
   compartment_id      = var.compartment_id
   display_name        = var.display_name
 
-  shape               = var.shape
+  shape = var.shape
   dynamic "shape_config" {
     for_each = local.flex_shape_config
     content {
@@ -90,28 +85,29 @@ resource "oci_core_instance" "essbase" {
     external_admin_username = var.external_admin_username
 
     enable_cluster      = var.enable_cluster
-    enable_storage_vnic = local.enable_storage_vnic
+    enable_storage_vnic = var.enable_storage_vnic
     node_index          = var.node_index
   }
 
   extended_metadata = {
     metadata_bucket = jsonencode(var.metadata_bucket)
     backup_bucket   = jsonencode(var.backup_bucket)
+
+    catalog_bucket  = jsonencode(var.catalog_bucket)
+    catalog_storage = jsonencode(var.instance_catalog_storage)
+
     volumes = jsonencode({
       config = {
-        path         = "/u01/config",
-        device       = local.config_volume_device,
-        id           = var.config_volume.id
+        path = "/u01/config",
+        id   = var.config_volume.id
       },
       data = {
-        path         = "/u01/data",
-        device       = local.data_volume_device,
-        id           = var.data_volume.id
+        path = "/u01/data",
+        id   = var.data_volume.id
       },
       temp = {
-        path         = "/u01/tmp",
-        device       = local.temp_volume_device,
-        id           = var.temp_volume.id
+        path = "/u01/tmp",
+        id   = var.temp_volume.id
       },
     })
     idcs = jsonencode(var.idcs_config)
@@ -143,14 +139,14 @@ resource "oci_core_instance" "essbase" {
 # Secondary vnic for storage
 resource "oci_core_vnic_attachment" "storage_vnic_attachment" {
 
-  count        = local.enable_storage_vnic ? 1 : 0
+  count        = var.enable_storage_vnic ? 1 : 0
   instance_id  = oci_core_instance.essbase.id
   display_name = "${oci_core_instance.essbase.display_name}-storage-vnic"
 
   create_vnic_details {
-    display_name     = "storage"
-    subnet_id        = var.storage_subnet_id
-    assign_public_ip = false
+    display_name           = "storage"
+    subnet_id              = var.storage_subnet_id
+    assign_public_ip       = false
     skip_source_dest_check = false
 
     freeform_tags = var.freeform_tags
@@ -159,7 +155,7 @@ resource "oci_core_vnic_attachment" "storage_vnic_attachment" {
 }
 
 data "oci_core_vnic" "storage_vnic" {
-  count   = local.enable_storage_vnic ? 1 : 0
+  count   = var.enable_storage_vnic ? 1 : 0
   vnic_id = oci_core_vnic_attachment.storage_vnic_attachment[count.index].vnic_id
 }
 
@@ -172,13 +168,12 @@ resource "oci_core_volume_attachment" "essbase_data" {
   volume_id       = var.data_volume.id
   display_name    = "data-volume"
   is_shareable    = var.enable_cluster
-  device          = local.data_volume_device
 }
 
 resource "oci_objectstorage_object" "essbase_data_volume_metadata" {
-  bucket    = var.metadata_bucket.name
-  namespace = var.metadata_bucket.namespace
-  object    = format("%s/%s.dat", oci_core_instance.essbase.id, var.data_volume.id)
+  bucket       = var.metadata_bucket.name
+  namespace    = var.metadata_bucket.namespace
+  object       = format("%s/%s.dat", oci_core_instance.essbase.id, var.data_volume.id)
   storage_tier = "InfrequentAccess"
   content = jsonencode({
     "iqn"  = oci_core_volume_attachment.essbase_data.iqn,
@@ -196,14 +191,12 @@ resource "oci_core_volume_attachment" "essbase_config" {
   instance_id     = oci_core_instance.essbase.id
   volume_id       = var.config_volume.id
   display_name    = "config-volume"
-  is_shareable    = var.enable_cluster
-  device          = local.config_volume_device
 }
 
 resource "oci_objectstorage_object" "essbase_config_volume_metadata" {
-  bucket    = var.metadata_bucket.name
-  namespace = var.metadata_bucket.namespace
-  object    = format("%s/%s.dat", oci_core_instance.essbase.id, var.config_volume.id)
+  bucket       = var.metadata_bucket.name
+  namespace    = var.metadata_bucket.namespace
+  object       = format("%s/%s.dat", oci_core_instance.essbase.id, var.config_volume.id)
   storage_tier = "InfrequentAccess"
   content = jsonencode({
     "iqn"  = oci_core_volume_attachment.essbase_config.iqn,
@@ -221,13 +214,12 @@ resource "oci_core_volume_attachment" "essbase_temp" {
   instance_id     = oci_core_instance.essbase.id
   volume_id       = var.temp_volume.id
   display_name    = "temp-volume"
-  device          = local.temp_volume_device
 }
 
 resource "oci_objectstorage_object" "essbase_temp_volume_metadata" {
-  bucket    = var.metadata_bucket.name
-  namespace = var.metadata_bucket.namespace
-  object    = format("%s/%s.dat", oci_core_instance.essbase.id, var.temp_volume.id)
+  bucket       = var.metadata_bucket.name
+  namespace    = var.metadata_bucket.namespace
+  object       = format("%s/%s.dat", oci_core_instance.essbase.id, var.temp_volume.id)
   storage_tier = "InfrequentAccess"
   content = jsonencode({
     "iqn"  = oci_core_volume_attachment.essbase_temp.iqn,

@@ -69,3 +69,14 @@ essbase_admin_password_id = "<OCID for vault secret>"
 # oci_db_admin_password_id = "<OCID for vault secret>"
 
 # existing_db_connect_string = "<database connection string>"
+
+# IN CASE OF UPGRADE PROVIDE BELOW DETAILS
+
+is_upgrade                      = ""                        # REPLACE WITH TRUE IF UPGRADE CASE ELSE FALSE
+upgrade_backup_restore          = ""                        # REPLACE WITH "Essbase 21c - 21.3 or above" OR "Essbase 19c - 19.3.0.5.6 or above" ACCORDINGLY
+sourceInstance_ocid             = ""
+sourceInstance_extendedMetadata = <<-EOF
+
+EOF                                                         
+# REPLACE LINE 79 WITH EXTENDED METADATA WITH COMMAND OUTPUT FROM SOURCE INSTANCE:
+# oci compute instance get --instance-id $(oci-metadata -j | jq -r '.instance.id') --auth instance_principal | jq '.data."extended-metadata"'

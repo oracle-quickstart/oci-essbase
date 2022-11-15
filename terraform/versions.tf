@@ -16,10 +16,6 @@ terraform {
       source  = "hashicorp/random"
       version = "~> 3.1"
     }
-    #template = {
-     # source  = "hashicorp/template"
-      #version = "~> 2.1"
-    #}
     tls = {
       source  = "hashicorp/tls"
       version = "~> 3.1"

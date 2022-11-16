@@ -53,8 +53,8 @@ variable "enable_cluster" {
 }
 
 variable "instance_count" {
-  type        = number
-  default     = 1
+  type    = number
+  default = 1
 }
 
 variable "metadata_bucket" {
@@ -147,10 +147,10 @@ variable "identity_provider" {
 }
 
 variable "idcs_config" {
-  type    = object({
-     tenant = string,
-     client_id = string,
-     client_secret_id = string
+  type = object({
+    tenant           = string,
+    client_id        = string,
+    client_secret_id = string
   })
   default = null
 }
@@ -187,7 +187,7 @@ variable "db_database_id" {
 }
 
 variable "db_alias_name" {
-  type = string
+  type    = string
   default = null
 }
 
@@ -229,9 +229,9 @@ variable "notification_topic_id" {
 }
 
 variable "additional_host_mappings" {
-  type    = list(object({
-     host = string
-     ip_address = string
+  type = list(object({
+    host       = string
+    ip_address = string
   }))
   default = []
 }

@@ -3,11 +3,11 @@
 
 locals {
   external_loadbalancer_ip = oci_load_balancer.loadbalancer.ip_address_details[0].ip_address
-  redirect_url_prefix = format("https://%s:443/essbase", local.external_loadbalancer_ip)
+  redirect_url_prefix      = format("https://%s:443/essbase", local.external_loadbalancer_ip)
 }
 
 output "external_url" {
-  value = format("https://%s/essbase", local.external_loadbalancer_ip) 
+  value = format("https://%s/essbase", local.external_loadbalancer_ip)
 }
 
 output "redirect_url_prefix" {

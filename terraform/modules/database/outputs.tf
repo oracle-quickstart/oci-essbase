@@ -13,6 +13,10 @@ output "compartment_id" {
   value = var.compartment_id
 }
 
+output "tns_alias" {
+  value = local.tns_alias
+}
+
 output "bootstrap_password" {
   value     = local.bootstrap_password
   sensitive = true

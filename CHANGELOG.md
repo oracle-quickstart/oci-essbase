@@ -4,6 +4,31 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [21.4.0.0.1]
+
+### Changed
+- Upgrade feature added. Customers can perform upgrade of 19.3.0.5.6+ and 21.3 instances to 21.4.0.0.1 latest release. A new Compute Instance will be created based on the previous installation. Please refer to documentation for details.
+- Support for Secure Autonomous Database with private endpoint.
+- Support for Catalog Storage in object storage bucket.
+
+### Image Details
+
+- [Oracle-Linux-7.9-2022.08.08-0](https://docs.oracle.com/en-us/iaas/images/image/0575b4f8-a914-4a74-898f-736225a30a00/)
+- Oracle Fusion Middleware 12.2.1.4.0 GA
+- Oracle Essbase 21.1.0.0.0 GA
+- Oracle JDK 8 update 291 Server JRE
+- Applied patches:
+  - 28186730 - OPATCH latest patch
+  - 31676526 - RCU Patches for ADWC Database
+  - 30540494 - RCU Patches for ADWC Database
+  - 30754186 - RCU Patches for ADWC Database
+  - 34247006 - ADF BUNDLE PATCH 
+  - 34373563 - WLS Stack Patch Bundle
+  - 33727616 - Pre-requisite for log4j patch
+  - 33735326 - Update log4j to 2.17
+  - 33950717 - OPSS Bundle Patch
+  - 33460488 - Essbase Release Update 21.4.0.0.0
+
 ## [21.3.0.0.1]
 
 ### Changed

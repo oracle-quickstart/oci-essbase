@@ -18,9 +18,9 @@ resource "tls_private_key" "demo_loadbalancer_cert" {
 
 resource "tls_self_signed_cert" "demo_loadbalancer_cert" {
 
-  key_algorithm = tls_private_key.demo_loadbalancer_cert.algorithm
+  key_algorithm   = tls_private_key.demo_loadbalancer_cert.algorithm
   private_key_pem = tls_private_key.demo_loadbalancer_cert.private_key_pem
-  ip_addresses = oci_load_balancer.loadbalancer.ip_address_details.*.ip_address
+  ip_addresses    = oci_load_balancer.loadbalancer.ip_address_details.*.ip_address
 
   subject {
     common_name         = "*.oraclevcn.com"
@@ -41,10 +41,10 @@ resource "tls_self_signed_cert" "demo_loadbalancer_cert" {
 resource "oci_load_balancer_certificate" "demo-cert" {
   load_balancer_id = oci_load_balancer.loadbalancer.id
 
-  certificate_name = "demo"
-  private_key = tls_private_key.demo_loadbalancer_cert.private_key_pem
+  certificate_name   = "demo"
+  private_key        = tls_private_key.demo_loadbalancer_cert.private_key_pem
   public_certificate = tls_self_signed_cert.demo_loadbalancer_cert.cert_pem
-  ca_certificate = tls_self_signed_cert.demo_loadbalancer_cert.cert_pem
+  ca_certificate     = tls_self_signed_cert.demo_loadbalancer_cert.cert_pem
 
   lifecycle {
     create_before_destroy = true
@@ -61,8 +61,8 @@ resource "oci_load_balancer_backend_set" "essbase" {
   ]
 
   health_checker {
-    protocol            = "HTTP"
-    url_path            = "/weblogic/ready"
+    protocol = "HTTP"
+    url_path = "/weblogic/ready"
 
     interval_ms       = 5000
     timeout_in_millis = 3000
@@ -91,16 +91,16 @@ resource "oci_load_balancer_backend" "essbase" {
 resource "oci_load_balancer_load_balancer_routing_policy" "essbase_routing_policy" {
 
   condition_language_version = "V1"
-  load_balancer_id = oci_load_balancer.loadbalancer.id
-  name = "essbase"
+  load_balancer_id           = oci_load_balancer.loadbalancer.id
+  name                       = "essbase"
   rules {
-     actions {
-        name = "FORWARD_TO_BACKENDSET"
-        backend_set_name = oci_load_balancer_backend_set.essbase.name
-     }
+    actions {
+      name             = "FORWARD_TO_BACKENDSET"
+      backend_set_name = oci_load_balancer_backend_set.essbase.name
+    }
 
-     condition = "any(http.request.url.path eq '/essbase', http.request.url.path sw '/essbase/')"
-     name = "essbase_url_match"
+    condition = "any(http.request.url.path eq '/essbase', http.request.url.path sw '/essbase/')"
+    name      = "essbase_url_match"
   }
 }
 

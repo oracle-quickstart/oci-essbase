@@ -4,91 +4,45 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [21.3.0.0.1]
-
-### Changed
-- Remove creation of bastion. Customers are encouraged to use the OCI Bastion service for accessing their environment.
-- Support for Terraform 1.0
+## [19.3.0.6.0]
 
 ### Image Details
-
-- [Oracle-Linux-7.9-2021.08.27-0](https://docs.oracle.com/en-us/iaas/images/image/33995e8a-13e8-4ebe-8a27-8beae9e57043/)
-- Oracle Fusion Middleware 12.2.1.4.0 GA
-- Oracle Essbase 21.1.0.0.0 GA
-- Oracle JDK 8 update 291 Server JRE
+- [Oracle-Linux-7.9-2022.08.08-0](https://docs.oracle.com/en-us/iaas/images/image/0575b4f8-a914-4a74-898f-736225a30a00/)
+- Oracle Fusion Middleware 12.2.1.3.0 GA
+- Oracle Essbase 19.3.0.0.0 GA
+- Oracle JDK 8 update 261 Server JRE
 - Applied patches:
-  - 33455144 - WebLogic Stack Patch Bundle 12.2.1.4.211011
-  -	28186730 - OPatch 13.9.4.2.7 for FMW/WLS 12.2.1.3.0 and 12.2.1.4.0
-  -	33416868 - WLS Patch Set Update 12.2.1.4.210930
-  -	33286160 - Coherence 12.2.1.4 Cumulative Patch 11 (12.2.1.4.11)
-  -	32148640 - WebLogic Samples SPU 12.2.1.4.210119
-  -	31544353 - ADR for WebLogic Server 12.2.1.4.0
-  -	32772437 - FMW platform 12.2.1.4.0 SPU Patch
-  -	31676526 - RCU Patches for ADB
-  -	30540494 - RCU Patches for ADB
-  -	30754186 - RCU Patches for ADB
-  -	32784652 - OPSS Bundle Patch 12.2.1.4.210418
-  -	33313802 - ADF Bundle Patch 12.2.1.4.210903
-  -	32646479 - Essbase Release Update 21.3.0.0.0
-  -	33671996 - WebLogic overlay patch for October 2021 PSU for CVE-2021-44228 and CVE-2021-45046
+  - 28186730 - OPatch 13.9.4.2.4 for FMW/WLS 12.2.1.3.0 and 12.2.1.4.0
+  - 33699205 - WebLogic Patch Set Update 12.2.1.3.200227
+  - 34697822 - WLS PATCH SET UPDATE 12.2.1.3.221013
+  - 33598515 - ADR FOR WEBLOGIC SERVER 12.2.1.3.0
+  - 34545595 - Coherence 12.2.1.3 Cumulative Patch 19 (12.2.1.3.19)
+  - 34243945 - ADF BUNDLE PATCH 12.2.1.3.220604
+  - 32982708 - FMW Platform SPU Patch
+  - 32397127 - OPSS Bundle Patch 12.2.1.3.210420
+  - 29840258 - RCU Patch for invalid FMWREGISTRY password
+  - 20623024 - RCU Patch
+  - 33735326 - log4j patch
 
-## [21.2.0.0.1]
 
-### Changed
-- Enable failover support. Experimental.
-- Use _tp connection type for Autonomous Transaction Processing (ATP) Database connections.
-- Enable Analytic View Feature when using an Autonomous Data Warehouse Serverless database.
-- Updated backup/restore functionality
-  - Removed backup bucket for created Autonomous Database resource.
-  - Created separate backup bucket for storing Essbase backup content.
-- Migrate scripts to terrform 0.14 syntax
+## [19.3.0.5.6]
 
 ### Image Details
-- [Oracle-Linux-7.9-2021.04.09-0](https://docs.oracle.com/en-us/iaas/images/image/8274a097-bc2b-46c7-ada3-dd138048c072/)
-- Oracle Fusion Middleware 12.2.1.4.0 GA
-- Oracle Essbase 21.1.0.0.0 GA
-- Oracle JDK 8 update 291 Server JRE
+- [Oracle-Linux-7.9-2021.12.08-0](https://docs.oracle.com/en-us/iaas/images/image/c918702c-8d3a-4895-a5f5-2e953eac4087/)
+- Oracle Fusion Middleware 12.2.1.3.0 GA
+- Oracle Essbase 19.3.0.0.0 GA
+- Oracle JDK 8 update 261 Server JRE
 - Applied patches:
-  - 28186730 - OPatch 13.9.4.2.5 for FMW/WLS 12.2.1.3.0 and 12.2.1.4.0
-  - 32253037 - WebLogic Patch Set Update 12.2.1.4.201209
-  - 31544353 - ADR for WebLogic Server 12.2.1.4.0 July CPU 2020
-  - 32124456 - Coherence 12.2.1.4.7 Cumulative Patch
-  - 31676526 - RCU Patches for ADB
-  - 30540494 - RCU Patches for ADB
-  - 30754186 - RCU Patches for ADB
-  - 31666198 - OPSS Bundle Patch 12.2.1.4.200724
-  - 32357288 - ADF Bundle Patch 12.2.1.4.210107
-  - 31949360 - Essbase Release Update 21.2.0.0.0
-
-
-## [21.1.0.0.1]
-
-### Changed
-- Essbase 21.1 GA Release
-- Fusion Middleware 12.2.1.4.0
-- Migrate scripts to terraform 0.13 syntax.
-- Switch from encrypted keys to secrets in vault.
-- Support for flex compute shapes.
-- Support for existing Autonomous Databases configured with private endpoint.
-- Rename variable `security_mode` to `identity_provider`
-- Disable bastion creation when using an existing network.
-- Support selection of timezone for the compute instance.
-
-### Image Details
-- [Oracle-Linux-7.9-2021.01.12-0](https://docs.oracle.com/en-us/iaas/images/image/b6a7b057-03a8-4624-b08b-c12caa2c63a0/)
-- Oracle Fusion Middleware 12.2.1.4.0 GA
-- Oracle Essbase 21.1.0.0.0 GA
-- Oracle JDK 8 update 281 Server JRE
-- Applied patches:
-  - 28186730 - OPatch 13.9.4.2.5 for FMW/WLS 12.2.1.3.0 and 12.2.1.4.0
-  - 32253037 - WebLogic Patch Set Update 12.2.1.4.201209
-  - 31544353 - ADR for WebLogic Server 12.2.1.4.0 July CPU 2020
-  - 32124456 - Coherence 12.2.1.4.7 Cumulative Patch
-  - 31676526 - RCU Patches for ADB
-  - 30540494 - RCU Patches for ADB
-  - 30754186 - RCU Patches for ADB
-  - 31666198 - OPSS Bundle Patch 12.2.1.4.200724
-  - 32357288 - ADF Bundle Patch 12.2.1.4.210107
+  - 28186730 - OPatch 13.9.4.2.4 for FMW/WLS 12.2.1.3.0 and 12.2.1.4.0
+  - 33699205 - WebLogic Patch Set Update 12.2.1.3.200227
+  - 31544340 - ADR FOR WEBLOGIC SERVER 12.2.1.3.0 JULY CPU 2020 (Patch)
+  - 33591009 - Coherence 12.2.1.3.12 Cumulative Patch
+  - 33313934 - ADF Bundle Patch 12.2.1.3.210111
+  - 32982708 - FMW Platform SPU Patch
+  - 32397127 - OPSS Bundle Patch 12.2.1.3.201020
+  - 29840258 - RCU Patch for invalid FMWREGISTRY password
+  - 20623024 - RCU Patch
+  - 33735326 - log4j patch
 
 ## [19.3.0.3.4]
 

@@ -3,7 +3,7 @@
 
 locals {
   // If VCN is /16, each tier will get /20
-  all_cidr         = "0.0.0.0/0"
+  all_cidr = "0.0.0.0/0"
 
   create_internet_gateway = !var.create_private_application_subnet || (var.create_load_balancer_subnet && !var.create_private_load_balancer_subnet)
 

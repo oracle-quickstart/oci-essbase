@@ -22,13 +22,18 @@ variable "availability_domain" {
 }
 
 variable "fault_domain" {
-  type = string
+  type    = string
   default = ""
 }
 
 variable "subnet_id" {
   description = "The subnet id for the Essbase node."
   type        = string
+}
+
+variable "enable_storage_vnic" {
+  type    = bool
+  default = false
 }
 
 variable "storage_subnet_id" {
@@ -81,20 +86,20 @@ variable "ssh_authorized_keys" {
 }
 
 variable "data_volume" {
-  type        = object({
-     id = string
+  type = object({
+    id = string
   })
 }
 
 variable "config_volume" {
-  type        = object({
-     id = string
+  type = object({
+    id = string
   })
 }
 
 variable "temp_volume" {
-  type        = object({
-     id = string
+  type = object({
+    id = string
   })
 }
 
@@ -114,10 +119,10 @@ variable "identity_provider" {
 }
 
 variable "idcs_config" {
-  type    = object({
-     tenant = string,
-     client_id = string,
-     client_secret_id = string
+  type = object({
+    tenant           = string,
+    client_id        = string,
+    client_secret_id = string
   })
   default = null
 }
@@ -190,9 +195,9 @@ variable "notification_topic_id" {
 }
 
 variable "additional_host_mappings" {
-  type    = list(object({
-     host = string
-     ip_address = string
+  type = list(object({
+    host       = string
+    ip_address = string
   }))
   default = []
 }
@@ -210,17 +215,17 @@ variable "timezone" {
 
 variable "metadata_bucket" {
   type = object({
-     id        = string
-     namespace = string
-     name      = string
+    id        = string
+    namespace = string
+    name      = string
   })
 }
 
 variable "backup_bucket" {
   type = object({
-     id        = string
-     namespace = string
-     name      = string
+    id        = string
+    namespace = string
+    name      = string
   })
 }
 

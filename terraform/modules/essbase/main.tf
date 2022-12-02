@@ -3,7 +3,6 @@
 
 locals {
   enable_subscription = var.listing_id != ""
-  enable_storage_vnic = var.enable_cluster && var.storage_subnet_id != ""
 }
 
 # Get Image Agreement
@@ -39,7 +38,7 @@ data "oci_core_subnet" "application" {
 }
 
 data "oci_core_subnet" "storage" {
-  count     = local.enable_storage_vnic ? 1 : 0
+  count     = var.enable_storage_vnic ? 1 : 0
   subnet_id = var.storage_subnet_id
 }
 
@@ -54,7 +53,7 @@ data "oci_identity_fault_domains" "fault_domains" {
 }
 
 resource "random_shuffle" "node_fault_domains" {
-  input        = data.oci_identity_fault_domains.fault_domains.fault_domains.*.name
+  input = data.oci_identity_fault_domains.fault_domains.fault_domains.*.name
 }
 
 
@@ -95,17 +94,18 @@ module "essbase-node" {
 
   source = "../essbase-node"
 
-  count               = local.node_count
-  compartment_id      = var.compartment_id
-  display_name        = format("%s-node-%s", var.display_name_prefix, count.index + 1)
+  count          = local.node_count
+  compartment_id = var.compartment_id
+  display_name   = format("%s-node-%s", var.display_name_prefix, count.index + 1)
 
   availability_domain = var.availability_domain
-  fault_domain        = random_shuffle.node_fault_domains.result[count.index % length(random_shuffle.node_fault_domains.result) ]
+  fault_domain        = random_shuffle.node_fault_domains.result[count.index % length(random_shuffle.node_fault_domains.result)]
 
-  image_id            = local.image_id
-  shape               = var.shape
-  shape_ocpus         = var.shape_ocpus
-
+  image_id    = local.image_id
+  shape       = var.shape
+  shape_ocpus = var.shape_ocpus
+  timezone    = var.timezone
+  
   ssh_authorized_keys = var.ssh_authorized_keys
 
   subnet_id        = data.oci_core_subnet.application.id
@@ -128,7 +128,8 @@ module "essbase-node" {
   external_admin_username = var.external_admin_username
 
   enable_cluster      = var.enable_cluster
-  storage_subnet_id   = local.enable_storage_vnic ? data.oci_core_subnet.storage[0].id : null
+  enable_storage_vnic = var.enable_storage_vnic
+  storage_subnet_id   = var.enable_storage_vnic ? data.oci_core_subnet.storage[0].id : null
   node_index          = count.index + 1
 
   config_volume = oci_core_volume.essbase_config[count.index]
@@ -152,7 +153,7 @@ module "essbase-node" {
 
 locals {
 
-  nodes = [ for i in range(local.node_count) : {
+  nodes = [for i in range(local.node_count) : {
     id             = module.essbase-node[i].id,
     display_name   = module.essbase-node[i].display_name,
     hostname       = module.essbase-node[i].hostname_label,
@@ -165,7 +166,7 @@ locals {
     node_index     = module.essbase-node[i].node_index,
   }]
 
-  cluster_nodes = [ for i in range(local.node_count) : {
+  cluster_nodes = [for i in range(local.node_count) : {
     id             = module.essbase-node[i].id,
     hostname       = module.essbase-node[i].hostname_label,
     domain_name    = local.use_hostnames ? format("%s.%s", module.essbase-node[i].hostname_label, data.oci_core_subnet.application.subnet_domain_name) : null
@@ -176,7 +177,7 @@ locals {
     node_index     = module.essbase-node[i].node_index,
   }]
 
-  external_urls = [ for i in range(local.node_count) : module.essbase-node[i].external_url ]
+  external_urls = [for i in range(local.node_count) : module.essbase-node[i].external_url]
 }
 
 #

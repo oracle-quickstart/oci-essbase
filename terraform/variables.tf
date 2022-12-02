@@ -188,7 +188,7 @@ variable "ssh_authorized_keys" {
 }
 
 variable "instance_timezone" {
-  type = string
+  type    = string
   default = ""
 }
 
@@ -293,7 +293,7 @@ variable "idcs_client_secret_id" {
   validation {
     condition     = var.idcs_client_secret_id == "" || can(regex("^ocid1\\.vaultsecret\\.[a-zA-Z0-9\\.\\-\\_]+$", var.idcs_client_secret_id))
     error_message = "ESSPROV-00006 - Invalid IDCS Application Client Secret. The value has to set if using IDCS."
-  }  
+  }
 }
 
 variable "idcs_external_admin_username" {

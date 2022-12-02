@@ -29,8 +29,8 @@ groupings:
   - ${essbase_listing_resource_version}
   - ${essbase_listing_resource_id}
   - ${enable_cluster}
-  - ${instance_availability_domain}
   - ${instance_count}
+  - ${instance_availability_domain}
   - ${instance_shape}
   - ${instance_shape_ocpus}
   - ${data_volume_size}
@@ -257,7 +257,7 @@ variables:
 
   existing_application_subnet_id:
     title: Select Application Subnet
-    description: Select an existing subnet for the target Essbase instance.
+    description: Select an existing subnet for the target Essbase compute instances.
     type: oci:core:subnet:id
     visible: ${use_existing_vcn}
     dependsOn:
@@ -279,7 +279,7 @@ variables:
 
   existing_storage_subnet_id:
     title: Select Storage Subnet
-    description: Select an existing subnet for the target Essbase instance.
+    description: Select an existing subnet for the target Essbase compute instances storage VNIC.
     type: oci:core:subnet:id
     visible:
       and:
@@ -301,14 +301,14 @@ variables:
 
   essbase_listing_resource_id:
     title: Essbase Compute Image OCID
-    description: The published image that will be used for the Essbase compute instance.
+    description: The published image that will be used for the Essbase compute instances.
     type: string
     pattern: "^ocid1\\.image\\.[a-zA-Z0-9\\.\\-\\_]+$"
     required: true
 
   instance_shape:
     title: Essbase Instance Shape
-    description: The shape for the Essbase compute instance.
+    description: The shape for the Essbase compute instances.
     type: oci:core:instanceshape:name
     default: VM.Standard2.4
     required: true
@@ -318,7 +318,7 @@ variables:
 
   instance_shape_ocpus:
     title: Essbase Instance OCPUs
-    description: The number of OCPUs for the Essbase compute instance. Fewer than four OCPUs is not recommended for production workloads.
+    description: The number of OCPUs for the Essbase compute instances. Fewer than four OCPUs is not recommended for production workloads.
     type: integer
     default: 4
     minimum: 1
@@ -335,31 +335,32 @@ variables:
 
   enable_cluster:
     title: Enable Cluster Topology
-    description: Select this to enable clustering support.
+    description: Create a cluster of multiple Essbase compute instances.
     type: boolean
     default: false
     visible: false
 
   instance_availability_domain:
     title: Essbase Availability Domain
-    description: The name of the availability domain in which to create the Essbase compute instance.
+    description: The name of the availability domain in which to create the Essbase compute instances.
     type: oci:identity:availabilitydomain:name
     required: true
     dependsOn:
       compartmentId: ${compartment_ocid}
 
   instance_count:
-    title: Number of Nodes
-    description: Number of nodes to create.
+    title: Number of Instances
+    description: Number of Essbase compute instances to create in the cluster.
     type: integer
-    default: 1
-    minimum: 1
-    maximum: 3
+    default: 2
+    minimum: 2
+    maximum: 6
+    required: true
     visible: ${enable_cluster}
 
   instance_hostname_label_prefix:
     title: Essbase Instance Hostname Prefix
-    description: The DNS hostname prefix for the Essbase compute instance. The hostname must be unique within the target subnet. If not provided, a random value will be generated. This value is ignored when using an existing network that does not allow for hostnames.
+    description: The DNS hostname prefix for the Essbase compute instances. The hostname must be unique within the target subnet. If not provided, a random value will be generated. This value is ignored when using an existing network that does not allow for hostnames.
     type: string
     pattern: "^([a-zA-Z0-9]([a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)?$"
     required: false
@@ -367,7 +368,7 @@ variables:
 
   instance_timezone:
     title: Essbase Instance Timezone
-    description: Set the timezone of the Essbase compute instance.
+    description: Set the timezone of the Essbase compute instances.
     type: enum
     enum:
     - "UTC"
@@ -801,7 +802,7 @@ variables:
 
   ssh_authorized_keys:
     title: SSH Public Key
-    description: Use the corresponding private key to access the Essbase compute instance.
+    description: Use the corresponding private key to access the Essbase compute instances.
     type: oci:core:ssh:publickey
     required: true
 
@@ -1229,6 +1230,12 @@ outputs:
   idcs_client_id:
     title: IDCS Application Client ID
     type: string
+  backup_bucket_name:
+    title: Backup Bucket Name
+    type: string
+  metadata_bucket_name:
+    title: Metadata Bucket Name
+    type: string
   z_messages:
     title: Messages
     type: string
@@ -1258,6 +1265,11 @@ outputGroups:
   - ${idcs_client_id}
   - ${essbase_redirect_url}
   - ${essbase_post_logout_redirect_url}
+
+- title: Storage Details
+  outputs:
+  - ${backup_bucket_name}
+  - ${metadata_bucket_name}
 
 - title: Other
   outputs:

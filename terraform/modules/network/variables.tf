@@ -8,7 +8,7 @@ variable "compartment_id" {
 }
 
 variable "vcn_cidr_block" {
-  type    = string
+  type = string
 }
 
 variable "display_name_prefix" {

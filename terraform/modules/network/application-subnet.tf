@@ -136,7 +136,7 @@ resource "oci_core_subnet" "application" {
   defined_tags   = var.defined_tags
 
   cidr_block        = var.application_subnet_cidr_block
-  security_list_ids = [ oci_core_security_list.application.id ]
+  security_list_ids = [oci_core_security_list.application.id]
   dns_label         = "app"
 
   prohibit_public_ip_on_vnic = var.create_private_application_subnet

@@ -21,3 +21,15 @@ output "bootstrap_password" {
 output "private_endpoint_mappings" {
   value = local.private_endpoint != null && local.private_endpoint != "" ? [{ "host" = local.private_endpoint, "ip_address" = local.private_endpoint_ip }] : []
 }
+
+output "private_endpoint" {
+  value = oci_database_autonomous_database.autonomous_database.private_endpoint
+}
+
+output "private_ip" {
+  value = oci_database_autonomous_database.autonomous_database.private_endpoint_ip
+}
+
+output "db_workload" {
+  value = oci_database_autonomous_database.autonomous_database.db_workload
+}

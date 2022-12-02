@@ -24,6 +24,11 @@ variable "show_advanced_options" {
   default = false
 }
 
+variable "is_upgrade" {
+  type    = bool
+  default = false
+}
+
 // Network configuration
 variable "use_existing_vcn" {
   type    = bool
@@ -161,6 +166,7 @@ variable "instance_shape_ocpus" {
 
 variable "instance_availability_domain" {
   type = string
+  default = ""
 }
 
 variable "enable_cluster" {
@@ -185,10 +191,16 @@ variable "instance_hostname_label_prefix" {
 
 variable "ssh_authorized_keys" {
   type = string
+  default = ""
 }
 
 variable "instance_timezone" {
-  type = string
+  type    = string
+  default = ""
+}
+
+variable "instance_catalog_storage" {
+  type    = string
   default = ""
 }
 
@@ -238,9 +250,10 @@ variable "essbase_admin_username" {
 
 variable "essbase_admin_password_id" {
   type = string
+  default = ""
 
   validation {
-    condition     = can(regex("^ocid1\\.vaultsecret\\.[a-zA-Z0-9\\.\\-\\_]+$", var.essbase_admin_password_id))
+    condition     = var.essbase_admin_password_id == "" || can(regex("^ocid1\\.vaultsecret\\.[a-zA-Z0-9\\.\\-\\_]+$", var.essbase_admin_password_id))
     error_message = "ESSPROV-00000 - Invalid input."
   }
 }
@@ -293,7 +306,7 @@ variable "idcs_client_secret_id" {
   validation {
     condition     = var.idcs_client_secret_id == "" || can(regex("^ocid1\\.vaultsecret\\.[a-zA-Z0-9\\.\\-\\_]+$", var.idcs_client_secret_id))
     error_message = "ESSPROV-00006 - Invalid IDCS Application Client Secret. The value has to set if using IDCS."
-  }  
+  }
 }
 
 variable "idcs_external_admin_username" {
@@ -312,6 +325,16 @@ variable "use_existing_db" {
   default = false
 }
 
+variable "create_secure_db" {
+  type    = bool
+  default = false
+}
+
+variable "db_workload" {
+  type    = string
+  default = "Autonomous Transaction Processing"
+}
+
 variable "existing_db_type" {
   type    = string
   default = "Autonomous Database"
@@ -321,6 +344,11 @@ variable "existing_db_type" {
 variable "existing_db_compartment_id" {
   type    = string
   default = ""
+}
+
+variable "show_db_advanced_options" {
+  type    = bool
+  default = false
 }
 
 variable "existing_db_id" {
@@ -340,7 +368,7 @@ variable "db_admin_password_id" {
 
 variable "db_license_model" {
   type    = string
-  default = "LICENSE_INCLUDED"
+  default = "BRING_YOUR_OWN_LICENSE"
 }
 
 variable "existing_db_connect_string" {
@@ -427,3 +455,44 @@ variable "enable_essbase_monitoring" {
   type    = bool
   default = false
 }
+
+//Upgrade input variables
+variable "sourceInstance_ocid" {
+  default = ""
+}
+
+variable "sourceInstance_extendedMetadata"{
+  type = string
+  default = ""
+}
+
+variable "instanceSpecifyPrivateIP" {
+  type = bool
+  default = false
+}
+
+variable "instancePrivateIP" {
+  type = string
+  default = ""
+}
+
+variable "upgrade_backup_restore" {
+  type    = string
+  default = ""
+}
+
+variable "upgrade_db_credential" {
+  type    = string
+  default = ""
+}
+
+variable "upgrade_essbase_credential" {
+  type    = string
+  default = ""
+}
+
+variable "upgrade_essbase_user" {
+  type    = string
+  default = ""
+}
+

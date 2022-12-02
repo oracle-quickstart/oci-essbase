@@ -23,24 +23,27 @@ locals {
   instance_hostname_label_prefix = var.instance_hostname_label_prefix != "" ? var.instance_hostname_label_prefix : local.generated_instance_hostname_prefix
 
   instance_count = var.enable_cluster ? var.instance_count : 1
+  instance_catalog_storage = var.instance_catalog_storage
 
   create_load_balancer = var.enable_cluster || var.create_load_balancer
-  
+
   db_type_map = {
     "Autonomous Database" = "adb"
     "Database System"     = "oci"
     "Manual"              = "manual"
   }
 
-  db_type = ! var.use_existing_db || var.existing_db_type == "" ? "adb" : local.db_type_map[var.existing_db_type]
+  db_type = !var.use_existing_db || var.existing_db_type == "" ? "adb" : local.db_type_map[var.existing_db_type]
 
   freeform_tags = {
     "essbase_stack_id"           = local.instance_uuid
     "essbase_stack_display_name" = local.resource_name_prefix
   }
 
-  defined_tags = null
+  defined_tags        = null
   enable_storage_vnic = var.enable_cluster && (!var.use_existing_vcn || (var.existing_storage_subnet_id != var.existing_application_subnet_id))
+
+  
 }
 
 data "oci_identity_compartment" "compartment" {
@@ -48,12 +51,12 @@ data "oci_identity_compartment" "compartment" {
 }
 
 module "idcs" {
-  source  = "./modules/idcs"
-  count   = var.identity_provider == "idcs" ? 1 : 0
+  source = "./modules/idcs"
+  count  = (var.identity_provider == "idcs" && !var.is_upgrade) ? 1 : 0
 
-  idcs_tenant = var.idcs_tenant
-  idcs_client_id = var.idcs_client_id
-  idcs_client_secret_id = var.idcs_client_secret_id
+  idcs_tenant                  = var.idcs_tenant
+  idcs_client_id               = var.idcs_client_id
+  idcs_client_secret_id        = var.idcs_client_secret_id
   idcs_external_admin_username = var.idcs_external_admin_username
 }
 
@@ -69,7 +72,9 @@ module "notification" {
 # provided at instance creation time
 #
 module "metadata-bucket" {
-  source = "./modules/bucket"
+  source         = "./modules/bucket"
+  count = var.is_upgrade? 0:1
+  
   compartment_id = data.oci_identity_compartment.compartment.id
   bucket_name    = "essbase_${local.instance_uuid_short}_metadata"
   freeform_tags  = local.freeform_tags
@@ -81,9 +86,25 @@ module "metadata-bucket" {
 # Stores Essbase backups
 #
 module "backup-bucket" {
-  source = "./modules/bucket"
+  source         = "./modules/bucket"
+  count = var.is_upgrade? 0:1
+
   compartment_id = data.oci_identity_compartment.compartment.id
   bucket_name    = "essbase_${local.instance_uuid_short}_backup"
+  freeform_tags  = local.freeform_tags
+  defined_tags   = local.defined_tags
+}
+
+#
+# Catalog Bucket
+# Stores Essbase catalog 
+#
+module "catalog-bucket" {
+  source         = "./modules/bucket"
+  count  = local.instance_catalog_storage == "Object Storage Bucket" ? 1 : 0
+
+  compartment_id = data.oci_identity_compartment.compartment.id
+  bucket_name    = "essbase_${local.instance_uuid_short}_catalog"
   freeform_tags  = local.freeform_tags
   defined_tags   = local.defined_tags
 }
@@ -94,26 +115,27 @@ module "backup-bucket" {
 #
 module "network" {
   source = "./modules/network"
-  count  = !var.use_existing_vcn ? 1 : 0
+  count  = (!var.use_existing_vcn && !var.is_upgrade) ? 1 : 0
 
-  compartment_id = data.oci_identity_compartment.compartment.id
+  compartment_id      = data.oci_identity_compartment.compartment.id
   display_name_prefix = local.resource_name_prefix
 
-  dns_label           = local.vcn_dns_label
-  vcn_cidr_block      = var.vcn_cidr
+  dns_label      = local.vcn_dns_label
+  vcn_cidr_block = var.vcn_cidr
 
-  application_subnet_cidr_block = var.application_subnet_cidr
-  create_private_application_subnet = ! var.create_public_essbase_instance
-  instance_listen_port  = var.enable_embedded_proxy ? 443 : 9001
+  application_subnet_cidr_block     = var.application_subnet_cidr
+  create_private_application_subnet = !var.create_public_essbase_instance
+  instance_listen_port              = var.enable_embedded_proxy ? 443 : 9001
 
   storage_subnet_cidr_block = var.storage_subnet_cidr
+  create_storage_subnet     = local.enable_storage_vnic
 
-  load_balancer_subnet_cidr_block = var.load_balancer_subnet_cidr
-  create_load_balancer_subnet = local.create_load_balancer
+  load_balancer_subnet_cidr_block     = var.load_balancer_subnet_cidr
+  create_load_balancer_subnet         = local.create_load_balancer
   create_private_load_balancer_subnet = !var.create_public_load_balancer
 
-  freeform_tags       = local.freeform_tags
-  defined_tags        = local.defined_tags
+  freeform_tags = local.freeform_tags
+  defined_tags  = local.defined_tags
 }
 
 #
@@ -123,22 +145,26 @@ module "existing-network" {
   source = "./modules/existing-network"
   count  = var.use_existing_vcn ? 1 : 0
 
-  existing_vcn_id = var.existing_vcn_id
-  existing_application_subnet_id = var.existing_application_subnet_id
-  existing_storage_subnet_id = local.enable_storage_vnic ? var.existing_storage_subnet_id : ""
-  #existing_bastion_subnet_id = var.existing_bastion_subnet_id
-  existing_load_balancer_subnet_ids = local.create_load_balancer ? compact([ var.existing_load_balancer_subnet_id, var.existing_load_balancer_subnet_id_2 ]) : []
+  existing_vcn_id                   = var.existing_vcn_id
+  existing_application_subnet_id    = var.existing_application_subnet_id
+  existing_storage_subnet_id        = local.enable_storage_vnic ? var.existing_storage_subnet_id : ""
+  existing_load_balancer_subnet_ids = local.create_load_balancer ? compact([var.existing_load_balancer_subnet_id, var.existing_load_balancer_subnet_id_2]) : []
 }
+
 
 module "database" {
   source = "./modules/database"
 
-  count                = local.db_type == "adb" && var.existing_db_id == "" ? 1 : 0
+  count                = ((local.db_type == "adb" && var.existing_db_id == "") && !var.is_upgrade)? 1 : 0
   compartment_id       = data.oci_identity_compartment.compartment.id
   db_name              = local.generated_atp_db_name
   db_admin_password_id = var.db_admin_password_id
   license_model        = var.db_license_model
   display_name_prefix  = local.resource_name_prefix
+  db_workload          = var.db_workload
+  create_secure_db      = var.create_secure_db
+  vcn_id                = join("", module.network[*].vcn_id)
+  subnet_id             = join("", module.network[*].application_subnet_id)
   freeform_tags        = local.freeform_tags
   defined_tags         = local.defined_tags
 }
@@ -146,8 +172,8 @@ module "database" {
 module "existing-database" {
   source = "./modules/existing-database"
 
-  count                = local.db_type == "adb" && var.existing_db_id != "" ? 1 : 0
-  database_id          = var.existing_db_id
+  count       = local.db_type == "adb" && var.existing_db_id != "" ? 1 : 0
+  database_id = var.existing_db_id
 }
 
 module "existing-database-oci" {
@@ -186,13 +212,14 @@ locals {
   }
 
   db_type_host_mappings = {
-    "adb"    = flatten(concat(module.database.*.private_endpoint_mappings, module.existing-database.*.private_endpoint_mappings))
+    "adb" = flatten(concat(module.database.*.private_endpoint_mappings, module.existing-database.*.private_endpoint_mappings))
   }
 
 }
 
 module "essbase" {
   source = "./modules/essbase"
+  count = var.is_upgrade? 0:1
 
   compartment_id      = data.oci_identity_compartment.compartment.id
   region              = var.region
@@ -212,8 +239,8 @@ module "essbase" {
   subnet_id             = join("", concat(module.existing-network.*.application_subnet_id, module.network.*.application_subnet_id))
   assign_public_ip      = var.create_public_essbase_instance
 
-  enable_storage_vnic   = local.enable_storage_vnic
-  storage_subnet_id     = var.use_existing_vcn ? join("", module.existing-network.*.storage_subnet_id) : join("", module.network.*.storage_subnet_id)
+  enable_storage_vnic = local.enable_storage_vnic
+  storage_subnet_id   = var.use_existing_vcn ? join("", module.existing-network.*.storage_subnet_id) : join("", module.network.*.storage_subnet_id)
 
   config_volume_size = var.config_volume_size
   data_volume_size   = var.data_volume_size
@@ -234,20 +261,24 @@ module "essbase" {
   db_connect_string     = lookup(local.db_type_connect_string, local.db_type, null)
   db_bootstrap_password = lookup(local.db_type_bootstrap_password, local.db_type, null)
 
-  metadata_bucket       = module.metadata-bucket
-  backup_bucket         = module.backup-bucket
-
+  metadata_bucket = module.metadata-bucket[0]
+  backup_bucket   = module.backup-bucket[0]
+  catalog_bucket  = (length(module.catalog-bucket) > 0) ? module.catalog-bucket[0] : null
+  
+  instance_catalog_storage = var.instance_catalog_storage
+  
   additional_host_mappings = lookup(local.db_type_host_mappings, local.db_type, [])
 
-  identity_provider       = var.identity_provider
-  idcs_config             = var.identity_provider != "idcs" ? null : { tenant = var.idcs_tenant,
-                                                                       client_id = var.idcs_client_id,
-                                                                       client_secret_id = var.idcs_client_secret_id,
-                                                                     }
+  identity_provider = var.identity_provider
+  idcs_config = var.identity_provider != "idcs" ? null : { tenant = var.idcs_tenant,
+    client_id        = var.idcs_client_id,
+    client_secret_id = var.idcs_client_secret_id,
+  }
   external_admin_username = var.identity_provider == "idcs" ? var.idcs_external_admin_username : null
 
   timezone              = var.instance_timezone
   enable_embedded_proxy = var.enable_embedded_proxy
+  catalog_storage       = var.instance_catalog_storage
 
   enable_monitoring  = var.enable_essbase_monitoring
   stack_id           = local.instance_uuid
@@ -259,16 +290,40 @@ module "essbase" {
 module "load-balancer" {
 
   source = "./modules/load-balancer"
-  count  = local.create_load_balancer ? 1 : 0
+  count  = (local.create_load_balancer && !var.is_upgrade) ? 1 : 0
 
   compartment_id      = data.oci_identity_compartment.compartment.id
-  subnet_ids          = flatten([ module.existing-network.*.load_balancer_subnet_ids, module.network.*.load_balancer_subnet_ids])
+  subnet_ids          = flatten([module.existing-network.*.load_balancer_subnet_ids, module.network.*.load_balancer_subnet_ids])
   shape               = var.load_balancer_shape
-  backend_nodes       = [for i in module.essbase.nodes : { ip_address = i.private_ip, port = i.listen_port }]
+  backend_nodes       = [for i in module.essbase[0].nodes : { ip_address = i.private_ip, port = i.listen_port }]
   display_name_prefix = local.resource_name_prefix
   freeform_tags       = local.freeform_tags
   defined_tags        = local.defined_tags
 
-  is_private = ! var.create_public_load_balancer
+  is_private = !var.create_public_load_balancer
 }
 
+module "upgrade" {
+  source = "./modules/upgrade"
+  count = var.is_upgrade? 1:0
+
+  compartment_ocid         = data.oci_identity_compartment.compartment.id
+
+  listing_id               = var.essbase_listing_id
+  listing_resource_version = var.essbase_listing_resource_version
+  listing_resource_id      = var.essbase_listing_resource_id
+  
+  sourceInstance_ocid = var.sourceInstance_ocid
+  sourceInstance_extendedMetadata = var.sourceInstance_extendedMetadata
+
+  instanceImage_ocid = var.essbase_listing_resource_id
+  instanceSpecifyPrivateIP = var.instanceSpecifyPrivateIP
+  instancePrivateIP = var.instancePrivateIP
+
+  instanceBackupRestore = var.upgrade_backup_restore == "Essbase 21c - 21.3 or above" ? false: true
+  instanceSchemaPrefix = local.rcu_schema_prefix
+
+  instanceDBPassword = var.upgrade_db_credential
+  instanceEssbasePassword = var.upgrade_essbase_credential
+  instanceEssbaseUser = var.upgrade_essbase_user
+}

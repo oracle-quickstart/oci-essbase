@@ -7,8 +7,8 @@ data "oci_database_autonomous_database" "autonomous_database" {
 
 locals {
 
-  db_name             = data.oci_database_autonomous_database.autonomous_database.db_name
-  is_dedicated        = data.oci_database_autonomous_database.autonomous_database.is_dedicated
+  db_name      = data.oci_database_autonomous_database.autonomous_database.db_name
+  is_dedicated = data.oci_database_autonomous_database.autonomous_database.is_dedicated
 
   private_endpoint    = data.oci_database_autonomous_database.autonomous_database.private_endpoint
   private_endpoint_ip = data.oci_database_autonomous_database.autonomous_database.private_endpoint_ip

@@ -30,17 +30,35 @@ variable "license_model" {
 variable "subnet_id" {
   type    = string
   default = null
+  
 }
 
 variable "nsg_ids" {
   type    = list(string)
   default = null
+  
+}
+
+variable "create_secure_db" {
+  type    = bool
+  default = false
+}
+
+variable "db_workload" {
+  type    = string
+  default = "Autonomous Transaction Processing"
 }
 
 variable "whitelisted_ips" {
   type    = list(string)
   default = null
 }
+
+variable "vcn_id" {
+  type = string
+  default = null
+}
+
 
 // Tags
 variable "freeform_tags" {

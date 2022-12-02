@@ -16,3 +16,4 @@ output "storage_subnet_id" {
 output "load_balancer_subnet_ids" {
   value = data.oci_core_subnet.load-balancer.*.id
 }
+

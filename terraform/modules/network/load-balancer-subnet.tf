@@ -2,7 +2,7 @@
 ## Licensed under the Universal Permissive License v1.0 as shown at https://oss.oracle.com/licenses/upl.
 
 locals {
-  incoming_port       = 443
+  incoming_port = 443
 }
 
 resource "oci_core_security_list" "load-balancer" {
@@ -57,11 +57,11 @@ resource "oci_core_subnet" "load-balancer" {
   prohibit_public_ip_on_vnic = var.create_private_load_balancer_subnet
   security_list_ids          = oci_core_security_list.load-balancer.*.id
 
-  dns_label       = "lb"
+  dns_label = "lb"
 }
 
 resource "oci_core_route_table_attachment" "load-balancer" {
-  count          = var.create_load_balancer_subnet && ! var.create_private_load_balancer_subnet ? 1 : 0
+  count          = var.create_load_balancer_subnet && !var.create_private_load_balancer_subnet ? 1 : 0
   subnet_id      = join("", oci_core_subnet.load-balancer.*.id)
   route_table_id = join("", oci_core_route_table.internet_route_table.*.id)
 }

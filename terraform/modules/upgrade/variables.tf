@@ -1,4 +1,4 @@
-## Copyright (c) 2019-2022 Oracle and/or its affiliates.
+## Copyright (c) 2019, 2021, Oracle and/or its affiliates.
 ## Licensed under the Universal Permissive License v1.0 as shown at https://oss.oracle.com/licenses/upl.
 
 variable "listing_id" {
@@ -45,13 +45,19 @@ variable "instanceBackupRestore"{
   default = false
 }
 
+variable "instanceUpgrade19c34"{
+  type = bool
+  default = false
+}
+
+
 variable "instanceSchemaPrefix" {
   description = "Schema prefix"
   type        = string
   default     = ""
 }
 
-variable "instanceEssbaseUser"{
+variable "instanceIDCSPassword"{
   type = string
   default = ""
 }

@@ -1,4 +1,4 @@
-## Copyright (c) 2019-2022 Oracle and/or its affiliates.
+## Copyright (c) 2019, 2021, Oracle and/or its affiliates.
 ## Licensed under the Universal Permissive License v1.0 as shown at https://oss.oracle.com/licenses/upl.
 
 locals {
@@ -34,6 +34,7 @@ locals {
   stack_resource_id = data.oci_core_instance.source_instance.metadata.stack_display_name
   stack_resource_id_escaped = replace(local.stack_resource_id, "-", "_")
   stack_id = data.oci_core_instance.source_instance.metadata.stack_id
+  
 }
 
 data "oci_core_instance" "source_instance" {
@@ -53,7 +54,8 @@ data "oci_core_volume_attachments" "test_volume_attachments" {
     
     filter {
       name   = "display_name"
-      values = ["config-volume","data-volume","temp-volume"]
+      values = ["\\w*config-volume\\w*","\\w*data-volume\\w*","\\w*temp-volume\\w*"]
+      regex = true
     }
 }
 
@@ -129,7 +131,7 @@ locals {
 
   target_displayname = format("%s_1", local.stack_resource_id)
   target_hostname    = format("%s_1", local.source_VNIChostname)
-  
+
 }
 
 resource "oci_core_volume" "targetVolume" {
@@ -137,7 +139,13 @@ resource "oci_core_volume" "targetVolume" {
   
   compartment_id = var.compartment_ocid
 
-  display_name = format("%s_1-%s", local.stack_resource_id_escaped, tostring(local.source_volumeAttachments[count.index].display_name))
+  display_name = var.instanceUpgrade19c34 ? format(
+    "%s_1-%s-volume", local.stack_resource_id_escaped, 
+    strrev(split("-",strrev(tostring(local.source_volumeAttachments[count.index].display_name)))[2])
+  ):format(
+    "%s_1-%s", local.stack_resource_id_escaped, tostring(local.source_volumeAttachments[count.index].display_name))
+  
+ #split("-", oci_core_volume.targetVolume[count.index].display_name)
   # Since extended metadata is not currently available from Terraform (bug)
   # Volume type & ID is determined from source volume attachment 
 
@@ -154,7 +162,7 @@ resource "oci_core_volume_attachment" "targetVolumeAttachment" {
     attachment_type = "iscsi"
     instance_id = oci_core_instance.target_instance.id
     volume_id = oci_core_volume.targetVolume[count.index].id
-    display_name = format("%s_1-%s", local.stack_resource_id_escaped, tostring(oci_core_volume.targetVolume[count.index].display_name))
+    display_name = format( "%s-volume", strrev(split("-", strrev(tostring(oci_core_volume.targetVolume[count.index].display_name)))[1]))
 }
 
 
@@ -201,7 +209,7 @@ resource "oci_core_instance" "target_instance" {
     source_backup_restore = var.instanceBackupRestore
     target_schema_prefix = var.instanceBackupRestore? var.instanceSchemaPrefix: null
     
-    backup_user = var.instanceEssbaseUser!="" ? var.instanceEssbaseUser: null
+    backup_IDCS_secret = var.instanceIDCSPassword!="" ? var.instanceIDCSPassword: null
     backup_db_password = var.instanceDBPassword!="" ? var.instanceDBPassword: null
     backup_essbase_password = var.instanceEssbasePassword!="" ? var.instanceEssbasePassword: null
   }
@@ -211,5 +219,14 @@ resource "oci_core_instance" "target_instance" {
   }
 }
 
+resource "oci_objectstorage_object" "essbase_cluster_metadata" {
+  bucket       = data.oci_objectstorage_bucket.source_bucket.name
+  namespace    = data.oci_objectstorage_bucket.source_bucket.namespace
+  count        = var.instanceUpgrade19c34? 1:0
+
+  object       = "cluster-info.dat"
+  storage_tier = "InfrequentAccess"
+  content      = "{}"
+}
 
 

@@ -32,7 +32,7 @@ groupings:
   - instanceSpecifyPrivateIP
   - instancePrivateIP
   - upgrade_db_credential
-  - upgrade_essbase_user
+  - upgrade_IDCS_credential
   - upgrade_essbase_credential
   
 - title: "Essbase Instance"
@@ -192,7 +192,8 @@ variables:
     type: enum
     enum:
     - "Essbase 21c - 21.3 or above"
-    - "Essbase 19c - 19.3.0.5.6 or above"
+    - "Essbase 19c - 19.3.0.5.6, 19.3.0.6.0"
+    - "Essbase 19c - 19.3.0.3.4, 19.3.0.4.5"
     default: "Essbase 21c - 21.3 or above"
     required: true
     visible: ${is_upgrade} 
@@ -217,12 +218,13 @@ variables:
       - ${upgrade_backup_restore}
       - "Essbase 19c - 19.3.0.5.6 or above"
 
-  upgrade_essbase_user:
-    title: Essbase System Admin User Name
-    description: The name of the Essbase system administrator.
+  upgrade_IDCS_credential:
+    title: IDCS Application Client Secret
+    description: Provide the OCID for the secret that contains the IDCS application client secret to be overriden with in case it was changed / deleted
     type: string
     default: ""
     visible: ${is_upgrade}
+    #pattern: "^ocid1\\.vaultsecret\\.[a-zA-Z0-9\\.\\-\\_]+$"
     required: 
       - ${upgrade_backup_restore}
       - "Essbase 19c - 19.3.0.5.6 or above"
@@ -1447,7 +1449,7 @@ variables:
     type: oci:core:instance:id
     required: true
     title: Source Instance
-    description: Select source Essbase 19.3.0.5.6/21.3 Compute Instance to pick configuration from.
+    description: Select source Essbase 19c/21c Compute Instance to pick configuration from. 19.3.0.0.2 and 19.3.0.2.3 are not supported currently for upgrade.
     dependsOn:
       compartmentId: ${compartment_ocid}
     visible: ${is_upgrade}
@@ -1457,7 +1459,7 @@ variables:
     required: true
     title: Source Instance Metadata
     visible: ${is_upgrade}
-    description: Enter extended metadata collected in JSON format from source instance. Use the command - oci compute instance get --instance-id $(oci-metadata -j | jq -r '.instance.id') --auth instance_principal | jq '.data."extended-metadata"'. Example output - { "backup_bucket" ... }
+    description: Enter extended metadata collected in JSON format from source instance. In case of instances which are running Essbase version prior to 19.3.0.5.6, please run the upgrade-metadata-19c.sh to prepare for upgrade. Post running script, use the command - oci compute instance get --instance-id $(oci-metadata -j | jq -r '.instance.id') --auth instance_principal | jq '.data."extended-metadata"'. Example output - { "backup_bucket" ... }
     
 
   instanceSpecifyPrivateIP:

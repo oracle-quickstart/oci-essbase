@@ -1,4 +1,4 @@
-## Copyright (c) 2019-2022 Oracle and/or its affiliates.
+## Copyright (c) 2019, 2021, Oracle and/or its affiliates.
 ## Licensed under the Universal Permissive License v1.0 as shown at https://oss.oracle.com/licenses/upl.
 
 
@@ -23,7 +23,7 @@ output "domain_name" {
 }
 
 output "backup_bucket_name" {
-  value = local.target_extendedMetadata.backup_bucket.name
+  value = var.instanceUpgrade19c34 ? local.target_extendedMetadata.database.backup_bucket.name: local.target_extendedMetadata.backup_bucket.name
 }
 
 output "metadata_bucket_name" {

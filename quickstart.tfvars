@@ -46,6 +46,7 @@ upgrade_backup_restore          = "Essbase 21c - 21.3 or above"                 
 sourceInstance_ocid             = ""
 sourceInstance_extendedMetadata = <<-EOF
 
-EOF                                                         
+EOF
+# Check documentation if you need to run upgrade-metadata-19c.sh script to prepare the source instance for upgrade.                                                    
 # REPLACE LINE 48 WITH EXTENDED METADATA WITH COMMAND OUTPUT FROM SOURCE INSTANCE:
 # oci compute instance get --instance-id $(oci-metadata -j | jq -r '.instance.id') --auth instance_principal | jq '.data."extended-metadata"'

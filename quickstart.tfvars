@@ -47,6 +47,6 @@ sourceInstance_ocid             = ""
 sourceInstance_extendedMetadata = <<-EOF
 
 EOF
-# Check documentation if you need to run upgrade-metadata-19c.sh script to prepare the source instance for upgrade.                                                    
+# In case of instances which are running Essbase version prior to 19.3.0.5.6, please run the upgrade-metadata-19c.sh to prepare for upgrade, and collect the extended metadata as shown below.                                                  
 # REPLACE LINE 48 WITH EXTENDED METADATA WITH COMMAND OUTPUT FROM SOURCE INSTANCE:
 # oci compute instance get --instance-id $(oci-metadata -j | jq -r '.instance.id') --auth instance_principal | jq '.data."extended-metadata"'

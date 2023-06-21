@@ -1,8 +1,10 @@
-## Copyright (c) 2019-2022 Oracle and/or its affiliates.
+## Copyright (c) 2019-2023 Oracle and/or its affiliates.
 ## Licensed under the Universal Permissive License v1.0 as shown at https://oss.oracle.com/licenses/upl.
 
 # Listing details for the Essbase custom image.
 # The resource_id values here should match the build script and oci_images.tf
 essbase_listing_id="ocid1.appcataloglisting.oc1..aaaaaaaanstxnoz6uttexhw5jfpqhu4gkwsp2ebmw4i2p7gkq65sr3e7z4gq"
-essbase_listing_resource_version="21.4.0.0.1_2209301529"
-essbase_listing_resource_id="ocid1.image.oc1..aaaaaaaa33fpnpox3fskmbku2xzuqs4keyriigvxsozo7os65rwxlgyw5jaq"
+essbase_listing_resource_version="21.4.3.0.1_230407"
+essbase_listing_resource_id="ocid1.image.oc1..aaaaaaaavomtkpulouvfcl6rl6w7wrdd2av5awsazvoa3sycs6z3om7sygmq"
+
+# Check quickstart.tfvars for example usage / instructions

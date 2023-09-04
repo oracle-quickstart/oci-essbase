@@ -67,8 +67,25 @@ if [ "null" != "${idcs_client_secret}" ]; then
   echo "Created Vault Secret for IDCS Client Secret. $ocid_idcs_client_secret"
 fi
 
-cat /tmp/upgrade/core_metadata.json | jq --arg essbase_password $ocid_essbase_password --arg identity_provider $security_mode '. += {"admin_password_id":$essbase_password,"stack_version":"19c","node_index": "1","identity_provider":$identity_provider}' > /tmp/upgrade/upgraded_core_metadata.json
-cat /tmp/upgrade/extended_metadata.json | jq --arg database_password $ocid_database_password '.database += {"admin_password_id":$database_password}' > /tmp/upgrade/upgraded_extended_metadata.json
+stack_id=$(echo $source_metadata | jq -r '.data.metadata.stack_id')
+stack_id="${stack_id/essbase.stack./}_essbase_stack"
+
+cat /tmp/upgrade/core_metadata.json | jq --arg essbase_password $ocid_essbase_password \
+            --arg identity_provider $security_mode \
+            --arg stack $stack_id \
+            '. += {"admin_password_id":$essbase_password,"stack_version":"19c","node_index": "1","identity_provider":$identity_provider} |
+               .stack_id=$stack' > /tmp/upgrade/upgraded_core_metadata.json
+
+backup_bucket_name=$(echo $source_metadata | jq -r '.data."extended-metadata".database.backup_bucket.name')
+backup_bucket_ns=$(echo $source_metadata | jq -r '.data."extended-metadata".database.backup_bucket.namespace')
+backup_bucket_id="n/$backup_bucket_ns/b/$backup_bucket_name"
+
+cat /tmp/upgrade/extended_metadata.json | jq --arg database_password $ocid_database_password \
+                --arg bucket_id $backup_bucket_id \
+                '.database += {"admin_password_id":$database_password}|
+                 .backup_bucket.name=.database.backup_bucket.name|
+                 .backup_bucket.namespace=.database.backup_bucket.namespace|
+                 .backup_bucket.id=$bucket_id' > /tmp/upgrade/upgraded_extended_metadata.json
 
 if [ "null" != "${idcs_client_secret}" ]; then
   cat /tmp/upgrade/upgraded_extended_metadata.json | jq --arg idcs_client_secret $ocid_idcs_client_secret '.idcs += {"client_secret_id":$idcs_client_secret}' > /tmp/upgrade/idcs.json

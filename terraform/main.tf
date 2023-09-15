@@ -1,4 +1,4 @@
-## Copyright (c) 2019-2023 Oracle and/or its affiliates.
+## Copyright (c) 2019, 2021, Oracle and/or its affiliates.
 ## Licensed under the Universal Permissive License v1.0 as shown at https://oss.oracle.com/licenses/upl.
 
 // Random string to make things unique
@@ -24,6 +24,7 @@ locals {
 
   instance_count = var.enable_cluster ? var.instance_count : 1
   instance_catalog_storage = var.instance_catalog_storage
+  instance_smv_server = var.instance_smv_server
 
   create_load_balancer = var.enable_cluster || var.create_load_balancer
 
@@ -266,7 +267,7 @@ module "essbase" {
   catalog_bucket  = (length(module.catalog-bucket) > 0) ? module.catalog-bucket[0] : null
   
   instance_catalog_storage = var.instance_catalog_storage
-  
+  instance_smv_server = local.instance_smv_server
   additional_host_mappings = lookup(local.db_type_host_mappings, local.db_type, [])
 
   identity_provider = var.identity_provider

@@ -53,6 +53,7 @@ groupings:
   - ${essbase_admin_password_id}
   - ${instance_timezone}
   - ${instance_catalog_storage}
+  - ${instance_smv_server}
   - ${enable_embedded_proxy}
   - ${region}
   - ${localAD}
@@ -181,7 +182,7 @@ variables:
      - ${is_upgrade}
 
   is_upgrade:
-    title: Image Update 
+    title: Upgrade Stack 
     description: Create a new node based on existing deployment, using new image. 
     type: boolean
     default: false
@@ -937,7 +938,17 @@ variables:
     required: false
     visible:
      not: 
-     - ${is_upgrade}    
+     - ${is_upgrade}
+
+  instance_smv_server:
+    title: "Deploy Smart View Server (Preview)"
+    description: "Check to configure Oracle Smart View server. Oracle Smart View for Office (Mac and Browser) for Essbase is in Preview status."
+    type: boolean
+    default: false
+    required: false
+    visible:
+     not: 
+     - ${is_upgrade} 
 
   ssh_authorized_keys:
     title: SSH Public Key

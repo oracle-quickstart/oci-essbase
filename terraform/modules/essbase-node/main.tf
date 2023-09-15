@@ -1,4 +1,4 @@
-## Copyright (c) 2019-2023 Oracle and/or its affiliates.
+## Copyright (c) 2019, 2021, Oracle and/or its affiliates.
 ## Licensed under the Universal Permissive License v1.0 as shown at https://oss.oracle.com/licenses/upl.
 
 #
@@ -95,6 +95,7 @@ resource "oci_core_instance" "essbase" {
 
     catalog_bucket  = jsonencode(var.catalog_bucket)
     catalog_storage = jsonencode(var.instance_catalog_storage)
+    smv_server      = jsonencode(tostring(var.instance_smv_server))
 
     volumes = jsonencode({
       config = {

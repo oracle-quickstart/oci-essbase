@@ -5,8 +5,8 @@
 # Run "terraform apply" to apply plan and create stack.
 
 essbase_listing_id               = "ocid1.appcataloglisting.oc1..aaaaaaaaqyxur5zacfln6epkbm46sdu5whf6zepbm43b63rm44d5hnm2ft5a"
-essbase_listing_resource_version = "21.4.0.0.1_2209301529"
-essbase_listing_resource_id      = "ocid1.image.oc1..aaaaaaaayqzkbfw6byytpgmmp5s2kv64ipqa5gkxyhc23tuqptalqipsjkpq"
+essbase_listing_resource_version = "21.5.0.0.1_230623"
+essbase_listing_resource_id      = "ocid1.image.oc1..aaaaaaaatbmet5aq76qywqzhgxyqbka3nj5dze3gbcr6ll43fgkl33klzw2q"
 
 tenancy_ocid 					= "" 		                # REPLACE
 
@@ -47,6 +47,12 @@ sourceInstance_ocid             = ""
 sourceInstance_extendedMetadata = <<-EOF
 
 EOF
-# In case of instances which are running Essbase version prior to 19.3.0.5.6, please run the upgrade-metadata-19c.sh to prepare for upgrade, and collect the extended metadata as shown below.                                                  
+
+# In case of instances which are running Essbase version prior to 19.3.0.5.6, please run the appropriate upgrade metadata script to prepare for upgrade, and collect the extended metadata as shown below.                                                  
 # REPLACE LINE 48 WITH EXTENDED METADATA WITH COMMAND OUTPUT FROM SOURCE INSTANCE:
 # oci compute instance get --instance-id $(oci-metadata -j | jq -r '.instance.id') --auth instance_principal | jq '.data."extended-metadata"'
+
+# Optional fields to override in case of change in original credentials
+upgrade_db_credential           = ""
+upgrade_essbase_credential      = ""
+upgrade_IDCS_credential         = ""

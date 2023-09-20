@@ -1,4 +1,4 @@
-## Copyright (c) 2019-2023 Oracle and/or its affiliates.
+## Copyright (c) 2019, 2021, Oracle and/or its affiliates.
 ## Licensed under the Universal Permissive License v1.0 as shown at https://oss.oracle.com/licenses/upl.
 
 output "stack_version" {
@@ -75,6 +75,10 @@ output "catalog_bucket_name" {
 
 output "metadata_bucket_name" {
   value = var.is_upgrade? module.upgrade[0].metadata_bucket_name:  module.metadata-bucket[0].name
+}
+
+output "instance_smv_server" {
+  value = var.is_upgrade? null: var.instance_smv_server
 }
 
 output "z_messages" {

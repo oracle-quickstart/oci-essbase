@@ -1,4 +1,4 @@
-## Copyright (c) 2019-2023 Oracle and/or its affiliates.
+## Copyright (c) 2019, 2021, Oracle and/or its affiliates.
 ## Licensed under the Universal Permissive License v1.0 as shown at https://oss.oracle.com/licenses/upl.
 
 locals {
@@ -141,6 +141,7 @@ module "essbase-node" {
   catalog_bucket  = var.catalog_bucket
 
   instance_catalog_storage = var.instance_catalog_storage
+  instance_smv_server = var.instance_smv_server
 
 
   db_type               = var.db_type

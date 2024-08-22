@@ -1,4 +1,4 @@
-## Copyright (c) 2019-2023 Oracle and/or its affiliates.
+## Copyright (c) 2019 - 2023 Oracle and/or its affiliates.
 ## Licensed under the Universal Permissive License v1.0 as shown at https://oss.oracle.com/licenses/upl.
 
 // General settings
@@ -203,6 +203,12 @@ variable "instance_catalog_storage" {
   type    = string
   default = ""
 }
+
+variable "instance_smv_server" {
+  type    = bool
+  default = false
+}
+
 
 variable "data_volume_size" {
   // (gigabytes)
@@ -494,5 +500,11 @@ variable "upgrade_essbase_credential" {
 variable "upgrade_IDCS_credential" {
   type    = string
   default = ""
+}
+
+variable "upgrade_target_instance_shape" {
+  type = string 
+  default = ""
+  
 }
 

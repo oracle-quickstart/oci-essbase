@@ -1,4 +1,4 @@
-## Copyright (c) 2019, 2021, Oracle and/or its affiliates.
+## Copyright (c) 2019 - 2023 Oracle and/or its affiliates.
 ## Licensed under the Universal Permissive License v1.0 as shown at https://oss.oracle.com/licenses/upl.
 
 #
@@ -27,7 +27,7 @@ runcmd:
 --boundary-0123456789--
 TMPL
 
-  is_flex_shape     = (var.shape == "VM.Standard.E3.Flex" || var.shape == "VM.Standard.E4.Flex") || (var.shape == "VM.Optimized3.Flex" || var.shape == "VM.Standard3.Flex")
+  is_flex_shape     = (var.shape == "VM.Standard.E3.Flex" || var.shape == "VM.Standard.E4.Flex") || (var.shape == "VM.Optimized3.Flex" || var.shape == "VM.Standard3.Flex") || var.shape == "VM.Standard.E5.Flex"
   flex_ocpus        = var.shape_ocpus == null ? 4 : var.shape_ocpus
   flex_shape_config = local.is_flex_shape ? [{ "ocpus" : local.flex_ocpus }] : []
 }

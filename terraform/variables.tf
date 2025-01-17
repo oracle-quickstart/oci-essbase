@@ -1,4 +1,4 @@
-## Copyright (c) 2019, 2021, Oracle and/or its affiliates.
+## Copyright (c) 2019 - 2023 Oracle and/or its affiliates.
 ## Licensed under the Universal Permissive License v1.0 as shown at https://oss.oracle.com/licenses/upl.
 
 // General settings
@@ -500,5 +500,11 @@ variable "upgrade_essbase_credential" {
 variable "upgrade_IDCS_credential" {
   type    = string
   default = ""
+}
+
+variable "upgrade_target_instance_shape" {
+  type = string 
+  default = ""
+  
 }
 

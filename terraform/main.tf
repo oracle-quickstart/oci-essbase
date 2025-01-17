@@ -1,4 +1,4 @@
-## Copyright (c) 2019, 2021, Oracle and/or its affiliates.
+## Copyright (c) 2019 - 2023 Oracle and/or its affiliates.
 ## Licensed under the Universal Permissive License v1.0 as shown at https://oss.oracle.com/licenses/upl.
 
 // Random string to make things unique
@@ -316,16 +316,23 @@ module "upgrade" {
   
   sourceInstance_ocid = var.sourceInstance_ocid
   sourceInstance_extendedMetadata = var.sourceInstance_extendedMetadata
+  sourceInstance_version      = var.upgrade_backup_restore
 
   instanceImage_ocid = var.essbase_listing_resource_id
   instanceSpecifyPrivateIP = var.instanceSpecifyPrivateIP
   instancePrivateIP = var.instancePrivateIP
 
-  instanceBackupRestore = var.upgrade_backup_restore == "Essbase 21c - 21.3 or above" ? false: true
+  instanceBackupRestore = true
   instanceUpgrade19c34  = var.upgrade_backup_restore == "Essbase 19c - 19.3.0.3.4, 19.3.0.4.5" ? true: false
+  instanceUpgrade19c23  = var.upgrade_backup_restore == "Essbase 19c - 19.3.0.2.3" ? true: false
+  instanceUpgrade19c02  = var.upgrade_backup_restore == "Essbase 19c - 19.3.0.0.2" ? true: false
+  instanceUpgrade21c01  = var.upgrade_backup_restore == "Essbase 21c - 21.1" ? true: false
   instanceSchemaPrefix = local.rcu_schema_prefix
 
   instanceDBPassword = var.upgrade_db_credential
   instanceEssbasePassword = var.upgrade_essbase_credential
   instanceIDCSPassword = var.upgrade_IDCS_credential
+  instanceUpgradeShape = var.upgrade_target_instance_shape
+  bucket_name    = "essbase_${local.instance_uuid_short}_metadata"
+
 }

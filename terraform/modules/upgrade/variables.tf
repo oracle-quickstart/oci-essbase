@@ -1,4 +1,4 @@
-## Copyright (c) 2019, 2021, Oracle and/or its affiliates.
+## Copyright (c) 2019 - 2023 Oracle and/or its affiliates.
 ## Licensed under the Universal Permissive License v1.0 as shown at https://oss.oracle.com/licenses/upl.
 
 variable "listing_id" {
@@ -17,6 +17,11 @@ variable "listing_resource_id" {
 }
 
 variable "sourceInstance_ocid" {
+  default = ""
+}
+
+variable "sourceInstance_version" {
+  type    = string
   default = ""
 }
 
@@ -50,6 +55,20 @@ variable "instanceUpgrade19c34"{
   default = false
 }
 
+variable "instanceUpgrade19c23"{
+  type = bool
+  default = false
+}
+
+variable "instanceUpgrade19c02"{
+  type = bool
+  default = false
+}
+
+variable "instanceUpgrade21c01"{
+  type = bool
+  default = false
+}
 
 variable "instanceSchemaPrefix" {
   description = "Schema prefix"
@@ -90,6 +109,21 @@ variable "stack_resource_id" {
 }
 
 variable "stack_id" {
+  type = string
+  default = ""
+}
+
+variable "bucket_name" {
+  description = "Name of the bucket to create"
+  type        = string
+}
+
+variable "source_instance_ocpus" {
+  type = number
+  default = 4
+}
+
+variable "instanceUpgradeShape" {
   type = string
   default = ""
 }

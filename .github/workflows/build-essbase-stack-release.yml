@@ -4,6 +4,7 @@ on:
   release:
     types:
     - published
+disabled: true
 
 jobs:
   terraform_generate_packages:

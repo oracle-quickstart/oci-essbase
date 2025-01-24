@@ -29,11 +29,9 @@ groupings:
   - ${upgrade_backup_restore}
   - sourceInstance_ocid
   - sourceInstance_extendedMetadata
+  - upgrade_target_instance_shape
   - instanceSpecifyPrivateIP
   - instancePrivateIP
-  - upgrade_db_credential
-  - upgrade_IDCS_credential
-  - upgrade_essbase_credential
   
 - title: "Essbase Instance"
   variables:
@@ -50,7 +48,6 @@ groupings:
   - ${temp_volume_size}
   - ${ssh_authorized_keys}
   - ${essbase_admin_username}
-  - ${essbase_admin_password_id}
   - ${instance_timezone}
   - ${instance_catalog_storage}
   - ${instance_smv_server}
@@ -68,8 +65,23 @@ groupings:
   - ${identity_provider}
   - ${idcs_tenant}
   - ${idcs_client_id}
-  - ${idcs_client_secret_id}
   - ${idcs_external_admin_username}
+
+- title: "Secret Selection"
+  variables:
+  - ${multiple_compartment_secrets}
+  - ${secret_compartment_ocid_essbase_admin_password_id}
+  - ${essbase_admin_password_id}
+  - ${secret_compartment_ocid_db_admin_password_id}
+  - ${db_admin_password_id}
+  - ${secret_compartment_ocid_idcs_client_secret_id}
+  - ${idcs_client_secret_id}
+  - ${secret_compartment_ocid_upgrade_essbase_credential}
+  - upgrade_essbase_credential
+  - ${secret_compartment_ocid_upgrade_db_credential}
+  - upgrade_db_credential
+  - ${secret_compartment_ocid_upgrade_IDCS_credential}
+  - upgrade_IDCS_credential
 
 - title: "Network Configuration"
   variables:
@@ -94,13 +106,13 @@ groupings:
   - ${existing_db_type}
   - ${existing_db_compartment_id}
   - ${existing_db_id}
-  - ${db_admin_password_id}
   - ${db_license_model}
   - ${existing_oci_db_system_id}
   - ${existing_oci_db_system_dbhome_id}
   - ${existing_oci_db_system_database_id}
   - ${existing_oci_db_system_database_pdb_name}
   - ${oci_db_admin_username}
+  - ${secret_compartment_ocid_oci_db_admin_password_id}
   - ${oci_db_admin_password_id}
   - ${rcu_schema_prefix}
   - ${show_db_advanced_options}
@@ -141,6 +153,12 @@ variables:
     title: Target Compartment
     description: The target compartment in which all provisioned resources will be created.
     type: oci:identity:compartment:id
+    required: true
+
+  multiple_compartment_secrets:
+    title: Show Advanced Secret Selection Options
+    description: Enable Secrets to be selected from different compartments
+    type: boolean
     required: true
 
   user_ocid:
@@ -187,42 +205,100 @@ variables:
     type: boolean
     default: false
 
-  upgrade_backup_restore:
-    title: Source Instance Essbase Version
-    description: Version of Essbase on Source Instance.
+  upgrade_target_instance_shape:
+    title: Target Instance Shape
+    description: "Choose to keep the shape of the target upgraded instance same as the Source Instance's shape, or upgrade it to the recommended Flex shape - VM.Standard.E5.Flex. Note - If the existing Source Instance's shape does not exist on OCI, the deployment will fail."
     type: enum
     enum:
-    - "Essbase 21c - 21.3 or above"
+    - "Keep the shape same as the Source Instance"
+    - "Upgrade to recommended Flex Shape"
+    default: "Keep the shape same as the Source Instance"
+    visible: ${is_upgrade}
+
+  upgrade_backup_restore:
+    title: Source Instance Essbase Stack Version
+    description: Version of Essbase on OCI Stack used to deploy Source Instance.
+    type: enum
+    enum:
+    - "Essbase 21c - 21.2 or above"
+    - "Essbase 21c - 21.1"
     - "Essbase 19c - 19.3.0.5.6, 19.3.0.6.0"
     - "Essbase 19c - 19.3.0.3.4, 19.3.0.4.5"
-    default: "Essbase 21c - 21.3 or above"
+    - "Essbase 19c - 19.3.0.2.3"
+    - "Essbase 19c - 19.3.0.0.2"
+    default: "Essbase 21c - 21.2 or above"
     required: true
     visible: ${is_upgrade} 
 
+  secret_compartment_ocid_upgrade_db_credential:
+    title: Compartment for Database Admin Password
+    description: Compartment for selecting secret for Database Admin Password during upgrade
+    type: oci:identity:compartment:id
+    default: ${compartment_ocid}
+    required: 
+      - ${upgrade_backup_restore}
+      - "Essbase 19c - 19.3.0.5.6 or above"
+    visible:
+      and: 
+      - ${multiple_compartment_secrets}
+      - ${is_upgrade}
+
   upgrade_db_credential:
-    title: Database Admin User Password
-    description: OCID of Vault Secret for Database Admin User password.
-    type: string
+    title: Database Admin Password
+    description: Select the Vault Secret for Database Admin password. In case of upgrading from 19.3.0.0.2, this field is mandatory.
+    type: oci:kms:secret:id
+    dependsOn:
+      compartmentId: ${secret_compartment_ocid_upgrade_db_credential}
     default: ""
     visible: ${is_upgrade}
     required: 
       - ${upgrade_backup_restore}
       - "Essbase 19c - 19.3.0.5.6 or above"
+
+  secret_compartment_ocid_upgrade_essbase_credential:
+    title: Compartment for Essbase System Admin Password
+    description: Compartment for selecting secret for Essbase System Admin Password during upgrade
+    type: oci:identity:compartment:id
+    default: ${compartment_ocid}
+    required: 
+      - ${upgrade_backup_restore}
+      - "Essbase 19c - 19.3.0.5.6 or above"
+    visible: 
+      and: 
+      - ${multiple_compartment_secrets}
+      - ${is_upgrade}
 
   upgrade_essbase_credential:
-    title: Essbase System Admin User Password
-    description: OCID of Vault Secret for Essbase Admin User password.
-    type: string
+    title: Essbase System Admin Password
+    description: Select the secret for Essbase System Admin password. In case of upgrading from 19.3.0.0.2, this field is mandatory.
+    type: oci:kms:secret:id
+    dependsOn:
+      compartmentId: ${secret_compartment_ocid_upgrade_essbase_credential}
     default: ""
     visible: ${is_upgrade}
     required: 
       - ${upgrade_backup_restore}
       - "Essbase 19c - 19.3.0.5.6 or above"
 
+  secret_compartment_ocid_upgrade_IDCS_credential:
+    title: Compartment for IDCS/IAM Application Client Secret
+    description: Compartment for selecting secret for IDCS/IAM Application Client Secret during upgrade
+    type: oci:identity:compartment:id
+    default: ${compartment_ocid}
+    required: 
+      - ${upgrade_backup_restore}
+      - "Essbase 19c - 19.3.0.5.6 or above"
+    visible: 
+      and: 
+      - ${multiple_compartment_secrets}
+      - ${is_upgrade}
+
   upgrade_IDCS_credential:
-    title: IDCS Application Client Secret
-    description: Provide the OCID for the secret that contains the IDCS application client secret to be overriden with in case it was changed / deleted
-    type: string
+    title: IDCS/IAM Application Client Secret
+    description: Select the secret that contains the IDCS/IAM application client secret to be overriden with in case it was changed / deleted. In case of upgrading from 19.3.0.0.2, this field is mandatory.
+    type: oci:kms:secret:id
+    dependsOn:
+      compartmentId: ${secret_compartment_ocid_upgrade_IDCS_credential}
     default: ""
     visible: ${is_upgrade}
     #pattern: "^ocid1\\.vaultsecret\\.[a-zA-Z0-9\\.\\-\\_]+$"
@@ -449,7 +525,10 @@ variables:
           - eq:
             - ${instance_shape}
             - "VM.Standard.E4.Flex"
-
+          - eq:
+            - ${instance_shape}
+            - "VM.Standard.E5.Flex"
+  
   enable_cluster:
     title: Enable Cluster Topology
     description: Create a cluster of multiple Essbase compute instances.
@@ -941,8 +1020,13 @@ variables:
      - ${is_upgrade}
 
   instance_smv_server:
+<<<<<<< HEAD
     title: "Deploy Smart View Server (Preview)"
     description: "Check to configure Oracle Smart View server. Oracle Smart View for Office (Mac and Browser) for Essbase is in Preview status."
+=======
+    title: "Deploy Smart View Server"
+    description: "Select to configure Oracle Smart View for Office (Mac and Browser) for Essbase."
+>>>>>>> sankara911-snh_release_216
     type: boolean
     default: false
     required: false
@@ -1004,10 +1088,24 @@ variables:
      not: 
      - ${is_upgrade}
 
+  secret_compartment_ocid_essbase_admin_password_id:
+    title: Compartment for Essbase System Admin Password 
+    description: Compartment for selecting secret for Essbase System Admin Password
+    type: oci:identity:compartment:id
+    default: ${compartment_ocid}
+    required: true
+    visible: 
+     and:
+       - ${multiple_compartment_secrets}
+       - not: 
+         - ${is_upgrade}
+
   essbase_admin_password_id:
-    title: Essbase System Admin User Password
-    description: "The OCID for the secret that contains the password for the Essbase system administrator. The password must start with a letter, is between 8 and 30 characters long, contains at least one number, and, optionally, any number of the special characters ($ # _). For example, Ach1z0#d."
-    type: string
+    title: Essbase System Admin Password
+    description: "Select the secret that contains the password for the Essbase system administrator. The password must start with a letter, is between 8 and 30 characters long, contains at least one number, and, optionally, any number of the special characters ($ # _). For example, Ach1z0#d."
+    type: oci:kms:secret:id
+    dependsOn:
+      compartmentId: ${secret_compartment_ocid_essbase_admin_password_id}
     pattern: "^ocid1\\.vaultsecret\\.[a-zA-Z0-9\\.\\-\\_]+$"
     required: true
     visible: 
@@ -1169,9 +1267,7 @@ variables:
     visible: 
       and:
       - not:
-        - or:
-          - ${use_existing_db}
-          - ${use_existing_vcn}
+        - ${use_existing_db}
       - not: 
         - ${is_upgrade}    
 
@@ -1248,11 +1344,32 @@ variables:
     dependsOn:
       compartmentId: ${existing_db_compartment_id} 
 
+  secret_compartment_ocid_db_admin_password_id:
+    title: Compartment for Database Admin Password
+    description: Compartment for selecting secret for Database Admin Password 
+    type: oci:identity:compartment:id
+    default: ${compartment_ocid}
+    required: true
+    visible:
+      and:
+      - ${multiple_compartment_secrets}
+      - or:
+        - eq:
+          - ${existing_db_type}
+          - "Autonomous Database"
+        - not:
+          - ${use_existing_db}
+      - not:
+        - ${is_upgrade}
+
   db_admin_password_id:
-    title: Database Admin User Password
-    description: "The OCID for the secret that contains the database administrator password. The password must start with a letter, is between 12 and 30 characters long, contains at least one number, and at least one of the special characters ($ # _). For example, BEstr0ng_#12."
-    type: string
+    title: Database Admin Password
+    description: "Select the secret that contains the database administrator password. The password must start with a letter, is between 12 and 30 characters long, contains at least one number, and at least one of the special characters ($ # _). For example, BEstr0ng_#12."
+    type: oci:kms:secret:id 
+    dependsOn:
+      compartmentId: ${secret_compartment_ocid_db_admin_password_id}
     pattern: "^ocid1\\.vaultsecret\\.[a-zA-Z0-9\\.\\-\\_]+$"
+    default: ${compartment_ocid}
     visible:
       and:
       - or:
@@ -1363,10 +1480,26 @@ variables:
       - ${use_existing_db}
     required: true
 
+  secret_compartment_ocid_oci_db_admin_password_id:
+    title: Vault Compartment for OCI DB Admin Password ID
+    description: Vault Compartment to select secret from for OCI DB Admin Password
+    type: oci:identity:compartment:id
+    default: ${compartment_ocid}
+    visible:
+      and:
+      - eq:
+        - ${existing_db_type}
+        - "Database System"
+      - ${use_existing_db}
+      - ${multiple_compartment_secrets}
+    required: true
+
   oci_db_admin_password_id:
     title: Database Admin User Password
-    description: "The OCID for the secret that contains the database administrator password. The password must start with a letter, is between 12 and 30 characters long, contains at least one number, and at least one of the special characters ($ # _). For example, BEstr0ng_#12."
-    type: string
+    description: "Select the secret that contains the database administrator password. The password must start with a letter, is between 12 and 30 characters long, contains at least one number, and at least one of the special characters ($ # _). For example, BEstr0ng_#12."
+    type: oci:kms:secret:id
+    dependsOn:
+      compartmentId: ${secret_compartment_ocid_oci_db_admin_password_id}
     pattern: "^ocid1\\.vaultsecret\\.[a-zA-Z0-9\\.\\-\\_]+$"
     visible:
       and:
@@ -1378,7 +1511,7 @@ variables:
 
   identity_provider:
     title: Identity Provider
-    description: Choose embedded LDAP or integration with Identity Cloud Service (IDCS). The use of embedded LDAP is not recommended for production workloads.
+    description: Choose embedded for Embedded LDAP or idcs for IDCS/IAM . The use of embedded LDAP is not recommended for production workloads.
     type: enum
     enum:
     - idcs
@@ -1390,8 +1523,8 @@ variables:
      - ${is_upgrade}
 
   idcs_tenant:
-    title: IDCS Instance GUID
-    description: The ID of your Identity Cloud Service instance, which typically has the format idcs-<guid>, and is part of the host name that you use to access Identity Cloud Service.
+    title: IDCS/IAM Instance GUID
+    description: The ID of your IDCS/IAM instance, which typically has the format idcs-<guid>, and is part of the host name that you use to access IDCS/IAM.
     type: string
     visible:
       and:
@@ -1404,8 +1537,8 @@ variables:
        
 
   idcs_client_id:
-    title: IDCS Application Client ID
-    description: Provide the IDCS application client ID
+    title: IDCS/IAM Application Client ID
+    description: Provide the IDCS/IAM application client ID
     type: string
     visible:
       and:
@@ -1416,10 +1549,27 @@ variables:
         - ${is_upgrade}
     required: true
 
+  secret_compartment_ocid_idcs_client_secret_id:
+    title: Compartment for IDCS/IAM Application Client Secret
+    description: Compartment for selecting secret for IDCS/IAM Application Client Secret
+    type: oci:identity:compartment:id
+    default: ${compartment_ocid}
+    visible:
+      and:
+      - ${multiple_compartment_secrets}
+      - eq:
+        - ${identity_provider}
+        - idcs
+      - not:
+        - ${is_upgrade}
+    required: true
+
   idcs_client_secret_id:
-    title: IDCS Application Client Secret
-    description: Provide the OCID for the secret that contains the IDCS application client secret.
-    type: string
+    title: IDCS/IAM Application Client Secret
+    description: Select the secret that contains the IDCS/IAM application client secret
+    type: oci:kms:secret:id
+    dependsOn:
+      compartmentId: ${secret_compartment_ocid_idcs_client_secret_id}
     pattern: "^ocid1\\.vaultsecret\\.[a-zA-Z0-9\\.\\-\\_]+$"
     visible:
       and:
@@ -1431,8 +1581,8 @@ variables:
     required: true
 
   idcs_external_admin_username:
-    title: IDCS Essbase Admin User
-    description: Provide a user id to be registered as an Essbase administrator. This user must exist in the provided Identity Cloud Service instance.
+    title: IDCS/IAM Essbase Admin User
+    description: Provide a user id to be registered as an Essbase administrator. This user must exist in the provided IDCS/IAM instance.
     type: string
     visible:
       and:
@@ -1456,11 +1606,10 @@ variables:
 
   # Upgrade Settings
   sourceInstance_ocid:
-#    type: string
     type: oci:core:instance:id
     required: true
     title: Source Instance
-    description: Select source Essbase 19c/21c Compute Instance to pick configuration from. 19.3.0.0.2 and 19.3.0.2.3 are not supported currently for upgrade.
+    description: Select source Essbase 19c/21c Compute Instance to pick configuration from.
     dependsOn:
       compartmentId: ${compartment_ocid}
     visible: ${is_upgrade}
@@ -1470,7 +1619,7 @@ variables:
     required: true
     title: Source Instance Metadata
     visible: ${is_upgrade}
-    description: Enter extended metadata collected in JSON format from source instance. In case of instances which are running Essbase version prior to 19.3.0.5.6, please run the upgrade-metadata-19c.sh to prepare for upgrade. Post running script, use the command - oci compute instance get --instance-id $(oci-metadata -j | jq -r '.instance.id') --auth instance_principal | jq '.data."extended-metadata"'. Example output - { "backup_bucket" ... }
+    description: Enter extended metadata collected in JSON format from source instance. In case of instances which are running Essbase version prior to 19.3.0.5.6, please run the upgrade-metadata-19cxx.sh to prepare for upgrade. Post running script, use the command - oci compute instance get --instance-id $(oci-metadata -j | jq -r '.instance.id') --auth instance_principal | jq '.data."extended-metadata"'. Example output - { "backup_bucket" ... }
     
 
   instanceSpecifyPrivateIP:
@@ -1536,10 +1685,10 @@ outputs:
     title: RCU Schema Prefix
     type: string
   idcs_tenant:
-    title: IDCS Instance GUID
+    title: IDCS/IAM Instance GUID
     type: string
   idcs_client_id:
-    title: IDCS Application Client ID
+    title: IDCS/IAM Application Client ID
     type: string
   backup_bucket_name:
     title: Backup Bucket Name

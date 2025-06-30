@@ -43,7 +43,7 @@ output "rcu_schema_prefix"{
 }
 
 output "bucket_namespace" {
-  value = var.instanceUpgrade19c02? data.oci_objectstorage_namespace.objectstorage_ns.namespace: null
+  value = var.instanceUpgrade19c02? data.oci_objectstorage_namespace.objectstorage_ns.namespace: data.oci_objectstorage_bucket.source_bucket.namespace
 }
 
 output "bucket_name" {

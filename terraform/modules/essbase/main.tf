@@ -114,6 +114,8 @@ module "essbase-node" {
 
   stack_id              = var.stack_id
   stack_display_name    = var.stack_display_name
+  stack_version         = var.stack_version
+  
   enable_monitoring     = var.enable_monitoring
   enable_embedded_proxy = var.enable_embedded_proxy
   notification_topic_id = var.notification_topic_id
@@ -142,7 +144,7 @@ module "essbase-node" {
 
   instance_catalog_storage = var.instance_catalog_storage
   instance_smv_server = var.instance_smv_server
-
+  instance_register_essbase_url = var.instance_register_essbase_url
 
   db_type               = var.db_type
   db_database_id        = var.db_database_id

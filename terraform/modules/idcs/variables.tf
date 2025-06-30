@@ -11,6 +11,13 @@ variable "idcs_tenant" {
   }
 }
 
+variable "idcs_host" {
+  type = string
+  default = "identity.oraclecloud.com"
+
+  # No validation. String can be left empty and default would be taken as identity.oraclecloud.com
+}
+
 variable "idcs_client_id" {
   type    = string
   default = ""

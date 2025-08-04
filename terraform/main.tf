@@ -25,6 +25,7 @@ locals {
   instance_count = var.enable_cluster ? var.instance_count : 1
   instance_catalog_storage = var.instance_catalog_storage
   instance_smv_server = var.instance_smv_server
+  instance_register_essbase_url = var.register_essbase_url
 
   create_load_balancer = var.enable_cluster || var.create_load_balancer
 
@@ -268,6 +269,8 @@ module "essbase" {
   
   instance_catalog_storage = var.instance_catalog_storage
   instance_smv_server = local.instance_smv_server
+  instance_register_essbase_url = local.instance_register_essbase_url
+  
   additional_host_mappings = lookup(local.db_type_host_mappings, local.db_type, [])
 
   identity_provider = var.identity_provider
@@ -284,6 +287,7 @@ module "essbase" {
   enable_monitoring  = var.enable_essbase_monitoring
   stack_id           = local.instance_uuid
   stack_display_name = local.resource_name_prefix
+  stack_version = local.stack_version
 
   notification_topic_id = var.notification_topic_id
 }

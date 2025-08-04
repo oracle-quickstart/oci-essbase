@@ -118,6 +118,7 @@ groupings:
   - ${show_db_advanced_options}
   - ${create_secure_db}
   - ${db_workload}
+  - ${register_essbase_url}
 
 - title: "Load Balancer Configuration"
   variables:
@@ -1020,13 +1021,8 @@ variables:
      - ${is_upgrade}
 
   instance_smv_server:
-<<<<<<< HEAD
-    title: "Deploy Smart View Server (Preview)"
-    description: "Check to configure Oracle Smart View server. Oracle Smart View for Office (Mac and Browser) for Essbase is in Preview status."
-=======
     title: "Deploy Smart View Server"
     description: "Select to configure Oracle Smart View for Office (Mac and Browser) for Essbase."
->>>>>>> sankara911-snh_release_216
     type: boolean
     default: false
     required: false
@@ -1302,7 +1298,24 @@ variables:
           - ${use_existing_db} 
           - ${use_existing_vcn}
           - ${is_upgrade}
-        
+
+  register_essbase_url:
+    type: boolean
+    default: false
+    required: true
+    title: Add Essbase URL to Autonomous Database 
+    description: Configure Autonomous Database with Essbase Launch URL automatically. Can be configured post-deployment too.
+    visible:
+      and: 
+      - or:
+        - eq:
+          - ${existing_db_type}
+          - "Autonomous Database"
+        - not:
+          - ${use_existing_db}
+      - not:
+          - ${is_upgrade}
+      
   existing_db_type:
     title: Database Type
     description: Select which database you will use

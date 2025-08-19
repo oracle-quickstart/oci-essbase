@@ -96,6 +96,10 @@ resource "oci_core_instance" "essbase" {
     catalog_bucket  = jsonencode(var.catalog_bucket)
     catalog_storage = jsonencode(var.instance_catalog_storage)
     smv_server      = jsonencode(tostring(var.instance_smv_server))
+    stack_info=jsonencode({
+      register_essbase_url = tostring(var.instance_register_essbase_url),
+      version = tostring(var.stack_version),
+    })
 
     volumes = jsonencode({
       config = {

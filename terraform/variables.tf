@@ -209,6 +209,10 @@ variable "instance_smv_server" {
   default = false
 }
 
+variable "register_essbase_url" {
+  type    = bool
+  default = false
+}
 
 variable "data_volume_size" {
   // (gigabytes)

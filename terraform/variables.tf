@@ -209,6 +209,10 @@ variable "instance_smv_server" {
   default = false
 }
 
+variable "register_essbase_url" {
+  type    = bool
+  default = false
+}
 
 variable "data_volume_size" {
   // (gigabytes)
@@ -293,6 +297,11 @@ variable "idcs_tenant" {
   #   condition = var.identity_provider != "idcs" || var.idcs_tenant != ""
   #   error_message = "ESSPROV-00007 - Missing value for IDCS Instance GUID. The value has to set if using IDCS."
   # }
+}
+
+variable "idcs_host" {
+  type = string
+  default = "identity.oraclecloud.com"
 }
 
 variable "idcs_client_id" {

@@ -121,6 +121,7 @@ variable "identity_provider" {
 variable "idcs_config" {
   type = object({
     tenant           = string,
+    idcs_host        = string,
     client_id        = string,
     client_secret_id = string
   })
@@ -188,6 +189,12 @@ variable "stack_display_name" {
   default = ""
 }
 
+variable "stack_version" {
+  type    = string
+  default = ""
+}
+
+
 // Notification settings
 variable "notification_topic_id" {
   type    = string
@@ -219,6 +226,11 @@ variable "instance_catalog_storage" {
 }
 
 variable "instance_smv_server" {
+  type    = bool
+  default = false
+}
+
+variable "instance_register_essbase_url" {
   type    = bool
   default = false
 }

@@ -91,6 +91,12 @@ variable "instance_smv_server" {
   default = false
 }
 
+variable "instance_register_essbase_url" {
+  type    = bool
+  default = false
+}
+
+
 variable "hostname_label_prefix" {
   description = "The hostname for the essbase node"
   type        = string
@@ -167,6 +173,7 @@ variable "identity_provider" {
 variable "idcs_config" {
   type = object({
     tenant           = string,
+    idcs_host        = string,
     client_id        = string,
     client_secret_id = string
   })
@@ -236,6 +243,11 @@ variable "stack_id" {
 }
 
 variable "stack_display_name" {
+  type    = string
+  default = ""
+}
+
+variable "stack_version" {
   type    = string
   default = ""
 }

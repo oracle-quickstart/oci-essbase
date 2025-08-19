@@ -63,6 +63,7 @@ groupings:
 - title: "Identity Configuration"
   variables:
   - ${identity_provider}
+  - ${idcs_host}
   - ${idcs_tenant}
   - ${idcs_client_id}
   - ${idcs_external_admin_username}
@@ -118,6 +119,7 @@ groupings:
   - ${show_db_advanced_options}
   - ${create_secure_db}
   - ${db_workload}
+  - ${register_essbase_url}
 
 - title: "Load Balancer Configuration"
   variables:
@@ -1020,13 +1022,8 @@ variables:
      - ${is_upgrade}
 
   instance_smv_server:
-<<<<<<< HEAD
-    title: "Deploy Smart View Server (Preview)"
-    description: "Check to configure Oracle Smart View server. Oracle Smart View for Office (Mac and Browser) for Essbase is in Preview status."
-=======
     title: "Deploy Smart View Server"
     description: "Select to configure Oracle Smart View for Office (Mac and Browser) for Essbase."
->>>>>>> sankara911-snh_release_216
     type: boolean
     default: false
     required: false
@@ -1302,7 +1299,24 @@ variables:
           - ${use_existing_db} 
           - ${use_existing_vcn}
           - ${is_upgrade}
-        
+
+  register_essbase_url:
+    type: boolean
+    default: false
+    required: true
+    title: Add Essbase URL to Autonomous Database 
+    description: Configure Autonomous Database with Essbase Launch URL automatically. Can be configured post-deployment too.
+    visible:
+      and: 
+      - or:
+        - eq:
+          - ${existing_db_type}
+          - "Autonomous Database"
+        - not:
+          - ${use_existing_db}
+      - not:
+          - ${is_upgrade}
+      
   existing_db_type:
     title: Database Type
     description: Select which database you will use
@@ -1522,6 +1536,20 @@ variables:
      not: 
      - ${is_upgrade}
 
+  idcs_host:
+    title: IDCS/IAM Endpoint URL
+    description: By default it is identity.oraclecloud.com for most commercial regions - change only if needed.
+    type: string
+    visible:
+      and:
+      - eq:
+        - ${identity_provider}
+        - idcs
+      - not:
+        - ${is_upgrade}
+    required: true
+    default: identity.oraclecloud.com
+
   idcs_tenant:
     title: IDCS/IAM Instance GUID
     description: The ID of your IDCS/IAM instance, which typically has the format idcs-<guid>, and is part of the host name that you use to access IDCS/IAM.
@@ -1683,6 +1711,9 @@ outputs:
     type: list
   rcu_schema_prefix:
     title: RCU Schema Prefix
+    type: string
+  idcs_host:
+    title: IDCS/IAM Endpoint
     type: string
   idcs_tenant:
     title: IDCS/IAM Instance GUID

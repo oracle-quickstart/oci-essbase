@@ -154,6 +154,14 @@ allow group group_name to manage orm-jobs in compartment compartment_name
 
 Refer to the [documentation](https://docs.oracle.com/en/database/other-databases/essbase/21/essad/complete-deployment-tasks.html) for a list of post-deployment tasks.
 
+## Contributing
+
+This project welcomes contributions from the community. Before submitting a pull request, please [review our contribution guide](./CONTRIBUTING.md)
+
+## Security
+
+Please consult the [security guide](./SECURITY.md) for our responsible security vulnerability disclosure process
+
 ## License
 
 These terraform scripts are licensed under the Universal Permissive License 1.0.  See [LICENSE](./LICENSE) for more details.
@@ -169,6 +177,8 @@ The listing in OCI Marketplace can be found here: https://cloudmarketplace.oracl
 When deploying using BYOL, the Essbase license is governed by the following Licensing terms: https://cloudmarketplace.oracle.com/marketplace/content?contentId=18088784&render=inline
 
 The Oracle Essbase product requires an on-premises purchased license and active support contract. This allows customers to leverage BYOL option for deploying Essbase on OCI.
+
+Copyright (c) 2023 Oracle and/or its affiliates.
 
 ## Questions
 

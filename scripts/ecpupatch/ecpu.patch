@@ -1,0 +1,12 @@
+--- main.tf	2025-09-02 17:41:14
++++ main.tf.new	2025-09-02 17:59:54
+@@ -103,7 +103,8 @@
+ resource "oci_database_autonomous_database" "autonomous_database" {
+   admin_password           = local.bootstrap_password
+   compartment_id           = var.compartment_id
+-  cpu_core_count           = "1"
++  compute_model            = "ECPU"
++  compute_count            = "4.0"
+   data_storage_size_in_tbs = "1"
+   db_name                  = var.db_name
+   db_workload              = var.db_workload == "Autonomous Transaction Processing" ? "OLTP" : "DW"

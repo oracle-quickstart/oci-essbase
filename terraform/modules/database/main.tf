@@ -103,7 +103,7 @@ resource "oci_core_network_security_group_security_rule" "vcn_nsg_rule3" {
 resource "oci_database_autonomous_database" "autonomous_database" {
   admin_password           = local.bootstrap_password
   compartment_id           = var.compartment_id
-  cpu_core_count           = "1" # parameter invalid if compute_model is ECPU
+  cpu_core_count           = "1"
   data_storage_size_in_tbs = "1"
   db_name                  = var.db_name
   db_workload              = var.db_workload == "Autonomous Transaction Processing" ? "OLTP" : "DW"

@@ -299,6 +299,11 @@ variable "idcs_tenant" {
   # }
 }
 
+variable "idcs_host" {
+  type = string
+  default = "identity.oraclecloud.com"
+}
+
 variable "idcs_client_id" {
   type    = string
   default = ""

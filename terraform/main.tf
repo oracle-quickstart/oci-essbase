@@ -57,6 +57,7 @@ module "idcs" {
   count  = (var.identity_provider == "idcs" && !var.is_upgrade) ? 1 : 0
 
   idcs_tenant                  = var.idcs_tenant
+  idcs_host                    = var.idcs_host
   idcs_client_id               = var.idcs_client_id
   idcs_client_secret_id        = var.idcs_client_secret_id
   idcs_external_admin_username = var.idcs_external_admin_username
@@ -275,6 +276,7 @@ module "essbase" {
 
   identity_provider = var.identity_provider
   idcs_config = var.identity_provider != "idcs" ? null : { tenant = var.idcs_tenant,
+    idcs_host        = var.idcs_host,
     client_id        = var.idcs_client_id,
     client_secret_id = var.idcs_client_secret_id,
   }

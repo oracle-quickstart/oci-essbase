@@ -63,6 +63,7 @@ groupings:
 - title: "Identity Configuration"
   variables:
   - ${identity_provider}
+  - ${idcs_host}
   - ${idcs_tenant}
   - ${idcs_client_id}
   - ${idcs_external_admin_username}
@@ -1535,6 +1536,20 @@ variables:
      not: 
      - ${is_upgrade}
 
+  idcs_host:
+    title: IDCS/IAM Endpoint URL
+    description: By default it is identity.oraclecloud.com for most commercial regions - change only if needed.
+    type: string
+    visible:
+      and:
+      - eq:
+        - ${identity_provider}
+        - idcs
+      - not:
+        - ${is_upgrade}
+    required: true
+    default: identity.oraclecloud.com
+
   idcs_tenant:
     title: IDCS/IAM Instance GUID
     description: The ID of your IDCS/IAM instance, which typically has the format idcs-<guid>, and is part of the host name that you use to access IDCS/IAM.
@@ -1696,6 +1711,9 @@ outputs:
     type: list
   rcu_schema_prefix:
     title: RCU Schema Prefix
+    type: string
+  idcs_host:
+    title: IDCS/IAM Endpoint
     type: string
   idcs_tenant:
     title: IDCS/IAM Instance GUID

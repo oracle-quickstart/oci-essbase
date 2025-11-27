@@ -121,6 +121,7 @@ variable "identity_provider" {
 variable "idcs_config" {
   type = object({
     tenant           = string,
+    idcs_host        = string,
     client_id        = string,
     client_secret_id = string
   })

@@ -103,15 +103,13 @@ resource "oci_core_network_security_group_security_rule" "vcn_nsg_rule3" {
 resource "oci_database_autonomous_database" "autonomous_database" {
   admin_password           = local.bootstrap_password
   compartment_id           = var.compartment_id
-  # cpu_core_count           = "1" # parameter invalid if compute_model is ECPU
+  cpu_core_count           = "1" # parameter invalid if compute_model is ECPU
   data_storage_size_in_tbs = "1"
   db_name                  = var.db_name
   db_workload              = var.db_workload == "Autonomous Transaction Processing" ? "OLTP" : "DW"
   is_auto_scaling_enabled  = true
   subnet_id = local.secure_count == 1 ? var.subnet_id : null
   nsg_ids = local.secure_count == 1 ? [oci_core_network_security_group.vcn_nsg[0].id] : null
-  compute_model            = "ECPU"
-  compute_count            = "4.0" # Minimum value is 1 for ECPU model. 1 OCPU = 4 ECPU
   
   display_name  = "${var.display_name_prefix}-database"
   freeform_tags = var.freeform_tags

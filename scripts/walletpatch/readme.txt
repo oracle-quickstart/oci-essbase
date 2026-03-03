@@ -73,7 +73,7 @@ patch -p0 <<EOF
 > +def downloadOCIWalletArchive(databaseId, dir='/tmp'):
 > +    logging.info("Downloading wallet for database %s via OCI CLI", databaseId)
 > +
-> +    walletPassword = "Welcome1"
+> +    walletPassword = randomWalletPassword()
 > +
 > +    fd, walletLocation = tempfile.mkstemp(suffix='.zip', prefix='wallet', dir=dir)
 > +    os.close(fd)
@@ -81,7 +81,7 @@ patch -p0 <<EOF
 > +    # OCI CLI command:
 > +    # oci db autonomous-database generate-wallet --autonomous-database-id <ocid> --password <pw> --file <path> --auth instance_principal
 > +    cmd = [
-> +        "oci", "db", "autonomous-database", "generate-wallet",
+> +        "/bin/oci", "db", "autonomous-database", "generate-wallet",
 > +        "--autonomous-database-id", databaseId,
 > +        "--password", walletPassword,
 > +        "--file", walletLocation,
